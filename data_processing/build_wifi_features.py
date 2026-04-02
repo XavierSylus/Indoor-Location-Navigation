@@ -48,26 +48,30 @@ def extract_wifi_features(
     window_ms: int = WIFI_WINDOW_MS
 ) -> np.ndarray:
     """
-    计算核心：对查询时间戳进行最近邻扫描，将 RSSI 序列化为矩阵。
+    计算核心：对查询时间戳进行最近邻扫描，将 RSSI 序列化为多维统计特征矩阵。
+    每个 BSSID 产出 3 维特征: [max_rssi | mean_rssi | visible_count]
+    总维度 = n_bssid * 3
     """
     n_ts = len(query_timestamps)
     n_bssid = len(bssid_vocab)
-    feat = np.full((n_ts, n_bssid), MISSING_RSSI, dtype=np.float32)
+    # 三个平行矩阵: max, sum (后转 mean), count
+    feat_max = np.full((n_ts, n_bssid), MISSING_RSSI, dtype=np.float32)
+    feat_sum = np.zeros((n_ts, n_bssid), dtype=np.float32)
+    feat_cnt = np.zeros((n_ts, n_bssid), dtype=np.float32)
 
     if wifi_df is None or wifi_df.empty:
-        return feat
+        return np.hstack([feat_max, feat_max, feat_cnt])
 
     bssid2col = {b: i for i, b in enumerate(bssid_vocab)}
     wifi_vocab = wifi_df[wifi_df["bssid"].isin(bssid2col)].copy()
     if wifi_vocab.empty:
-        return feat
+        return np.hstack([feat_max, feat_max, feat_cnt])
 
     wifi_ts_arr = wifi_vocab["timestamp"].to_numpy(dtype=np.int64)
     wifi_bssid_arr = wifi_vocab["bssid"].to_numpy()
     wifi_rssi_arr = wifi_vocab["rssi"].to_numpy(dtype=np.float32)
     query_arr = np.asarray(query_timestamps, dtype=np.int64)
 
-    # 按时间排序，允许 searchsorted 加速二分查找
     sort_idx = np.argsort(wifi_ts_arr, kind="stable")
     wifi_ts_sorted = wifi_ts_arr[sort_idx]
     wifi_bssid_sorted = wifi_bssid_arr[sort_idx]
@@ -80,7 +84,7 @@ def extract_wifi_features(
             candidates.append(pos - 1)
         if pos < len(wifi_ts_sorted):
             candidates.append(pos)
-            
+
         if not candidates:
             continue
 
@@ -97,11 +101,16 @@ def extract_wifi_features(
         for bssid, rssi in zip(bssids_in_scan, rssis_in_scan):
             col = bssid2col.get(bssid)
             if col is not None:
-                # 保留同一扫描周期内同 BSSID 的最大信号强度
-                if feat[i, col] == MISSING_RSSI or rssi > feat[i, col]:
-                    feat[i, col] = rssi
+                if feat_max[i, col] == MISSING_RSSI or rssi > feat_max[i, col]:
+                    feat_max[i, col] = rssi
+                feat_sum[i, col] += rssi
+                feat_cnt[i, col] += 1.0
 
-    return feat
+    feat_mean = np.full_like(feat_max, MISSING_RSSI)
+    nonzero = feat_cnt > 0
+    feat_mean[nonzero] = feat_sum[nonzero] / feat_cnt[nonzero]
+
+    return np.hstack([feat_max, feat_mean, feat_cnt]).astype(np.float32)
 
 
 def extract_path_features(
