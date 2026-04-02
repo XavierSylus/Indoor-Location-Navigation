@@ -1,0 +1,30 @@
+# ===== 原始竞赛数据 (GitHub 100MB 限制) =====
+indoor-location-navigation/
+
+# ===== 模型权重与缓存 (可从代码重新生成) =====
+models/pretrained_lgbm/
+models/*.pkl
+data_processing/processed/*.pkl
+
+# ===== Python 环境 =====
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# ===== 中间产物与临时文件 =====
+dummy_submission.csv
+submission_viterbi_test.csv
+submission_viterbi_native.csv
+submission_base.csv
+*.png
+
+# ===== 敏感信息 =====
+kaggle.json
+
+# ===== IDE / OS =====
+.claude/
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

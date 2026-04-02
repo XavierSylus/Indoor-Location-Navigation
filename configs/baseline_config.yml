@@ -1,0 +1,46 @@
+# Kaggle Indoor Location - Wi-Fi Baseline Configuration
+# 强迫症与科研规范：所有超参数与路径必须在此配置，禁止硬编码在脚本中。
+
+seed: 42
+
+paths:
+  train_dir: "indoor-location-navigation/train"
+  test_dir: "indoor-location-navigation/test"
+  cache_dir: "data_processing/processed"       # 避免每次重复拉取解析 Wi-Fi
+  model_dir: "models/pretrained_lgbm"          # 模型权重输出目录
+  sample_sub: "indoor-location-navigation/sample_submission.csv"
+
+features:
+  n_bssid: 500       # Top K BSSIDs for fingerprint. 500 is a safe baseline against OOM.
+  window_ms: 5000    # Wi-Fi observation window
+
+model_params:
+  # LightGBM 回归模型参数 (X, Y)
+  regressor:
+    objective: "rmse"
+    metric: "rmse"
+    learning_rate: 0.1
+    num_leaves: 63
+    max_depth: 8
+    feature_fraction: 0.8  # 稀疏矩阵中降低维度相关性
+    bagging_fraction: 0.8
+    bagging_freq: 5
+    seed: 42
+    n_jobs: -1
+    verbose: -1
+  
+  # LightGBM 分类模型参数 (Floor)
+  classifier:
+    objective: "multiclass"
+    metric: "multi_error"
+    learning_rate: 0.1
+    num_leaves: 31
+    max_depth: 6
+    feature_fraction: 0.8
+    seed: 42
+    n_jobs: -1
+    verbose: -1
+
+training:
+  num_boost_round: 100
+  early_stopping_rounds: 10

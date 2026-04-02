@@ -1,0 +1,18 @@
+# Delta XY 预测模型超参数配置
+# 用于预测轨迹中相邻 waypoint 的相对位移 (Δx, Δy)
+
+lgb_params:
+  objective: "regression"
+  metric: "rmse"
+  num_leaves: 63
+  max_depth: 10
+  learning_rate: 0.05
+  n_estimators: 800
+  min_child_samples: 5
+  colsample_bytree: 0.6
+  subsample: 0.7
+  subsample_freq: 5
+  reg_alpha: 0.1
+  reg_lambda: 1.0
+  n_jobs: -1
+  verbose: -1
