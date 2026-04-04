@@ -50,6 +50,45 @@ def parse_wifi_and_waypoint(file_path: Path) -> Tuple[Optional[pd.DataFrame], Op
     return wifi_df, wp_df
 
 
+def parse_imu_data(file_path: Path) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame]]:
+    """
+    从轨迹文件中提取 TYPE_ACCELEROMETER 和 TYPE_ROTATION_VECTOR。
+    用于 PDR (Pedestrian Dead Reckoning) 步态推算。
+    """
+    acc_data = []
+    rot_data = []
+    
+    with open(file_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            if line.startswith('#') or not line.strip():
+                continue
+            parts = line.strip().split('\t')
+            if len(parts) < 5:
+                continue
+            
+            data_type = parts[1]
+            
+            if data_type == 'TYPE_ACCELEROMETER' and len(parts) >= 5:
+                acc_data.append([
+                    int(parts[0]),
+                    float(parts[2]),  # ax
+                    float(parts[3]),  # ay
+                    float(parts[4]),  # az
+                ])
+            elif data_type == 'TYPE_ROTATION_VECTOR' and len(parts) >= 5:
+                rot_data.append([
+                    int(parts[0]),
+                    float(parts[2]),  # qx
+                    float(parts[3]),  # qy
+                    float(parts[4]),  # qz
+                ])
+    
+    acc_df = pd.DataFrame(acc_data, columns=['timestamp', 'ax', 'ay', 'az']) if acc_data else None
+    rot_df = pd.DataFrame(rot_data, columns=['timestamp', 'qx', 'qy', 'qz']) if rot_data else None
+    
+    return acc_df, rot_df
+
+
 if __name__ == '__main__':
     # TDD 快速自测验证
     import sys

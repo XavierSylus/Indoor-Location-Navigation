@@ -3,8 +3,42 @@ indoor-location-navigation/
 
 # ===== 模型权重与缓存 (可从代码重新生成) =====
 models/pretrained_lgbm/
+models/perfloor_k20/
+models/perfloor_k20_2k/
 models/*.pkl
 data_processing/processed/*.pkl
+data_processing/processed_2k/*.pkl
+
+# ===== Submission 文件 =====
+submission_*.csv
+dummy_submission.csv
+
+# ===== 第三方数据 =====
+num2/
+
+# ===== 过渡性脚本 (已整合到 src/) =====
+run_viterbi.py
+scripts/generate_submission_v2.py
+scripts/generate_submission_v3.py
+scripts/run_pipeline.py
+scripts/viterbi_v2.py
+data_processing/compute_pdr_delta.py
+data_processing/knn_predictor.py
+data_processing/augment_waypoints.py
+configs/optimized_config.yml
+
+# ===== 临时文件与调试产物 =====
+first_aid_report*.txt
+sites*.txt
+newproject
+CONTINUATION_GUIDE.md
+PHASE1_GUIDE.md
+PHASE1_SUMMARY.md
+PHASE2_COMPLETION.md
+PHASE2_SUMMARY.md
+PROJECT_STATUS.md
+WINNING_STRATEGY.md
+test_phase*.py
 
 # ===== Python 环境 =====
 venv/
@@ -12,11 +46,7 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# ===== 中间产物与临时文件 =====
-dummy_submission.csv
-submission_viterbi_test.csv
-submission_viterbi_native.csv
-submission_base.csv
+# ===== 媒体 =====
 *.png
 
 # ===== 敏感信息 =====
@@ -24,6 +54,7 @@ kaggle.json
 
 # ===== IDE / OS =====
 .claude/
+.gemini/
 .vscode/
 .idea/
 Thumbs.db

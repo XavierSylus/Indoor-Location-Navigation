@@ -1,54 +1,79 @@
-# Indoor Location & Navigation — Wi-Fi Fingerprinting Baseline
+# Indoor Location & Navigation — Per-Floor KNN Wi-Fi Fingerprinting
 
-A high-performance, minimalist Wi-Fi fingerprinting pipeline for the [Kaggle Indoor Location & Navigation](https://www.kaggle.com/competitions/indoor-location-navigation) competition.
+A high-performance indoor positioning system for the [Kaggle Indoor Location & Navigation](https://www.kaggle.com/competitions/indoor-location-navigation) competition. This work proposes a **Per-Floor K-Nearest Neighbors** architecture with expanded Wi-Fi feature engineering and kinematic trajectory optimization, achieving a **12.30 m** Mean Position Error on the public leaderboard.
 
-## Architecture
+## Results
 
+| Metric | Score |
+| --- | ---: |
+| **Public Score (MPE)** | **12.30 m** |
+| **Private Score (MPE)** | **12.71 m** |
+| Buildings Covered | 204 |
+| Test Predictions | 10,133 waypoints |
+
+## Methodology
+
+### Problem Formulation
+
+Given a sequence of Wi-Fi RSSI observations collected along an indoor trajectory, the task is to predict the floor level and (x, y) coordinates of each waypoint. The dataset spans 204 heterogeneous buildings with varying floor counts (1–10), AP densities, and structural layouts.
+
+### Feature Representation
+
+For each building, we construct a site-specific BSSID vocabulary consisting of the top-2,000 most frequently observed access points. Each waypoint is then represented as a **6,000-dimensional** feature vector, comprising three statistical aggregates per BSSID within a 5-second observation window:
+
+- **Max RSSI**: Peak signal strength, robust to transient fluctuations
+- **Mean RSSI**: Average signal level, capturing steady-state proximity
+- **Visibility Count**: Number of scans detecting the AP, encoding temporal persistence
+
+Missing observations (undetected BSSIDs) are imputed with a sentinel value of −999, which implicitly contributes zero discriminative power under the Euclidean distance metric.
+
+### Per-Floor KNN Regression
+
+Standard KNN regressors trained on all floors jointly suffer from **cross-floor signal leakage**: access points penetrate floor slabs with only 3–5 dBm attenuation, producing similar fingerprints at vertically adjacent but spatially distant locations. To address this, we decompose XY regression into floor-conditional sub-problems:
+
+1. **Floor Classification**: A LightGBM classifier predicts the floor label, with path-level majority voting enforcing trajectory consistency.
+2. **Floor-Conditioned KNN**: For each predicted floor, a dedicated KNeighborsRegressor (k=20, distance-weighted) operates exclusively on same-floor training points, eliminating inter-floor interference.
+3. **Graceful Degradation**: Floors with fewer than 5 training samples fall back to a global KNN model.
+
+This decomposition reduces the effective search space by a factor of 3–5× per site, concentrating neighbor selection on physically plausible reference points.
+
+### Trajectory Smoothing
+
+Raw KNN predictions are generated independently per waypoint, ignoring temporal continuity along walking paths. We apply a post-processing step that formulates trajectory refinement as a constrained optimization problem, solved via L-BFGS-B:
+
+$$\min_{\mathbf{x}} \quad \alpha \sum_{i} \|\mathbf{x}_i - \hat{\mathbf{x}}_i\|^2 + \beta \sum_{i} \|(\mathbf{x}_{i+1} - \mathbf{x}_i) - \mathbf{d}_i\|^2$$
+
+where $\hat{\mathbf{x}}_i$ denotes the raw KNN prediction, $\mathbf{d}_i$ is the expected displacement, and $\alpha$, $\beta$ balance data fidelity against kinematic plausibility.
+
+## Project Structure
+
+```text
+configs/                       # Hyperparameter configurations (YAML)
+data_processing/               # Feature engineering pipeline
+  ├── parse_wifi_logs.py       # Raw sensor log parser
+  ├── build_wifi_features.py   # BSSID vocabulary & fingerprint matrix builder
+  └── build_topological_grids.py
+src/
+  ├── models.py                # FloorClassifier, PerFloorXYRegressor, SiteModel
+  └── post_process.py          # Trajectory smoothing (L-BFGS-B)
+models/
+  └── train_lgbm_baseline.py   # Site-isolated LightGBM training (204 sites)
+scripts/
+  ├── infer_perfloor.py        # Per-Floor KNN inference
+  ├── run_phase2.py            # End-to-end pipeline (extract → train → infer)
+  └── retrain_perfloor.py      # Model retraining from cached features
 ```
-├── configs/                  # Hyperparameter configs (YAML)
-├── data_processing/          # Feature engineering pipeline
-│   ├── parse_wifi_logs.py    # Raw sensor log parser (Wi-Fi + Waypoint only)
-│   ├── build_wifi_features.py # BSSID vocabulary & multi-stat fingerprint matrix builder
-│   └── build_topological_grids.py # Physical corridor graph miner
-├── models/
-│   └── train_lgbm_baseline.py # Site-isolated LightGBM training (204 sites)
-├── scripts/
-│   ├── generate_submission.py # Baseline inference & CSV generation
-│   ├── postprocess_viterbi.py # Viterbi DP snap-to-grid optimization
-│   └── run_full_pipeline.ps1  # One-click automated pipeline
-└── viterbi_optim_solution.py  # Core Viterbi algorithm implementation
+
+## Usage
+
+```bash
+# End-to-end: feature extraction (n_bssid=2000) → model training → inference
+python scripts/run_phase2.py --config configs/phase2_2k_config.yml --out submission.csv
+
+# Post-processing: trajectory smoothing
+python src/post_process.py --input submission.csv --output submission_final.csv --alpha 1.0 --beta 3.0
 ```
 
-## Key Results
+## Dependencies
 
-| Version | Public Score (MPE) | Private Score (MPE) | Changes |
-|---------|-------------------|--------------------:|---------|
-| v1 — Single Site | 180.87 m | 169.80 m | Only 1/204 sites trained |
-| v2 — Full Sites | 15.14 m | 15.34 m | All 204 sites, n_bssid=500, boost=100 |
-| **v3 — Enhanced Features** | **12.36 m** | **13.13 m** | **n_bssid=800, boost=500, 3x features (max+mean+count)** |
-
-## Design Principles
-
-1. **First-Principles Thinking**: Only Wi-Fi RSSI signals are used — no IMU, accelerometer, or gyroscope data. This isolates the electromagnetic fingerprint as the sole positioning signal.
-2. **Site-Isolated Modeling**: Each of the 204 buildings has independent Floor classifier + X/Y regressors, preventing cross-building data leakage.
-3. **Multi-Dimensional Feature Engineering**: Each BSSID produces 3 statistical features (max RSSI, mean RSSI, visible count), tripling the feature space and capturing richer spatial signatures.
-4. **Topological Constraint Optimization**: A Viterbi Dynamic Programming layer snaps predicted coordinates onto physically valid corridor grids mined from 981 floor plans.
-5. **Graceful Degradation**: The Viterbi engine automatically falls back to pure spatial smoothing when PDR delta data is unavailable.
-
-## Quick Start
-
-```powershell
-# Full pipeline: train all sites → generate baseline → apply Viterbi optimization
-.\scripts\run_full_pipeline.ps1
-```
-
-Or run step by step:
-```powershell
-python models/train_lgbm_baseline.py                    # Train 204 sites (~2h)
-python scripts/generate_submission.py --out submission_baseline.csv
-python scripts/postprocess_viterbi.py --sub submission_baseline.csv --out submission_viterbi_final.csv
-```
-
-## Tech Stack
-
-Python 3.12 · LightGBM 4.6 · NumPy · SciPy · Pandas · PyYAML · joblib
+Python 3.12 · scikit-learn · LightGBM · NumPy · SciPy · Pandas · PyYAML
