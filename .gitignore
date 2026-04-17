@@ -5,9 +5,23 @@ indoor-location-navigation/
 models/pretrained_lgbm/
 models/perfloor_k20/
 models/perfloor_k20_2k/
+models/phase2_ensemble/
+models/imu_delta/
+models/imu_delta_v3/
 models/*.pkl
 data_processing/processed/*.pkl
 data_processing/processed_2k/*.pkl
+data_processing/processed_v3/
+
+# ===== 压缩包 =====
+*.zip
+
+# ===== CatBoost 临时 =====
+catboost_info/
+
+# ===== 临时笔记 =====
+Untitled-*.txt
+scratch/
 
 # ===== Submission 文件 =====
 submission_*.csv

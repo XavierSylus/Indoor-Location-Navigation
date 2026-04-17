@@ -1,0 +1,80 @@
+# IMU Delta 模型配置 V3 — DeltaDistanceLoss + 震荡训练
+# ============================================================
+
+seed: 42
+
+data:
+  n_time_steps: 100
+  imu_channels: 12
+  aux_feature_dim: 16
+  train_ratio: 0.85
+  batch_size: 256
+  num_workers: 0
+  noise_std: 0.02
+
+model:
+  cnn:
+    channels: [12, 32, 64, 128]
+    kernel_sizes: [5, 5, 3]
+    dropout: 0.15
+
+  gru:
+    hidden_size: 128
+    num_layers: 2
+    dropout: 0.15
+    bidirectional: true
+
+  mlp_aux:
+    hidden_sizes: [64, 32]
+    dropout: 0.15
+
+  head:
+    hidden_sizes: [256, 128]
+    dropout: 0.25
+    output_dim: 2
+
+training:
+  # 循环训练：Phase A (Adam + DeltaDistanceLoss) → Phase B (SGD + DeltaDistanceLoss) × N
+  n_cycles: 3
+
+  phase_a:
+    optimizer: "adam"
+    lr: 1.0e-3
+    weight_decay: 1.0e-4
+    loss: "delta_distance"
+    loss_params:
+      alpha: 1.0              # Delta MAE 权重
+      beta: 0.5               # Distance MAE 权重
+      gamma: 0.3              # Direction cosine 权重
+    epochs: 40
+    scheduler: "cosine_warmup"
+    warmup_epochs: 3
+
+  phase_b:
+    optimizer: "sgd"
+    lr: 1.0e-3
+    momentum: 0.9
+    weight_decay: 1.0e-5
+    loss: "delta_distance"
+    loss_params:
+      alpha: 1.0
+      beta: 0.8               # Phase B 距离约束更强
+      gamma: 0.5               # Phase B 方向约束更强
+    epochs: 25
+    scheduler: "cosine"
+    warmup_epochs: 0
+
+  cycle_lr_decay: 0.5
+  gradient_clip: 5.0
+
+  early_stopping:
+    patience: 15
+    min_delta: 0.001
+
+  amp: true
+
+paths:
+  train_dir: "indoor-location-navigation/train"
+  model_save_dir: "models/imu_delta_v3"
+  log_dir: "models/imu_delta_v3/logs"
+  leg_cache_dir: "models/imu_delta/cache"    # 复用 V2 缓存

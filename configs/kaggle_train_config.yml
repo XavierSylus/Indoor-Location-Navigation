@@ -1,0 +1,63 @@
+# Kaggle Indoor Location - Phase 2 集成训练配置
+# 多模态特征融合 + LightGBM/XGBoost/CatBoost 三模型集成
+# 支持本地特征提取 + Kaggle 云端训练的分离式工作流
+
+seed: 42
+
+paths:
+  train_dir: "indoor-location-navigation/train"
+  test_dir: "indoor-location-navigation/test"
+  cache_dir: "data_processing/processed_v3"      # 多模态缓存目录（与 WiFi-only 的 processed/ 隔离）
+  model_dir: "models/phase2_ensemble"             # 集成模型输出目录
+  sample_sub: "indoor-location-navigation/sample_submission.csv"
+  kaggle_dataset_name: "indoor-loc-phase2-cache"  # Kaggle Dataset slug
+
+features:
+  n_bssid: 2000
+  window_ms: 5000
+
+fusion:
+  enable_wifi: true
+  wifi_stats: true
+  wifi_spatial: true
+  wifi_temporal: true
+  enable_imu: true
+  enable_beacon: true
+  fusion_type: "early"
+  enable_scaling: true
+  enable_pca: false
+  imu_window_ms: 1000
+
+ensemble:
+  type: "weighted"                                # single | stacking | weighted
+  models: ["lgbm", "xgb", "catboost"]
+  stacking:
+    n_folds: 5
+    use_original_features: true
+  weighted:
+    weights: [0.4, 0.3, 0.3]                     # 仅 type=weighted 时生效
+
+model_params:
+  classifier:
+    objective: "multiclass"
+    metric: "multi_logloss"
+    boosting_type: "gbdt"
+    num_leaves: 63
+    max_depth: 10
+    learning_rate: 0.05
+    n_estimators: 500
+    min_child_samples: 3
+    colsample_bytree: 0.6
+    subsample: 0.7
+    subsample_freq: 5
+    reg_alpha: 0.3
+    reg_lambda: 1.0
+    n_jobs: -1
+    verbose: -1
+
+training:
+  num_boost_round: 500
+  early_stopping_rounds: 20
+
+batch:
+  total_batches: 4                                # 默认分 4 批并行

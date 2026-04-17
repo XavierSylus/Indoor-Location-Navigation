@@ -1,0 +1,72 @@
+# IMU Delta 模型配置 V2 — 增强特征 + 高斯噪声 + 循环训练
+# ============================================================
+
+seed: 42
+
+data:
+  n_time_steps: 100          # 每段 Leg 的 IMU 重采样时间步数
+  imu_channels: 12           # 加速度计(3) + 陀螺仪(3) + 磁力计(3) + 旋转向量(3)
+  aux_feature_dim: 16        # V2: +rot3_mid +time_sin +time_cos +building_idx
+  train_ratio: 0.85          # 训练集比例
+  batch_size: 256
+  num_workers: 0
+  noise_std: 0.02            # 高斯噪声标准差（仅训练集）
+
+model:
+  cnn:
+    channels: [12, 32, 64, 128]
+    kernel_sizes: [5, 5, 3]
+    dropout: 0.15
+
+  gru:
+    hidden_size: 128
+    num_layers: 2
+    dropout: 0.15
+    bidirectional: true
+
+  mlp_aux:
+    hidden_sizes: [64, 32]
+    dropout: 0.15
+
+  head:
+    hidden_sizes: [256, 128]
+    dropout: 0.25
+    output_dim: 2
+
+training:
+  # 循环训练：Phase A (Adam+MSE) → Phase B (SGD+MAE) × N 轮
+  n_cycles: 3                 # A-B 循环次数
+
+  phase_a:
+    optimizer: "adam"
+    lr: 1.0e-3
+    weight_decay: 1.0e-4
+    loss: "mse"
+    epochs: 40
+    scheduler: "cosine_warmup"
+    warmup_epochs: 3
+
+  phase_b:
+    optimizer: "sgd"
+    lr: 1.0e-3
+    momentum: 0.9
+    weight_decay: 1.0e-5
+    loss: "mae"
+    epochs: 25
+    scheduler: "cosine"
+    warmup_epochs: 0
+
+  # 每个 cycle 的 LR 衰减因子
+  cycle_lr_decay: 0.5         # cycle_i 的 LR = base_lr × decay^i
+
+  early_stopping:
+    patience: 15
+    min_delta: 0.001
+
+  amp: true
+
+paths:
+  train_dir: "indoor-location-navigation/train"
+  model_save_dir: "models/imu_delta"
+  log_dir: "models/imu_delta/logs"
+  leg_cache_dir: "models/imu_delta/cache"
