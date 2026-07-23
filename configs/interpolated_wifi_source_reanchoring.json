@@ -6,6 +6,7 @@
   "seed": 42,
   "inputs": {
     "train_root": "indoor-location-navigation/train",
+    "kaggle_train_root": "/kaggle/input/indoor-location-navigation/train",
     "candidate_dataset": "data_processing/processed/hard_site_candidate_rerank_dataset.csv",
     "v008_delta_predictions": "versions/v008_path_safe_delta_oof/remote_output/path_safe_v3_delta_oof.csv",
     "v008_report": "versions/v008_path_safe_delta_oof/remote_output/path_safe_delta_oof_report.json"

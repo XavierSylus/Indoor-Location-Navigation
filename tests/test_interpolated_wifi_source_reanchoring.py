@@ -12,6 +12,7 @@ from data_processing.interpolated_wifi_source_reanchoring import (
     current_binding_stats,
     interpolate_scan_positions,
     nearest_indices,
+    resolve_runtime_train_root,
 )
 
 
@@ -101,6 +102,22 @@ class InterpolatedWifiSourceReanchoringTest(unittest.TestCase):
 
         self.assertNotIn("ModuleNotFoundError", result.stderr)
         self.assertIn("may run only inside Kaggle", result.stderr)
+
+    def test_runtime_train_root_is_selected_explicitly(self) -> None:
+        config = {
+            "inputs": {
+                "train_root": "indoor-location-navigation/train",
+                "kaggle_train_root": "/kaggle/input/indoor-location-navigation/train",
+            }
+        }
+
+        local = resolve_runtime_train_root(config, kaggle_runtime=False)
+        kaggle = resolve_runtime_train_root(config, kaggle_runtime=True)
+
+        self.assertEqual(("indoor-location-navigation", "train"), local.parts[-2:])
+        self.assertEqual(
+            Path("/kaggle/input/indoor-location-navigation/train"), kaggle
+        )
 
 
 if __name__ == "__main__":

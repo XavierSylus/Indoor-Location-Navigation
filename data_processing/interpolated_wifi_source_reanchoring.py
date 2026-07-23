@@ -65,6 +65,16 @@ def resolve_path(value: str | Path) -> Path:
     return path if path.is_absolute() else PROJECT_ROOT / path
 
 
+def resolve_runtime_train_root(config: dict, kaggle_runtime: bool) -> Path:
+    key = "kaggle_train_root" if kaggle_runtime else "train_root"
+    if key not in config["inputs"]:
+        raise ValueError(f"Missing explicit runtime input path: inputs.{key}")
+    path = Path(config["inputs"][key])
+    if kaggle_runtime:
+        return path
+    return path if path.is_absolute() else PROJECT_ROOT / path
+
+
 def load_config(path: Path) -> dict:
     with path.open("r", encoding="utf-8") as handle:
         config = json.load(handle)
@@ -243,7 +253,9 @@ def git_commit() -> str:
 
 
 def list_source_paths(config: dict) -> Iterable[Path]:
-    train_root = resolve_path(config["inputs"]["train_root"])
+    train_root = resolve_runtime_train_root(
+        config, kaggle_runtime=Path("/kaggle/input").is_dir()
+    )
     heldout = {str(value) for value in config["data"]["heldout_path_ids"]}
     for site_id in config["data"]["target_site_ids"]:
         site_root = train_root / str(site_id)
