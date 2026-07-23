@@ -1,0 +1,18 @@
+{
+  "version": "kaggle_pathsafe_training_smoke_v1",
+  "seed": 42,
+  "data": {
+    "max_paths": 12,
+    "validation_paths": 2,
+    "minimum_train_paths": 2,
+    "minimum_legs": 8
+  },
+  "model": {
+    "type": "ridge",
+    "alpha": 1.0
+  },
+  "outputs": {
+    "report": "/kaggle/working/training_smoke_report.json",
+    "predictions": "/kaggle/working/training_smoke_predictions.csv"
+  }
+}
