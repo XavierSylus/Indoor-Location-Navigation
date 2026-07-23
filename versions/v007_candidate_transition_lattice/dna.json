@@ -1,0 +1,58 @@
+{
+  "dna_id": "dna:v007_candidate_transition_lattice",
+  "dna_parent": [
+    "dna:v006_rank1_risk_signal_probe"
+  ],
+  "version": "v007_candidate_transition_lattice",
+  "genes": {
+    "base": {
+      "inherited": [
+        "v005 geometry_source_wifi OOF reranker",
+        "v006 inference-safe candidate context boundary"
+      ]
+    },
+    "strategy": {
+      "error_source": "pointwise candidate selection failure",
+      "attack": "joint path decoding with candidate-to-candidate vector consistency"
+    },
+    "feature_component": {
+      "inherited": [
+        "geometry_source_wifi unary features",
+        "Top-50 waypoint candidates"
+      ],
+      "added": [
+        "candidate displacement vector",
+        "accumulated V3 delta vector",
+        "capped pairwise vector error"
+      ],
+      "retired": [
+        "rank1 confidence policy as the primary correction mechanism"
+      ]
+    },
+    "model_component": {
+      "unary": "LightGBM geometry_source_wifi reranker",
+      "structured_decoder": "dynamic programming candidate transition lattice",
+      "delta_model": "existing IMU Delta V3 checkpoint"
+    },
+    "change_operator": {
+      "type": "add",
+      "change": "add full-path pairwise decoding without changing the unary reranker"
+    },
+    "validation": {
+      "type": "diagnostic leave-one-path-out CV with nested alpha calibration",
+      "result": "MAE 7.524908 -> 1.355896; excess-over-4m reduced 91.3658%",
+      "success_gate_passed": true,
+      "submission_safe": false,
+      "risk": "V3 checkpoint used leg-level random splitting"
+    },
+    "execution": {
+      "command": "& '.\\venv\\Scripts\\python.exe' -m unittest tests.test_candidate_transition_lattice -v; & '.\\venv\\Scripts\\python.exe' data_processing\\candidate_transition_lattice.py --config configs\\candidate_transition_lattice.yml",
+      "config": "versions/v007_candidate_transition_lattice/config.yml",
+      "seed": 42
+    },
+    "submission": {
+      "status": "none",
+      "reason": "diagnostic-only result with non-path-safe delta checkpoint"
+    }
+  }
+}

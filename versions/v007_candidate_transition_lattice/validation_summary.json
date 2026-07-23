@@ -1,0 +1,26 @@
+{
+  "status": "ok",
+  "validation_type": "cv_probe",
+  "diagnostic_only": true,
+  "submission_safe": false,
+  "n_groups": 59,
+  "n_paths": 5,
+  "split_type": "leave_one_path_out_with_nested_alpha_calibration",
+  "unary_reranker_mae_m": 7.524908431950883,
+  "structured_lattice_mae_m": 1.3558961450590747,
+  "improvement_vs_unary_m": 6.1690122868918085,
+  "unary_sum_excess_over_4m": 274.83238197789245,
+  "structured_sum_excess_over_4m": 23.729629120757963,
+  "excess_over_4m_reduction_ratio": 0.9136578122636699,
+  "hit3": 0.7627118644067796,
+  "hit5": 0.8983050847457628,
+  "success_gate_passed": true,
+  "test_command": "& '.\\venv\\Scripts\\python.exe' -m unittest tests.test_candidate_transition_lattice -v",
+  "test_result": "5 tests passed",
+  "leakage_boundary": {
+    "v3_checkpoint_path_safe": false,
+    "reason": "The existing V3 checkpoint was trained with a leg-level random split, so held-out paths may have contributed training legs.",
+    "submission_allowed": false
+  },
+  "next_version": "v008_path_safe_delta_oof"
+}

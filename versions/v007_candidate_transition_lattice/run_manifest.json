@@ -1,0 +1,40 @@
+{
+  "created_at_utc": "2026-07-23T08:40:39+00:00",
+  "version": "v007_candidate_transition_lattice",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "exact_command": "& '.\\venv\\Scripts\\python.exe' -m unittest tests.test_candidate_transition_lattice -v; & '.\\venv\\Scripts\\python.exe' data_processing\\candidate_transition_lattice.py --config configs\\candidate_transition_lattice.yml",
+  "seed": "42",
+  "holdout_definition": "hard-site Top-50 leave-one-path-out; 59 groups / 5 paths; nested alpha calibration",
+  "local_metric": "unary_mae=7.524908; lattice_mae=1.355896; excess_reduction=0.913658",
+  "decision": "exploratory",
+  "notes": "Strong diagnostic signal, but existing V3 checkpoint is not path-safe; no submission.",
+  "git_commit": "3e2c70e1fdf94df6003ebdf2d5305c63fd84d52e",
+  "git_status_short": "## main...origin/main\n?? agent(2).md\n?? configs/candidate_transition_lattice.yml\n?? data_processing/candidate_transition_lattice.py\n?? data_processing/processed/candidate_transition_lattice_selections.csv\n?? data_processing/processed/candidate_transition_lattice_summary.json\n?? tests/test_candidate_transition_lattice.py\n?? versions/v007_candidate_transition_lattice/",
+  "python": {
+    "executable": "H:\\Indoor Location & Navigation\\venv\\Scripts\\python.exe",
+    "version": "3.8.8rc1 (tags/v3.8.8rc1:dfd7d68, Feb 17 2021, 11:01:21) [MSC v.1928 64 bit (AMD64)]"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "10",
+    "version": "10.0.26100",
+    "machine": "AMD64"
+  },
+  "files": {
+    "config": "versions/v007_candidate_transition_lattice/config.yml",
+    "metrics": "data_processing/processed/candidate_transition_lattice_summary.json",
+    "submission": null,
+    "validation_summary": "versions/v007_candidate_transition_lattice/validation_summary.json",
+    "dna": "versions/v007_candidate_transition_lattice/dna.json",
+    "readme": "versions/v007_candidate_transition_lattice/README.md"
+  },
+  "sha256": {
+    "versions/v007_candidate_transition_lattice/config.yml": "11f24c026e03c57fb55981b49a0e5f2c0d0134a154c74a21edfafde4011ee7a5",
+    "data_processing/processed/candidate_transition_lattice_summary.json": "334c3059c26928ffc211c8ce6a2c0977da7e37e078fbf8b2ff20d0b1a106eab7",
+    "versions/v007_candidate_transition_lattice/validation_summary.json": "4bee110a77f20707ea7822e9ffdd6f3b6e00a67327eb9560da11295a42009a56",
+    "versions/v007_candidate_transition_lattice/dna.json": "50629fb58a4fd4e873bb704eed4d441c280e7f7ae1031822411eee5f0ee816d7",
+    "versions/v007_candidate_transition_lattice/README.md": "0d28f20714d904dda48b3425621b42362f5f400067e5dcf6d407dc169a8123e9"
+  },
+  "validation_summary_status": "ok"
+}
