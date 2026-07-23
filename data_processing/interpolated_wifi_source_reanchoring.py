@@ -536,7 +536,24 @@ def attach_reanchored_source_features(
         train_files = [path for path in all_paths if path.stem not in heldout_ids]
         heldout_files = [path for path in all_paths if path.stem in heldout_ids]
         if {path.stem for path in heldout_files} != heldout_ids:
-            raise ValueError(f"Heldout path coverage is incomplete for site {site_id}.")
+            available_ids = sorted(path.stem for path in all_paths)
+            near_matches = sorted(
+                path_id
+                for path_id in available_ids
+                if any(
+                    path_id in expected or expected in path_id
+                    for expected in heldout_ids
+                )
+            )
+            raise ValueError(
+                "Heldout path coverage is incomplete: "
+                f"site={site_id}, train_root={train_root}, "
+                f"expected={sorted(heldout_ids)}, "
+                f"found={sorted(path.stem for path in heldout_files)}, "
+                f"available_count={len(available_ids)}, "
+                f"near_matches={near_matches}, "
+                f"available_head={available_ids[:5]}"
+            )
         if {path.stem for path in train_files} & heldout_ids:
             raise ValueError(f"Heldout source leakage detected for site {site_id}.")
         bssid_vocab = build_vocab_from_files(train_files, n_bssid=n_bssid)
