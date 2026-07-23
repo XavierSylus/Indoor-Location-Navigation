@@ -1,0 +1,79 @@
+{
+  "version": "v009_pathwise_rotation_scale_calibration",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "competition_slug": "indoor-location-navigation",
+  "seed": 42,
+  "inputs": {
+    "candidate_dataset": "data_processing/processed/hard_site_candidate_rerank_dataset.csv",
+    "raw_delta_predictions": "versions/v008_path_safe_delta_oof/remote_output/path_safe_v3_delta_oof.csv",
+    "v008_report": "versions/v008_path_safe_delta_oof/remote_output/path_safe_delta_oof_report.json"
+  },
+  "calibration": {
+    "method": "origin_constrained_least_squares_similarity",
+    "source_columns": ["v3_delta_x", "v3_delta_y"],
+    "target_columns": ["unary_delta_x", "unary_delta_y"],
+    "grouping": "path_id",
+    "translation_allowed": false
+  },
+  "lattice": {
+    "version": "v009_pathwise_rotation_scale_calibration",
+    "experiment_type": "cv_probe",
+    "iteration_mode": "add_module",
+    "random_seed": 42,
+    "inputs": {
+      "candidate_dataset": "data_processing/processed/hard_site_candidate_rerank_dataset.csv",
+      "v3_delta_predictions": "/kaggle/working/pathwise_calibrated_delta.csv"
+    },
+    "outputs": {
+      "selections": "/kaggle/working/pathwise_calibrated_lattice_selections.csv",
+      "summary": "/kaggle/working/pathwise_similarity_calibration_report.json"
+    },
+    "reranker": {
+      "feature_set": "geometry_source_wifi",
+      "target": "label_log1p_distance_m",
+      "model_type": "lgbm",
+      "num_leaves": 7,
+      "min_child_samples": 20,
+      "learning_rate": 0.05,
+      "n_estimators": 300,
+      "reg_alpha": 1.0,
+      "reg_lambda": 5.0,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8
+    },
+    "transition": {
+      "alpha_grid": [0.0, 0.1, 0.25, 0.5, 1.0, 2.0, 4.0],
+      "pairwise_cap_m": 10.0,
+      "require_exact_v3_chain": true,
+      "calibration": "leave_one_path_out"
+    },
+    "success_gate": {
+      "baseline_mae_m": 4.346602166870011,
+      "target_mae_m": 3.0,
+      "minimum_excess_over_4m_reduction_ratio": 0.25
+    },
+    "leakage_boundary": {
+      "submission_safe": false,
+      "reason": "Rotation and scale use only path-safe V3 deltas and OOF unary candidate geometry; target-path GT is diagnostic-only.",
+      "forbidden_transition_columns": [
+        "gt_delta_x",
+        "gt_delta_y",
+        "gt_x",
+        "gt_y",
+        "label_distance_m",
+        "group_oracle_distance_at_topk"
+      ]
+    }
+  },
+  "success_gate": {
+    "target_mae_m": 3.0,
+    "require_improvement_vs_v008": true
+  },
+  "outputs": {
+    "calibrated_delta": "/kaggle/working/pathwise_calibrated_delta.csv",
+    "transforms": "/kaggle/working/pathwise_similarity_transforms.csv",
+    "lattice_selections": "/kaggle/working/pathwise_calibrated_lattice_selections.csv",
+    "report": "/kaggle/working/pathwise_similarity_calibration_report.json"
+  }
+}
