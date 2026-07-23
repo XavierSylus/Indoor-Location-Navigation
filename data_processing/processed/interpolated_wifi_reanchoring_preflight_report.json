@@ -1,0 +1,90 @@
+{
+  "status": "ok",
+  "version": "v011_interpolated_wifi_source_reanchoring",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "diagnostic_only": true,
+  "submission_safe": false,
+  "seed": 42,
+  "git_commit": "288e0a65d5d6b485c7e6e9b605a611775a1714c3",
+  "coverage": {
+    "target_sites": 5,
+    "source_paths": 865,
+    "wifi_scans": 29822,
+    "interpolated_scans": 28461,
+    "heldout_path_overlap": 0
+  },
+  "metrics": {
+    "mean_displacement_m": 1.9289593321881198,
+    "median_displacement_m": 1.6666912077774858,
+    "p90_displacement_m": 3.9244291294314286,
+    "fraction_over_1m": 0.6949509855591862,
+    "mean_time_gap_ms": 3058.7104107375003,
+    "mean_duplicate_binding_ratio": 0.0035014600043501774
+  },
+  "site_metrics": [
+    {
+      "site_id": "5d27099f03f801723c32511d",
+      "n_paths": 130,
+      "n_interpolated_scans": 4020,
+      "mean_displacement_m": 2.01744067100798,
+      "median_displacement_m": 1.692531729426371,
+      "p90_displacement_m": 4.215167709676154,
+      "fraction_over_1m": 0.6880597014925374,
+      "mean_duplicate_binding_ratio": 0.016778029662645046
+    },
+    {
+      "site_id": "5da138274db8ce0c98bbd3d2",
+      "n_paths": 212,
+      "n_interpolated_scans": 2438,
+      "mean_displacement_m": 1.841202402555137,
+      "median_displacement_m": 1.5927480646509218,
+      "p90_displacement_m": 3.7282903425252347,
+      "fraction_over_1m": 0.7063166529942576,
+      "mean_duplicate_binding_ratio": 0.0
+    },
+    {
+      "site_id": "5da138364db8ce0c98bc00f1",
+      "n_paths": 81,
+      "n_interpolated_scans": 2580,
+      "mean_displacement_m": 1.9159855780408042,
+      "median_displacement_m": 1.6044148457048832,
+      "p90_displacement_m": 3.908366734491318,
+      "fraction_over_1m": 0.6953488372093023,
+      "mean_duplicate_binding_ratio": 0.0
+    },
+    {
+      "site_id": "5da1383b4db8ce0c98bc11ab",
+      "n_paths": 238,
+      "n_interpolated_scans": 12792,
+      "mean_displacement_m": 1.949360459805754,
+      "median_displacement_m": 1.7239449527117356,
+      "p90_displacement_m": 3.9137237517150436,
+      "fraction_over_1m": 0.7029393370856786,
+      "mean_duplicate_binding_ratio": 0.0035614245698279315
+    },
+    {
+      "site_id": "5da138754db8ce0c98bca82f",
+      "n_paths": 204,
+      "n_interpolated_scans": 6631,
+      "mean_displacement_m": 1.8732750422778006,
+      "median_displacement_m": 1.602444979488624,
+      "p90_displacement_m": 3.8474556830883393,
+      "fraction_over_1m": 0.6793847081888101,
+      "mean_duplicate_binding_ratio": 0.0
+    }
+  ],
+  "preflight_gate": {
+    "minimum_p90_displacement_m": 2.0,
+    "minimum_fraction_over_1m": 0.2,
+    "passed": true
+  },
+  "decision": "Promote interpolated WiFi source reanchoring to the Kaggle OOF reranker probe.",
+  "submission_created": false,
+  "environment": {
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "1.26.4",
+    "pandas": "2.2.2"
+  }
+}

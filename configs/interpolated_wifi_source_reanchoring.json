@@ -1,0 +1,106 @@
+{
+  "version": "v011_interpolated_wifi_source_reanchoring",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "competition_slug": "indoor-location-navigation",
+  "seed": 42,
+  "inputs": {
+    "train_root": "indoor-location-navigation/train",
+    "candidate_dataset": "data_processing/processed/hard_site_candidate_rerank_dataset.csv",
+    "v008_delta_predictions": "versions/v008_path_safe_delta_oof/remote_output/path_safe_v3_delta_oof.csv",
+    "v008_report": "versions/v008_path_safe_delta_oof/remote_output/path_safe_delta_oof_report.json"
+  },
+  "data": {
+    "target_site_ids": [
+      "5d27099f03f801723c32511d",
+      "5da138274db8ce0c98bbd3d2",
+      "5da138364db8ce0c98bc00f1",
+      "5da1383b4db8ce0c98bc11ab",
+      "5da138754db8ce0c98bca82f"
+    ],
+    "heldout_path_ids": [
+      "5dc65d451cda3700060305be",
+      "5dce63105516ad00065f0280",
+      "5dce818894e4900006125129",
+      "5dd0e5dd878f3300066c7644",
+      "5dd374ae44333f00067aa196"
+    ],
+    "wifi_window_ms": 5000,
+    "n_bssid": 2000,
+    "source_wifi_topn": 5,
+    "rssi_clip_min": -100.0,
+    "rssi_clip_max": -20.0,
+    "missing_wifi_rssi": -999.0
+  },
+  "preflight_gate": {
+    "minimum_p90_displacement_m": 2.0,
+    "minimum_fraction_over_1m": 0.2
+  },
+  "validation_gate": {
+    "baseline_lattice_mae_m": 4.346602166870011,
+    "baseline_sum_excess_over_4m": 125.19464053183394,
+    "dominant_path_baseline_excess_over_4m": {
+      "5dd0e5dd878f3300066c7644": 35.32126998511714,
+      "5dd374ae44333f00067aa196": 83.1202517291327
+    },
+    "target_mae_m": 3.0,
+    "require_dominant_paths_combined_excess_decrease": true
+  },
+  "lattice": {
+    "version": "v011_interpolated_wifi_source_reanchoring",
+    "experiment_type": "cv_probe",
+    "iteration_mode": "add_module",
+    "random_seed": 42,
+    "inputs": {
+      "candidate_dataset": "/kaggle/working/interpolated_wifi_candidate_dataset.csv",
+      "v3_delta_predictions": "versions/v008_path_safe_delta_oof/remote_output/path_safe_v3_delta_oof.csv"
+    },
+    "outputs": {
+      "selections": "/kaggle/working/interpolated_wifi_lattice_selections.csv",
+      "summary": "/kaggle/working/interpolated_wifi_lattice_summary.json"
+    },
+    "reranker": {
+      "feature_set": "geometry_source_wifi",
+      "target": "label_log1p_distance_m",
+      "model_type": "lgbm",
+      "num_leaves": 7,
+      "min_child_samples": 20,
+      "learning_rate": 0.05,
+      "n_estimators": 300,
+      "reg_alpha": 1.0,
+      "reg_lambda": 5.0,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8
+    },
+    "transition": {
+      "alpha_grid": [0.0, 0.1, 0.25, 0.5, 1.0, 2.0, 4.0],
+      "pairwise_cap_m": 10.0,
+      "require_exact_v3_chain": true,
+      "calibration": "leave_one_path_out"
+    },
+    "success_gate": {
+      "baseline_mae_m": 4.346602166870011,
+      "target_mae_m": 3.0,
+      "minimum_excess_over_4m_reduction_ratio": 0.25
+    },
+    "leakage_boundary": {
+      "submission_safe": false,
+      "reason": "Heldout paths are excluded from reanchored source fingerprints and from path-safe V3 fitting; labels are diagnostic-only.",
+      "forbidden_transition_columns": [
+        "gt_delta_x",
+        "gt_delta_y",
+        "gt_x",
+        "gt_y",
+        "label_distance_m",
+        "group_oracle_distance_at_topk"
+      ]
+    }
+  },
+  "outputs": {
+    "preflight_path_metrics": "data_processing/processed/interpolated_wifi_reanchoring_preflight_paths.csv",
+    "preflight_report": "data_processing/processed/interpolated_wifi_reanchoring_preflight_report.json",
+    "reanchored_candidate_dataset": "/kaggle/working/interpolated_wifi_candidate_dataset.csv",
+    "lattice_selections": "/kaggle/working/interpolated_wifi_lattice_selections.csv",
+    "report": "/kaggle/working/interpolated_wifi_source_reanchoring_report.json"
+  }
+}

@@ -1,0 +1,73 @@
+from __future__ import annotations
+
+import unittest
+
+import numpy as np
+
+from data_processing.interpolated_wifi_source_reanchoring import (
+    assign_interpolated_to_grid,
+    current_binding_stats,
+    interpolate_scan_positions,
+    nearest_indices,
+)
+
+
+class InterpolatedWifiSourceReanchoringTest(unittest.TestCase):
+    def test_interpolates_wifi_scan_between_waypoints(self) -> None:
+        waypoints = np.array(
+            [
+                [1000.0, 0.0, 0.0],
+                [3000.0, 4.0, 0.0],
+            ]
+        )
+
+        result = interpolate_scan_positions(np.array([2000]), waypoints)
+
+        self.assertEqual(1, len(result))
+        self.assertAlmostEqual(2.0, result.loc[0, "interpolated_x"])
+        self.assertAlmostEqual(0.0, result.loc[0, "interpolated_y"])
+        self.assertAlmostEqual(2.0, result.loc[0, "displacement_m"])
+        self.assertEqual(1000, result.loc[0, "time_gap_ms"])
+
+    def test_does_not_extrapolate_outside_waypoint_interval(self) -> None:
+        waypoints = np.array(
+            [
+                [1000.0, 0.0, 0.0],
+                [3000.0, 4.0, 0.0],
+            ]
+        )
+
+        result = interpolate_scan_positions(
+            np.array([500, 1000, 3000, 3500]), waypoints
+        )
+
+        self.assertEqual([1000, 3000], result["wifi_timestamp"].tolist())
+
+    def test_current_binding_detects_reused_scan(self) -> None:
+        stats = current_binding_stats(
+            wifi_timestamps=np.array([1000, 5000]),
+            waypoint_timestamps=np.array([900, 1100, 5000]),
+            window_ms=5000,
+        )
+
+        self.assertEqual(3, stats["waypoint_assignments"])
+        self.assertEqual(2, stats["unique_scan_assignments"])
+        self.assertAlmostEqual(1.0 / 3.0, stats["duplicate_binding_ratio"])
+
+    def test_nearest_timestamp_tie_is_deterministic(self) -> None:
+        indices = nearest_indices(np.array([1000, 3000]), np.array([2000]))
+
+        np.testing.assert_array_equal(indices, np.array([0]))
+
+    def test_reanchoring_assigns_each_scan_to_one_nearest_grid_point(self) -> None:
+        scan_positions = np.array([[0.2, 0.0], [9.7, 0.0]])
+        grid = np.array([[0.0, 0.0], [10.0, 0.0]])
+
+        indices, distances = assign_interpolated_to_grid(scan_positions, grid)
+
+        np.testing.assert_array_equal(indices, np.array([0, 1]))
+        np.testing.assert_allclose(distances, np.array([0.2, 0.3]))
+
+
+if __name__ == "__main__":
+    unittest.main()
