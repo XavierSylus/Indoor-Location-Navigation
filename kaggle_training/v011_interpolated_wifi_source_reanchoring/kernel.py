@@ -25,6 +25,19 @@ def run(command: list[str], cwd: Path | None = None) -> None:
 def main() -> None:
     if not Path("/kaggle/input").is_dir() or not WORKING_ROOT.is_dir():
         raise RuntimeError("This kernel entrypoint may run only inside Kaggle.")
+    diagnostic_name = "5dce818894e4900006125129.txt"
+    diagnostic_matches = sorted(
+        str(path) for path in Path("/kaggle/input").rglob(diagnostic_name)
+    )
+    print(
+        json.dumps(
+            {
+                "diagnostic_file": diagnostic_name,
+                "diagnostic_matches": diagnostic_matches,
+            }
+        ),
+        flush=True,
+    )
     run(
         [
             "git",
