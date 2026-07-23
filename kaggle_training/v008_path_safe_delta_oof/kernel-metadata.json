@@ -1,0 +1,15 @@
+{
+  "id": "kiivii/indoor-v008-path-safe-delta-oof",
+  "title": "Indoor v008 Path-safe Delta OOF",
+  "code_file": "kernel.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "competition_sources": [
+    "indoor-location-navigation"
+  ],
+  "dataset_sources": [],
+  "kernel_sources": []
+}
