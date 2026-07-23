@@ -1,0 +1,54 @@
+{
+  "status": "ok",
+  "purpose": "Kaggle-only training chain validation; not experiment CV and not submission evidence",
+  "competition_slug": "indoor-location-navigation",
+  "kernel_slug": "kiivii/indoor-v008-path-safe-training-smoke",
+  "kernel_version": 2,
+  "kernel_status": "COMPLETE",
+  "is_private": true,
+  "repository_commit": "9be867918e92170552e1f9fe9b71ceec15e92fd4",
+  "kaggle_cli_version": "2.2.3",
+  "remote_training": {
+    "model_type": "ridge",
+    "seed": 42,
+    "n_features": 21,
+    "n_train_paths": 10,
+    "n_validation_paths": 2,
+    "n_train_legs": 52,
+    "n_validation_legs": 9,
+    "path_overlap_count": 0,
+    "path_safe_split": true,
+    "smoke_delta_mae_m": 6.317890565578269
+  },
+  "output_validation": {
+    "remote_output_files": [
+      "training_smoke_predictions.csv",
+      "training_smoke_report.json"
+    ],
+    "prediction_rows": 9,
+    "prediction_columns": [
+      "path_id",
+      "start_timestamp",
+      "end_timestamp",
+      "delta_x",
+      "delta_y",
+      "pred_delta_x",
+      "pred_delta_y",
+      "error_m"
+    ],
+    "non_finite_count": 0,
+    "submission_created": false,
+    "submission_file_count": 0,
+    "kernel_validation": "passed"
+  },
+  "sha256": {
+    "output_v2/training_smoke_report.json": "425ab1b70e30965230eddc8f21a537297bba061fbfb65dd50dbcd4e963981e99",
+    "output_v2/training_smoke_predictions.csv": "c7106539dfe22559e79743c6d655c9ab3757b38c3ff7412ee8599eeef0ee0882",
+    "output_v2/indoor-v008-path-safe-training-smoke.log": "8037b236776f0bc7d3f23c8548fb5a469af8937c5d739164b0cde3700941ccff"
+  },
+  "leaderboard_submission": {
+    "attempted": false,
+    "quota_consumed": 0
+  },
+  "judgement": "The direct Kaggle training, monitoring, status, output download, and validation chain is operational. The smoke metric is not a score-improvement result."
+}

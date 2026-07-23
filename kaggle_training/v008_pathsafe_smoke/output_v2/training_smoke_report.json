@@ -1,0 +1,62 @@
+{
+  "status": "ok",
+  "version": "kaggle_pathsafe_training_smoke_v1",
+  "purpose": "Kaggle training-chain smoke only; not experiment CV and not submission evidence.",
+  "seed": 42,
+  "competition_slug": "indoor-location-navigation",
+  "train_root": "/kaggle/input/competitions/indoor-location-navigation/train",
+  "model": {
+    "type": "ridge",
+    "alpha": 1.0,
+    "n_features": 21
+  },
+  "data": {
+    "n_selected_paths": 12,
+    "n_train_paths": 10,
+    "n_validation_paths": 2,
+    "n_train_legs": 52,
+    "n_validation_legs": 9,
+    "train_paths": [
+      "5cf76be6e36a4800081260da",
+      "5daebac3aa1d300006faaf6f",
+      "5db015db11adb40006afcaa6",
+      "5df7583f13d568000671addb",
+      "5ce3b963da68cb0009d8f6cf",
+      "5d084d944a2bd40008d47297",
+      "5d8db546fc794e0006ec2083",
+      "5daa90d6df065a00069beb2a",
+      "5d0b65357a560f00088a9831",
+      "5d8db7cafc794e0006ec208b"
+    ],
+    "validation_paths": [
+      "5d08672fd85da00008644f72",
+      "5dae78e343a5de00068ccd37"
+    ],
+    "path_overlap": [],
+    "path_safe_split": true,
+    "relative_path_files": {
+      "5cf76be6e36a4800081260da": "5cd56bade2acfd2d33b61a61/F2/5cf76be6e36a4800081260da.txt",
+      "5daebac3aa1d300006faaf6f": "5d2709c303f801723c3299ee/6F/5daebac3aa1d300006faaf6f.txt",
+      "5db015db11adb40006afcaa6": "5da138b74db8ce0c98bd4774/B1/5db015db11adb40006afcaa6.txt",
+      "5df7583f13d568000671addb": "5cd56b6ae2acfd2d33b59ccb/F4/5df7583f13d568000671addb.txt",
+      "5ce3b963da68cb0009d8f6cf": "5cd56baee2acfd2d33b61a93/F1/5ce3b963da68cb0009d8f6cf.txt",
+      "5d084d944a2bd40008d47297": "5cd56b5ae2acfd2d33b58549/2F/5d084d944a2bd40008d47297.txt",
+      "5d8db546fc794e0006ec2083": "5c3c44b80379370013e0fd2b/F2/5d8db546fc794e0006ec2083.txt",
+      "5daa90d6df065a00069beb2a": "5d27099303f801723c32364d/3F/5daa90d6df065a00069beb2a.txt",
+      "5d0b65357a560f00088a9831": "5cd96a0239e2fc0b4afed11f/F1/5d0b65357a560f00088a9831.txt",
+      "5d8db7cafc794e0006ec208b": "5c3c44b80379370013e0fd2b/F2/5d8db7cafc794e0006ec208b.txt",
+      "5d08672fd85da00008644f72": "5cd56b79e2acfd2d33b5b77c/L2/5d08672fd85da00008644f72.txt",
+      "5dae78e343a5de00068ccd37": "5da958dd46f8266d0737457b/B1/5dae78e343a5de00068ccd37.txt"
+    }
+  },
+  "smoke_delta_mae_m": 6.317890565578269,
+  "environment": {
+    "python": "3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]",
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "numpy": "2.0.2",
+    "pandas": "2.3.3"
+  },
+  "submission_created": false,
+  "repository_commit": "9be867918e92170552e1f9fe9b71ceec15e92fd4",
+  "kernel_validation": "passed"
+}

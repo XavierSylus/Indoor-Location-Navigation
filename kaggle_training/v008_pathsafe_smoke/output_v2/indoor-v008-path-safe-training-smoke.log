@@ -1,0 +1,131 @@
+[{"stream_name":"stderr","time":0.985203961,"data":"Cloning into '/tmp/indoor-location-navigation-code'...\n"}
+,{"stream_name":"stderr","time":4.219558216,"data":"HEAD is now at 9be8679 chore(kaggle): add Kaggle-only path-safe training smoke\n"}
+,{"stream_name":"stdout","time":341.551538861,"data":"{\n"}
+,{"stream_name":"stdout","time":341.551670882,"data":"  \"status\": \"ok\",\n"}
+,{"stream_name":"stdout","time":341.551679037,"data":"  \"version\": \"kaggle_pathsafe_training_smoke_v1\",\n"}
+,{"stream_name":"stdout","time":341.551685109,"data":"  \"purpose\": \"Kaggle training-chain smoke only; not experiment CV and not submission evidence.\",\n"}
+,{"stream_name":"stdout","time":341.551690938,"data":"  \"seed\": 42,\n"}
+,{"stream_name":"stdout","time":341.551696863,"data":"  \"competition_slug\": \"indoor-location-navigation\",\n"}
+,{"stream_name":"stdout","time":341.551702367,"data":"  \"train_root\": \"/kaggle/input/competitions/indoor-location-navigation/train\",\n"}
+,{"stream_name":"stdout","time":341.551707941,"data":"  \"model\": {\n"}
+,{"stream_name":"stdout","time":341.551712987,"data":"    \"type\": \"ridge\",\n"}
+,{"stream_name":"stdout","time":341.551718077,"data":"    \"alpha\": 1.0,\n"}
+,{"stream_name":"stdout","time":341.55172306,"data":"    \"n_features\": 21\n"}
+,{"stream_name":"stdout","time":341.551728077,"data":"  },\n"}
+,{"stream_name":"stdout","time":341.551732898,"data":"  \"data\": {\n"}
+,{"stream_name":"stdout","time":341.551737797,"data":"    \"n_selected_paths\": 12,\n"}
+,{"stream_name":"stdout","time":341.55174311,"data":"    \"n_train_paths\": 10,\n"}
+,{"stream_name":"stdout","time":341.551748328,"data":"    \"n_validation_paths\": 2,\n"}
+,{"stream_name":"stdout","time":341.55175332,"data":"    \"n_train_legs\": 52,\n"}
+,{"stream_name":"stdout","time":341.551758144,"data":"    \"n_validation_legs\": 9,\n"}
+,{"stream_name":"stdout","time":341.551762133,"data":"    \"train_paths\": [\n"}
+,{"stream_name":"stdout","time":341.551767359,"data":"      \"5cf76be6e36a4800081260da\",\n"}
+,{"stream_name":"stdout","time":341.551772337,"data":"      \"5daebac3aa1d300006faaf6f\",\n"}
+,{"stream_name":"stdout","time":341.551777275,"data":"      \"5db015db11adb40006afcaa6\",\n"}
+,{"stream_name":"stdout","time":341.551782776,"data":"      \"5df7583f13d568000671addb\",\n"}
+,{"stream_name":"stdout","time":341.551788325,"data":"      \"5ce3b963da68cb0009d8f6cf\",\n"}
+,{"stream_name":"stdout","time":341.551793287,"data":"      \"5d084d944a2bd40008d47297\",\n"}
+,{"stream_name":"stdout","time":341.551798248,"data":"      \"5d8db546fc794e0006ec2083\",\n"}
+,{"stream_name":"stdout","time":341.551803104,"data":"      \"5daa90d6df065a00069beb2a\",\n"}
+,{"stream_name":"stdout","time":341.551808021,"data":"      \"5d0b65357a560f00088a9831\",\n"}
+,{"stream_name":"stdout","time":341.551812985,"data":"      \"5d8db7cafc794e0006ec208b\"\n"}
+,{"stream_name":"stdout","time":341.551818008,"data":"    ],\n"}
+,{"stream_name":"stdout","time":341.551823111,"data":"    \"validation_paths\": [\n"}
+,{"stream_name":"stdout","time":341.551828128,"data":"      \"5d08672fd85da00008644f72\",\n"}
+,{"stream_name":"stdout","time":341.551833156,"data":"      \"5dae78e343a5de00068ccd37\"\n"}
+,{"stream_name":"stdout","time":341.551838133,"data":"    ],\n"}
+,{"stream_name":"stdout","time":341.551842828,"data":"    \"path_overlap\": [],\n"}
+,{"stream_name":"stdout","time":341.551848398,"data":"    \"path_safe_split\": true,\n"}
+,{"stream_name":"stdout","time":341.551851874,"data":"    \"relative_path_files\": {\n"}
+,{"stream_name":"stdout","time":341.551855587,"data":"      \"5cf76be6e36a4800081260da\": \"5cd56bade2acfd2d33b61a61/F2/5cf76be6e36a4800081260da.txt\",\n"}
+,{"stream_name":"stdout","time":341.551876832,"data":"      \"5daebac3aa1d300006faaf6f\": \"5d2709c303f801723c3299ee/6F/5daebac3aa1d300006faaf6f.txt\",\n"}
+,{"stream_name":"stdout","time":341.551882245,"data":"      \"5db015db11adb40006afcaa6\": \"5da138b74db8ce0c98bd4774/B1/5db015db11adb40006afcaa6.txt\",\n"}
+,{"stream_name":"stdout","time":341.55188658,"data":"      \"5df7583f13d568000671addb\": \"5cd56b6ae2acfd2d33b59ccb/F4/5df7583f13d568000671addb.txt\",\n"}
+,{"stream_name":"stdout","time":341.551890837,"data":"      \"5ce3b963da68cb0009d8f6cf\": \"5cd56baee2acfd2d33b61a93/F1/5ce3b963da68cb0009d8f6cf.txt\",\n"}
+,{"stream_name":"stdout","time":341.55189506,"data":"      \"5d084d944a2bd40008d47297\": \"5cd56b5ae2acfd2d33b58549/2F/5d084d944a2bd40008d47297.txt\",\n"}
+,{"stream_name":"stdout","time":341.551899307,"data":"      \"5d8db546fc794e0006ec2083\": \"5c3c44b80379370013e0fd2b/F2/5d8db546fc794e0006ec2083.txt\",\n"}
+,{"stream_name":"stdout","time":341.551903496,"data":"      \"5daa90d6df065a00069beb2a\": \"5d27099303f801723c32364d/3F/5daa90d6df065a00069beb2a.txt\",\n"}
+,{"stream_name":"stdout","time":341.551907617,"data":"      \"5d0b65357a560f00088a9831\": \"5cd96a0239e2fc0b4afed11f/F1/5d0b65357a560f00088a9831.txt\",\n"}
+,{"stream_name":"stdout","time":341.551912068,"data":"      \"5d8db7cafc794e0006ec208b\": \"5c3c44b80379370013e0fd2b/F2/5d8db7cafc794e0006ec208b.txt\",\n"}
+,{"stream_name":"stdout","time":341.551917979,"data":"      \"5d08672fd85da00008644f72\": \"5cd56b79e2acfd2d33b5b77c/L2/5d08672fd85da00008644f72.txt\",\n"}
+,{"stream_name":"stdout","time":341.55192237,"data":"      \"5dae78e343a5de00068ccd37\": \"5da958dd46f8266d0737457b/B1/5dae78e343a5de00068ccd37.txt\"\n"}
+,{"stream_name":"stdout","time":341.551926653,"data":"    }\n"}
+,{"stream_name":"stdout","time":341.551930353,"data":"  },\n"}
+,{"stream_name":"stdout","time":341.551934118,"data":"  \"smoke_delta_mae_m\": 6.317890565578269,\n"}
+,{"stream_name":"stdout","time":341.551938097,"data":"  \"environment\": {\n"}
+,{"stream_name":"stdout","time":341.551941147,"data":"    \"python\": \"3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]\",\n"}
+,{"stream_name":"stdout","time":341.551944008,"data":"    \"platform\": \"Linux-6.12.90+-x86_64-with-glibc2.35\",\n"}
+,{"stream_name":"stdout","time":341.551947459,"data":"    \"numpy\": \"2.0.2\",\n"}
+,{"stream_name":"stdout","time":341.551951386,"data":"    \"pandas\": \"2.3.3\"\n"}
+,{"stream_name":"stdout","time":341.551955446,"data":"  },\n"}
+,{"stream_name":"stdout","time":341.551990188,"data":"  \"submission_created\": false\n"}
+,{"stream_name":"stdout","time":341.55199526,"data":"}\n"}
+,{"stream_name":"stdout","time":342.022249189,"data":"{\n"}
+,{"stream_name":"stdout","time":342.022281163,"data":"  \"status\": \"ok\",\n"}
+,{"stream_name":"stdout","time":342.022286896,"data":"  \"version\": \"kaggle_pathsafe_training_smoke_v1\",\n"}
+,{"stream_name":"stdout","time":342.022309515,"data":"  \"purpose\": \"Kaggle training-chain smoke only; not experiment CV and not submission evidence.\",\n"}
+,{"stream_name":"stdout","time":342.022313613,"data":"  \"seed\": 42,\n"}
+,{"stream_name":"stdout","time":342.022316421,"data":"  \"competition_slug\": \"indoor-location-navigation\",\n"}
+,{"stream_name":"stdout","time":342.022319493,"data":"  \"train_root\": \"/kaggle/input/competitions/indoor-location-navigation/train\",\n"}
+,{"stream_name":"stdout","time":342.022322328,"data":"  \"model\": {\n"}
+,{"stream_name":"stdout","time":342.022324961,"data":"    \"type\": \"ridge\",\n"}
+,{"stream_name":"stdout","time":342.022327725,"data":"    \"alpha\": 1.0,\n"}
+,{"stream_name":"stdout","time":342.022341849,"data":"    \"n_features\": 21\n"}
+,{"stream_name":"stdout","time":342.022344713,"data":"  },\n"}
+,{"stream_name":"stdout","time":342.02234723,"data":"  \"data\": {\n"}
+,{"stream_name":"stdout","time":342.022349793,"data":"    \"n_selected_paths\": 12,\n"}
+,{"stream_name":"stdout","time":342.022352328,"data":"    \"n_train_paths\": 10,\n"}
+,{"stream_name":"stdout","time":342.02235488,"data":"    \"n_validation_paths\": 2,\n"}
+,{"stream_name":"stdout","time":342.02235741,"data":"    \"n_train_legs\": 52,\n"}
+,{"stream_name":"stdout","time":342.022359936,"data":"    \"n_validation_legs\": 9,\n"}
+,{"stream_name":"stdout","time":342.022371619,"data":"    \"train_paths\": [\n"}
+,{"stream_name":"stdout","time":342.022374227,"data":"      \"5cf76be6e36a4800081260da\",\n"}
+,{"stream_name":"stdout","time":342.022376896,"data":"      \"5daebac3aa1d300006faaf6f\",\n"}
+,{"stream_name":"stdout","time":342.022379401,"data":"      \"5db015db11adb40006afcaa6\",\n"}
+,{"stream_name":"stdout","time":342.022381893,"data":"      \"5df7583f13d568000671addb\",\n"}
+,{"stream_name":"stdout","time":342.022384325,"data":"      \"5ce3b963da68cb0009d8f6cf\",\n"}
+,{"stream_name":"stdout","time":342.022386831,"data":"      \"5d084d944a2bd40008d47297\",\n"}
+,{"stream_name":"stdout","time":342.022389446,"data":"      \"5d8db546fc794e0006ec2083\",\n"}
+,{"stream_name":"stdout","time":342.02239202,"data":"      \"5daa90d6df065a00069beb2a\",\n"}
+,{"stream_name":"stdout","time":342.02239453,"data":"      \"5d0b65357a560f00088a9831\",\n"}
+,{"stream_name":"stdout","time":342.022396995,"data":"      \"5d8db7cafc794e0006ec208b\"\n"}
+,{"stream_name":"stdout","time":342.022399611,"data":"    ],\n"}
+,{"stream_name":"stdout","time":342.022402047,"data":"    \"validation_paths\": [\n"}
+,{"stream_name":"stdout","time":342.022404525,"data":"      \"5d08672fd85da00008644f72\",\n"}
+,{"stream_name":"stdout","time":342.022421706,"data":"      \"5dae78e343a5de00068ccd37\"\n"}
+,{"stream_name":"stdout","time":342.022424477,"data":"    ],\n"}
+,{"stream_name":"stdout","time":342.022426985,"data":"    \"path_overlap\": [],\n"}
+,{"stream_name":"stdout","time":342.022429423,"data":"    \"path_safe_split\": true,\n"}
+,{"stream_name":"stdout","time":342.022431908,"data":"    \"relative_path_files\": {\n"}
+,{"stream_name":"stdout","time":342.022434466,"data":"      \"5cf76be6e36a4800081260da\": \"5cd56bade2acfd2d33b61a61/F2/5cf76be6e36a4800081260da.txt\",\n"}
+,{"stream_name":"stdout","time":342.022437185,"data":"      \"5daebac3aa1d300006faaf6f\": \"5d2709c303f801723c3299ee/6F/5daebac3aa1d300006faaf6f.txt\",\n"}
+,{"stream_name":"stdout","time":342.022439805,"data":"      \"5db015db11adb40006afcaa6\": \"5da138b74db8ce0c98bd4774/B1/5db015db11adb40006afcaa6.txt\",\n"}
+,{"stream_name":"stdout","time":342.022442415,"data":"      \"5df7583f13d568000671addb\": \"5cd56b6ae2acfd2d33b59ccb/F4/5df7583f13d568000671addb.txt\",\n"}
+,{"stream_name":"stdout","time":342.022445287,"data":"      \"5ce3b963da68cb0009d8f6cf\": \"5cd56baee2acfd2d33b61a93/F1/5ce3b963da68cb0009d8f6cf.txt\",\n"}
+,{"stream_name":"stdout","time":342.022447913,"data":"      \"5d084d944a2bd40008d47297\": \"5cd56b5ae2acfd2d33b58549/2F/5d084d944a2bd40008d47297.txt\",\n"}
+,{"stream_name":"stdout","time":342.022450609,"data":"      \"5d8db546fc794e0006ec2083\": \"5c3c44b80379370013e0fd2b/F2/5d8db546fc794e0006ec2083.txt\",\n"}
+,{"stream_name":"stdout","time":342.022453236,"data":"      \"5daa90d6df065a00069beb2a\": \"5d27099303f801723c32364d/3F/5daa90d6df065a00069beb2a.txt\",\n"}
+,{"stream_name":"stdout","time":342.022455896,"data":"      \"5d0b65357a560f00088a9831\": \"5cd96a0239e2fc0b4afed11f/F1/5d0b65357a560f00088a9831.txt\",\n"}
+,{"stream_name":"stdout","time":342.022462027,"data":"      \"5d8db7cafc794e0006ec208b\": \"5c3c44b80379370013e0fd2b/F2/5d8db7cafc794e0006ec208b.txt\",\n"}
+,{"stream_name":"stdout","time":342.022467384,"data":"      \"5d08672fd85da00008644f72\": \"5cd56b79e2acfd2d33b5b77c/L2/5d08672fd85da00008644f72.txt\",\n"}
+,{"stream_name":"stdout","time":342.022470065,"data":"      \"5dae78e343a5de00068ccd37\": \"5da958dd46f8266d0737457b/B1/5dae78e343a5de00068ccd37.txt\"\n"}
+,{"stream_name":"stdout","time":342.022473024,"data":"    }\n"}
+,{"stream_name":"stdout","time":342.022475476,"data":"  },\n"}
+,{"stream_name":"stdout","time":342.022477985,"data":"  \"smoke_delta_mae_m\": 6.317890565578269,\n"}
+,{"stream_name":"stdout","time":342.022480606,"data":"  \"environment\": {\n"}
+,{"stream_name":"stdout","time":342.022483115,"data":"    \"python\": \"3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]\",\n"}
+,{"stream_name":"stdout","time":342.022485775,"data":"    \"platform\": \"Linux-6.12.90+-x86_64-with-glibc2.35\",\n"}
+,{"stream_name":"stdout","time":342.022488401,"data":"    \"numpy\": \"2.0.2\",\n"}
+,{"stream_name":"stdout","time":342.022490948,"data":"    \"pandas\": \"2.3.3\"\n"}
+,{"stream_name":"stdout","time":342.022493752,"data":"  },\n"}
+,{"stream_name":"stdout","time":342.022496142,"data":"  \"submission_created\": false,\n"}
+,{"stream_name":"stdout","time":342.022498715,"data":"  \"repository_commit\": \"9be867918e92170552e1f9fe9b71ceec15e92fd4\",\n"}
+,{"stream_name":"stdout","time":342.022501335,"data":"  \"kernel_validation\": \"passed\"\n"}
+,{"stream_name":"stdout","time":342.022503861,"data":"}\n"}
+,{"stream_name":"stderr","time":344.710878355,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":344.710917473,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":345.060639972,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":345.060669908,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":346.792388354,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":348.447803587,"data":"[NbConvertApp] Writing 282450 bytes to __results__.html\n"}
+]
