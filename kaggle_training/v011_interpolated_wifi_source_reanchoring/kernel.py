@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 REPOSITORY_URL = "https://github.com/XavierSylus/Indoor-Location-Navigation.git"
-REPOSITORY_COMMIT = "1629d3d6da1688da5c9d81aa6f559be1b0d3dc1b"
+REPOSITORY_COMMIT = "ba56b329dd818a66ea945034e064871028c84618"
 WORKING_ROOT = Path("/kaggle/working")
 REPOSITORY_ROOT = Path("/tmp/indoor-location-navigation-v011")
 EXPECTED_OUTPUTS = {
@@ -25,19 +25,6 @@ def run(command: list[str], cwd: Path | None = None) -> None:
 def main() -> None:
     if not Path("/kaggle/input").is_dir() or not WORKING_ROOT.is_dir():
         raise RuntimeError("This kernel entrypoint may run only inside Kaggle.")
-    diagnostic_name = "5dce818894e4900006125129.txt"
-    diagnostic_matches = sorted(
-        str(path) for path in Path("/kaggle/input").rglob(diagnostic_name)
-    )
-    print(
-        json.dumps(
-            {
-                "diagnostic_file": diagnostic_name,
-                "diagnostic_matches": diagnostic_matches,
-            }
-        ),
-        flush=True,
-    )
     run(
         [
             "git",
