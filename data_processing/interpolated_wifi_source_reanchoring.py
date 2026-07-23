@@ -520,7 +520,9 @@ def attach_reanchored_source_features(
 
     data = candidates.copy()
     data["_row_id"] = np.arange(len(data), dtype=np.int64)
-    train_root = resolve_path(config["inputs"]["train_root"])
+    train_root = resolve_runtime_train_root(
+        config, kaggle_runtime=Path("/kaggle/input").is_dir()
+    )
     data_config = config["data"]
     n_bssid = int(data_config["n_bssid"])
     window_ms = int(data_config["wifi_window_ms"])
