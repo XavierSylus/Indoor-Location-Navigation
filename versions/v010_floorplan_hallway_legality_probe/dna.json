@@ -1,0 +1,100 @@
+{
+  "dna_id": "v010_floorplan_hallway_legality_probe",
+  "dna_parent": "v008_path_safe_delta_oof",
+  "version": "v010_floorplan_hallway_legality_probe",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "genes": {
+    "base": [
+      {
+        "id": "v008_path_safe_delta_oof",
+        "inherit": [
+          "candidate_dataset",
+          "geometry_source_wifi_unary_reranker",
+          "path_safe_v3_delta_oof",
+          "transition_lattice"
+        ]
+      }
+    ],
+    "strategy": [
+      {
+        "id": "floorplan_legality_preflight",
+        "hypothesis": "Floor-image hallway legality can distinguish the correct candidate or correct transition on both dominant v008 tail paths."
+      }
+    ],
+    "feature_component": [
+      {
+        "id": "floorplan_hallway_legality",
+        "status": "rejected_preflight",
+        "definition": "Point hallway membership and segment non-hallway ratio from floor_image.png using the floor_info coordinate transform.",
+        "evidence": {
+          "priority_paths": 2,
+          "minimum_candidate_in_bounds_ratio": 1.0,
+          "success_gate_passed": false
+        }
+      }
+    ],
+    "model_component": [
+      {
+        "id": "none",
+        "reason": "The information-source preflight failed before model or lattice integration."
+      }
+    ],
+    "change_operator": [
+      {
+        "operator": "add",
+        "target": "diagnostic floorplan legality signal",
+        "integrated_into_predictions": false
+      }
+    ],
+    "validation": [
+      {
+        "id": "dominant_tail_floorplan_preflight",
+        "scope": "five diagnostic paths / 59 groups, with gates evaluated on the two dominant excess-over-4m paths",
+        "point_advantage": {
+          "5dd0e5dd878f3300066c7644": -0.05,
+          "5dd374ae44333f00067aa196": 0.0
+        },
+        "edge_advantage": {
+          "5dd0e5dd878f3300066c7644": -0.06029302505275047,
+          "5dd374ae44333f00067aa196": 0.013610159031211655
+        },
+        "minimum_required_advantage": 0.05,
+        "success_gate_passed": false
+      }
+    ],
+    "execution": [
+      {
+        "platform": "local CPU diagnostic only",
+        "exact_command": "python data_processing/floorplan_hallway_legality.py --config configs/floorplan_hallway_legality.json",
+        "seed": 42,
+        "git_commit": "8e8367f2513cdf840e4d077ec08f9209c2db370f",
+        "config": "configs/floorplan_hallway_legality.json"
+      }
+    ],
+    "submission": [
+      {
+        "artifact": null,
+        "leaderboard_attempted": false,
+        "quota_consumed": 0
+      }
+    ],
+    "external_source": [
+      {
+        "source": "https://cocoinit23.com/kaggle-indoor-location-navigation-15th-place-solution/",
+        "retained_gene": "floor-image hallway evidence",
+        "adaptation": "test information value without moving or snapping predictions",
+        "discarded": [
+          "push-to-hallway coordinate mutation",
+          "snap-to-grid",
+          "repeated cost minimization"
+        ]
+      }
+    ]
+  },
+  "decision": {
+    "promote_gene": false,
+    "promote_score": false,
+    "reason": "Floorplan point and edge legality do not distinguish the oracle path from v008 on both dominant tail paths, so Kaggle integration would not test a supported hypothesis."
+  }
+}

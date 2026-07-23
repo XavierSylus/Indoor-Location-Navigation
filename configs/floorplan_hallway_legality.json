@@ -1,0 +1,29 @@
+{
+  "version": "v010_floorplan_hallway_legality_probe",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "competition_slug": "indoor-location-navigation",
+  "seed": 42,
+  "inputs": {
+    "candidate_dataset": "data_processing/processed/hard_site_candidate_rerank_dataset.csv",
+    "v008_selections": "versions/v008_path_safe_delta_oof/remote_output/path_safe_lattice_selections.csv",
+    "metadata_root": "indoor-location-navigation/metadata"
+  },
+  "hallway": {
+    "max_rgb_channel_exclusive": 80,
+    "invert_y": true,
+    "priority_path_ids": [
+      "5dd0e5dd878f3300066c7644",
+      "5dd374ae44333f00067aa196"
+    ]
+  },
+  "success_gate": {
+    "minimum_oracle_point_advantage": 0.05,
+    "minimum_oracle_edge_advantage": 0.05,
+    "require_every_priority_path": true
+  },
+  "outputs": {
+    "path_metrics": "data_processing/processed/floorplan_hallway_legality_path_metrics.csv",
+    "report": "data_processing/processed/floorplan_hallway_legality_report.json"
+  }
+}

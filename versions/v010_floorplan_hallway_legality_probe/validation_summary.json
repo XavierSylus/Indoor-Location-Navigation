@@ -1,0 +1,52 @@
+{
+  "status": "complete",
+  "validation_type": "cv_probe",
+  "diagnostic_only": true,
+  "submission_safe": false,
+  "execution": {
+    "stage": "preflight",
+    "kaggle_kernel_created": false,
+    "reason": "The frozen information-value gate failed before remote execution."
+  },
+  "coverage": {
+    "paths": 5,
+    "groups": 59,
+    "priority_paths": 2,
+    "minimum_candidate_in_bounds_ratio": 1.0
+  },
+  "priority_path_metrics": [
+    {
+      "path_id": "5dd0e5dd878f3300066c7644",
+      "n_groups": 20,
+      "candidate_hallway_ratio": 0.788,
+      "oracle_hallway_ratio": 0.8,
+      "v008_hallway_ratio": 0.85,
+      "oracle_point_advantage": -0.05,
+      "oracle_edge_nonhallway_ratio": 0.1310386198258052,
+      "v008_edge_nonhallway_ratio": 0.07074559477305473,
+      "oracle_edge_advantage": -0.06029302505275047
+    },
+    {
+      "path_id": "5dd374ae44333f00067aa196",
+      "n_groups": 31,
+      "candidate_hallway_ratio": 0.9767741935483871,
+      "oracle_hallway_ratio": 1.0,
+      "v008_hallway_ratio": 1.0,
+      "oracle_point_advantage": 0.0,
+      "oracle_edge_nonhallway_ratio": 0.033533533533533534,
+      "v008_edge_nonhallway_ratio": 0.04714369256474519,
+      "oracle_edge_advantage": 0.013610159031211655
+    }
+  ],
+  "success_gate": {
+    "minimum_oracle_point_advantage": 0.05,
+    "minimum_oracle_edge_advantage": 0.05,
+    "require_every_priority_path": true,
+    "passed": false
+  },
+  "tests": {
+    "command": "python -m unittest tests.test_floorplan_hallway_legality",
+    "result": "4 tests passed"
+  },
+  "decision": "Reject floorplan hallway legality before Kaggle execution. Do not tune its pixel threshold or add it to the v008 lattice."
+}

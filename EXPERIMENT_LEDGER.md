@@ -1,6 +1,6 @@
 # Experiment Ledger
 
-Last updated: 2026-04-20
+Last updated: 2026-07-23
 
 This file is the persistent experiment ledger for submission-facing work.
 Do not create a new default submission path unless it is recorded here together with its validation evidence.
@@ -48,6 +48,7 @@ Do not create a new default submission path unless it is recorded here together 
 | 2026-07-23 | `none` | `v007_candidate_transition_lattice` | `versions/v007_candidate_transition_lattice/config.yml` | `data_processing/processed/candidate_transition_lattice_summary.json` | `3e2c70e1fdf94df6003ebdf2d5305c63fd84d52e` | `42` | `hard-site Top-50 leave-one-path-out; 59 groups / 5 paths; nested alpha calibration` | unknown | unknown | `exploratory` | `dna:v007_candidate_transition_lattice`; unary `7.524908m` -> lattice `1.355896m`, excess-over-4m reduced `91.3658%`. Promote the transition-lattice gene, but existing V3 checkpoint is not path-safe; next is `v008_path_safe_delta_oof`, no submission. |
 | 2026-07-23 | `none` | `v008_path_safe_delta_oof` | `configs/path_safe_delta_oof.json` | `versions/v008_path_safe_delta_oof/validation_summary.json` | `459ef04a79e2437ff3a9f11770c9f6177ff7de24` | `42` | `five complete held-out paths; 59 groups; 54/54 path-safe delta intervals; nested alpha calibration` | unknown | unknown | `exploratory` | `dna:v008_path_safe_delta_oof,parent:v007_candidate_transition_lattice`; unary `7.524908m` -> path-safe lattice `4.346602m`, excess-over-4m reduced `54.4469%`, but `<3m` gate failed. Promote the transition gene, reject the score, no submission. Next: pathwise rotation/scale calibration. |
 | 2026-07-23 | `none` | `v009_pathwise_rotation_scale_calibration` | `configs/pathwise_similarity_calibration.json` | `versions/v009_pathwise_rotation_scale_calibration/validation_summary.json` | `e65a2e42ea1ab8a9ec4d0815e40c95d891860466` | `42` | `same frozen five path-safe paths / 59 groups as v008; per-path transform uses OOF unary geometry without GT` | unknown | unknown | `rejected` | `dna:v009_pathwise_rotation_scale_calibration,parent:v008_path_safe_delta_oof`; delta MAE `3.318868m` -> `3.784095m`, lattice MAE `4.346602m` -> `8.068362m`. Unary geometry is too noisy to calibrate relative motion; stop this route and return to error diagnosis. No submission. |
+| 2026-07-23 | `none` | `v010_floorplan_hallway_legality_probe` | `configs/floorplan_hallway_legality.json` | `versions/v010_floorplan_hallway_legality_probe/validation_summary.json` | `8e8367f2513cdf840e4d077ec08f9209c2db370f` | `42` | `five diagnostic paths / 59 groups; information gate on the two paths dominating v008 excess-over-4m` | unknown | unknown | `rejected` | `dna:v010_floorplan_hallway_legality_probe,parent:v008_path_safe_delta_oof,genes:floorplan_hallway_legality`; dominant-path point advantages were `-0.0500/0.0000`, edge advantages `-0.060293/0.013610`, below the frozen `0.05` gate. Rejected before Kaggle execution; no submission or quota consumed. |
 
 ## Supporting Validation References
 
@@ -57,6 +58,7 @@ Do not create a new default submission path unless it is recorded here together 
 | `data_processing/processed/safe_beam_param_search_summary.json` | global beam parameter search | best global beam setting still regresses against WiFi baseline |
 | `data_processing/processed/beam_gating_summary.json` | beam gating sweep | gating evidence is too weak to define a new mainline |
 | `data_processing/processed/grid_discretization_summary.json` | grid snapping / candidate gap diagnosis | absolute candidate quality is the main bottleneck |
+| `data_processing/processed/floorplan_hallway_legality_report.json` | floor-image point and transition legality preflight | floorplan legality does not distinguish the correct trajectory on both dominant v008 tail paths; reject before lattice integration |
 
 ## Entry Template
 

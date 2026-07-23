@@ -1,0 +1,63 @@
+{
+  "status": "ok",
+  "version": "v010_floorplan_hallway_legality_probe",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "diagnostic_only": true,
+  "submission_safe": false,
+  "seed": 42,
+  "git_commit": "8e8367f2513cdf840e4d077ec08f9209c2db370f",
+  "n_paths": 5,
+  "n_groups": 59,
+  "coordinate_mapping": {
+    "invert_y": true,
+    "max_rgb_channel_exclusive": 80,
+    "minimum_candidate_in_bounds_ratio": 1.0
+  },
+  "priority_path_metrics": [
+    {
+      "site_id": "5da138754db8ce0c98bca82f",
+      "path_id": "5dd0e5dd878f3300066c7644",
+      "floor": "F1",
+      "n_groups": 20,
+      "candidate_hallway_ratio": 0.788,
+      "oracle_hallway_ratio": 0.8,
+      "v008_hallway_ratio": 0.85,
+      "oracle_point_advantage": -0.04999999999999993,
+      "oracle_edge_nonhallway_ratio": 0.1310386198258052,
+      "v008_edge_nonhallway_ratio": 0.07074559477305473,
+      "oracle_edge_advantage": -0.06029302505275047,
+      "candidate_in_bounds_ratio": 1.0,
+      "oracle_in_bounds_ratio": 1.0,
+      "v008_in_bounds_ratio": 1.0,
+      "has_discriminative_signal": false
+    },
+    {
+      "site_id": "5da1383b4db8ce0c98bc11ab",
+      "path_id": "5dd374ae44333f00067aa196",
+      "floor": "F1",
+      "n_groups": 31,
+      "candidate_hallway_ratio": 0.9767741935483871,
+      "oracle_hallway_ratio": 1.0,
+      "v008_hallway_ratio": 1.0,
+      "oracle_point_advantage": 0.0,
+      "oracle_edge_nonhallway_ratio": 0.033533533533533534,
+      "v008_edge_nonhallway_ratio": 0.04714369256474519,
+      "oracle_edge_advantage": 0.013610159031211655,
+      "candidate_in_bounds_ratio": 1.0,
+      "oracle_in_bounds_ratio": 1.0,
+      "v008_in_bounds_ratio": 1.0,
+      "has_discriminative_signal": false
+    }
+  ],
+  "success_gate_passed": false,
+  "decision": "Reject floorplan legality before Kaggle execution because it does not distinguish the dominant tail paths.",
+  "submission_created": false,
+  "environment": {
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "1.26.4",
+    "pandas": "2.2.2",
+    "pillow": "10.4.0"
+  }
+}
