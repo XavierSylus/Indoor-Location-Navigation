@@ -1,0 +1,64 @@
+{
+  "status": "ok",
+  "n_selected": 2,
+  "n_rejected": 3,
+  "whitelist_sites": [
+    "5da138754db8ce0c98bca82f",
+    "5da1383b4db8ce0c98bc11ab"
+  ],
+  "selected": [
+    {
+      "site_id": "5da138754db8ce0c98bca82f",
+      "wifi_mae_m": 10.24871655211599,
+      "failure_mode": "catastrophic_outlier_failure",
+      "beam_candidate_signal": "candidate_for_outlier_aware_beam",
+      "top10_recall": 0.9,
+      "top50_recall": 0.9,
+      "oracle_rank_mean": 8.1,
+      "catastrophic_outlier_ratio": 0.1,
+      "mean_bias_mag_m": 7.012623991450237
+    },
+    {
+      "site_id": "5da1383b4db8ce0c98bc11ab",
+      "wifi_mae_m": 8.84907853476602,
+      "failure_mode": "systematic_bias_failure",
+      "beam_candidate_signal": "candidate_for_site_selective_beam",
+      "top10_recall": 0.8387096774193549,
+      "top50_recall": 1.0,
+      "oracle_rank_mean": 6.741935483870968,
+      "catastrophic_outlier_ratio": 0.0,
+      "mean_bias_mag_m": 5.697971349620264
+    }
+  ],
+  "rejected": [
+    {
+      "site_id": "5d27099f03f801723c32511d",
+      "wifi_mae_m": 14.590769468208975,
+      "failure_mode": "catastrophic_outlier_failure",
+      "beam_candidate_signal": "candidate_for_outlier_aware_beam",
+      "reasons": [
+        "top10_recall<0.8",
+        "oracle_rank_mean>10.0",
+        "catastrophic_outlier_ratio>0.15"
+      ]
+    },
+    {
+      "site_id": "5da138364db8ce0c98bc00f1",
+      "wifi_mae_m": 3.640422116325069,
+      "failure_mode": "mild_or_mixed_failure",
+      "beam_candidate_signal": "not_a_priority_for_beam",
+      "reasons": [
+        "beam_candidate_signal=not_a_priority_for_beam"
+      ]
+    },
+    {
+      "site_id": "5da138274db8ce0c98bbd3d2",
+      "wifi_mae_m": 2.8780991640995754,
+      "failure_mode": "mild_or_mixed_failure",
+      "beam_candidate_signal": "not_a_priority_for_beam",
+      "reasons": [
+        "beam_candidate_signal=not_a_priority_for_beam"
+      ]
+    }
+  ]
+}

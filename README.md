@@ -1,320 +1,137 @@
 # Indoor Location & Navigation
 
-> **Multi-Modal Indoor Positioning System for PRCV 2026**
->
-> A four-module indoor positioning pipeline for the [Kaggle Indoor Location & Navigation](https://www.kaggle.com/competitions/indoor-location-navigation) competition.
-> Combines Wi-Fi fingerprinting, IMU-based relative displacement prediction, ensemble learning, and Beam Search trajectory optimization to predict floor level and (x, y) coordinates for ~10k waypoints across 204 heterogeneous buildings.
+> Multi-stage indoor positioning pipeline for the Kaggle Indoor Location & Navigation competition.
+
+This repository currently contains two distinct layers of work:
+
+1. A verified mainline centered on absolute per-site positioning with the V3 ensemble.
+2. Several exploratory trajectory-constraint branches (`beam`, `PDR`, `gating`) that are retained for analysis but are not the recommended submission path.
 
 ---
 
-## Table of Contents
+## Current Verified Status
 
-- [Results](#results)
-- [System Architecture](#system-architecture)
-- [Module 1: IMU Delta Prediction](#module-1-imu-delta-prediction)
-- [Module 2: Weighted Ensemble](#module-2-weighted-ensemble)
-- [Module 3: Beam Search Optimization](#module-3-beam-search-optimization)
-- [Module 4: Pseudo-Label (Planned)](#module-4-pseudo-label-planned)
-- [Feature Engineering](#feature-engineering)
-- [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
-- [Dependencies](#dependencies)
-- [Reproducibility](#reproducibility)
+### Best leaderboard result still in use
 
----
+| Metric | Score |
+| --- | ---: |
+| Public MPE | 6.64 m |
+| Private MPE | 7.90 m |
+| Submission family | `step3` beam-search line |
 
-## Results
+These remain the best recorded leaderboard scores in this repository.
+The newer `submission_step3_optimized_ensemble.csv` and `submission_step3_gated_mean15.csv` variants did not beat that result and are therefore not treated as the new baseline.
 
-### Best Submission
+### Verified local findings
 
-| Metric               |    Score |
-| -------------------- | -------: |
-| **Public Score (MPE)**  | **6.64 m** |
-| **Private Score (MPE)** | **7.90 m** |
-| Buildings Covered    |      204 |
-| Test Predictions     | 10,133 waypoints |
+| Topic | Evidence | Conclusion |
+| --- | --- | --- |
+| IMU delta V3 | `data_processing/processed/pdr_v3_ensemble_metrics.json` | `v3_mae_m = 2.0655`, currently the strongest delta signal in repo |
+| PDR delta | `data_processing/processed/pdr_v3_ensemble_metrics.json` | `pdr_mae_m = 3.3527`, weaker than V3 delta |
+| V3 + PDR weighted delta | `data_processing/processed/pdr_v3_ensemble_metrics.json` | `ensemble_mae_m = 2.2158`, worse than V3 alone |
+| Global beam search parameter search | `data_processing/processed/safe_beam_param_search_summary.json` | best beam result is still worse than WiFi baseline by `+1.1355 m` |
+| Beam gating | `data_processing/processed/beam_gating_summary.json` | best gain is only `-0.0739 m` on `5` holdout paths / `40` points |
+| Grid discretization gap | `data_processing/processed/grid_discretization_summary.json` | `pred_to_grid_mae_m ~= 5.06`, `gt_to_grid_oracle_mae_m ~= 1.57` |
 
-### Performance Evolution
+### Practical interpretation
 
-| Phase | Approach | Public MPE |
-| ----- | -------- | ---------: |
-| Baseline | Global KNN + 800 BSSIDs | ~170 m |
-| Phase 1 | Per-Floor KNN + 2000 BSSIDs + 6000-dim features | 12.30 m |
-| Phase 2 | Weighted Ensemble (LightGBM + XGBoost + CatBoost) | ~8 m |
-| **Phase 3** | **+ IMU Delta V2 (2.137m MAE) + Beam Search** | **6.64 m** |
-| Phase 3 V3 | + DeltaDistanceLoss (2.066m MAE) | TBD |
-
-### Module Status
-
-| Module | Status | Key Metric |
-|--------|--------|-----------|
-| ✅ Module 1: IMU Delta V2 | Complete | MAE = 2.137m |
-| ✅ Module 1: IMU Delta V3 | Complete | MAE = 2.066m |
-| ✅ Module 2: Weighted Ensemble | Complete | 196/200 Sites |
-| ✅ Module 3: Beam Search | Complete | 24/24 Sites |
-| ⬜ Module 4: Pseudo-Label | Planned | — |
+- The current bottleneck is not "missing more trajectory logic".
+- The current bottleneck is the quality of the absolute candidate position before any trajectory constraint is applied.
+- `PDR`, global `beam`, and simple `gating` are exploratory branches until they show stable holdout gains under a unified validation split.
 
 ---
 
-## System Architecture
+## Recommended Mainline
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                     Four-Module Pipeline                                │
-│                                                                         │
-│  ┌───────────────┐   ┌──────────────────┐   ┌──────────────────────┐   │
-│  │  Module 1      │   │  Module 2         │   │  Module 3            │   │
-│  │  IMU Delta     │   │  Weighted         │   │  Beam Search         │   │
-│  │  (1D-CNN+GRU)  │   │  Ensemble         │   │  Trajectory          │   │
-│  │  MAE=2.066m    │   │  (LGB+XGB+CB)     │   │  Optimization        │   │
-│  └───────┬───────┘   └────────┬─────────┘   │                      │   │
-│          │                    │              │  ┌──────────────────┐ │   │
-│          │  Δx, Δy            │  x, y, floor │  │ WiFi Cost        │ │   │
-│          │  (relative)        │  (absolute)  │  │ IMU Cost         │ │   │
-│          └────────────────────┴──────────────►  │ Dijkstra Cost    │ │   │
-│                                              │  │ (wall penalty)   │ │   │
-│                                              │  └────────┬─────────┘ │   │
-│                                              └───────────┼──────────┘   │
-│                                                          ▼              │
-│                                              ┌──────────────────────┐   │
-│                                              │  submission.csv      │   │
-│                                              │  (floor, x, y)       │   │
-│                                              └──────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+The project should now be advanced in this order:
+
+1. Correct documentation and experiment bookkeeping.
+2. Rebuild a unified holdout validation protocol.
+3. Analyze absolute-position error without beam or PDR.
+4. Reintroduce beam only for sites that repeatedly improve under fixed validation splits.
+
+### What is not recommended now
+
+- Do not continue submitting global `PDR + beam + gating` variants as the default path.
+- Do not treat isolated smoke runs as proof of improvement.
+- Do not mix results from different holdout sets when comparing approaches.
 
 ---
 
-## Module 1: IMU Delta Prediction
+## System Components
 
-Predicts relative displacement (Δx, Δy) between consecutive waypoints using inertial sensor data.
+### Mainline components
 
-### Architecture: Conv1d + GRU + MLP
+| Module | Status | Notes |
+| --- | --- | --- |
+| Absolute per-site ensemble | Active mainline | strongest current submission base |
+| IMU Delta V3 | Active supporting model | useful as a relative signal, but not enough to justify global beam rollout |
 
-```
-IMU Sensors (12ch × 100 steps)
-    │
-    ├── Conv1d Block ×3 (BN + GELU + Dropout)
-    │       [12 → 32 → 64 → 128]
-    │
-    ├── Bidirectional GRU (128 hidden × 2 layers)
-    │       last_step + mean_pool fusion
-    │
-    └── MLP Aux (16-dim scalar features)
-            │
-            ├── Concat → Fusion Head [256 → 128 → 2]
-            │
-            └── Output: (Δx, Δy) in meters
-```
+### Exploratory components
 
-### Custom Loss: DeltaDistanceLoss (V3)
-
-Reference: Kaggle Indoor 5th place solution.
-
-```python
-Loss = α × MAE(Δpred, Δtrue)           # Delta error
-     + β × MAE(dist_pred, dist_true)    # Walking distance error  
-     + γ × (1 - cos_sim(Δpred, Δtrue))  # Direction error
-```
-
-| Version | Loss | Optimizer Strategy | Val MAE |
-|---------|------|--------------------|---------|
-| V2 | MSE → MAE (cycle) | Adam → SGD × 3 cycles | 2.137m |
-| **V3** | **DeltaDistanceLoss** | Adam → SGD × 3 cycles | **2.066m** |
-
-### Training Strategy
-
-- **Oscillation training**: Phase A (Adam + DeltaDistanceLoss) → Phase B (SGD + stronger distance/direction weights) × 3 cycles
-- **LR decay**: Each cycle reduces base LR by 50%
-- **AMP**: Mixed precision for RTX 3070ti (8GB VRAM)
-- **Data augmentation**: Gaussian noise (σ=0.02) on IMU sequences
+| Module | Status | Notes |
+| --- | --- | --- |
+| Beam Search | Exploratory | strong site variance; some sites improve, some regress |
+| PDR delta fusion | Exploratory | currently worse than V3 delta alone |
+| Beam gating | Exploratory | evidence too weak to promote |
+| Pseudo-labeling | Planned | not started as a mainline task |
 
 ---
 
-## Module 2: Weighted Ensemble
+## Repository Structure
 
-Per-site ensemble model combining three gradient boosting frameworks.
-
-### Architecture
-
-| Component | Model | Role |
-|-----------|-------|------|
-| Floor Classifier | LightGBM | Predicts discrete floor label |
-| XY Regressor (per-floor) | LightGBM + XGBoost + CatBoost | Weighted average regression |
-
-- **196/200** sites trained successfully
-- **8 single-floor sites** handled via fallback (geometric center of training waypoints)
-
-### Feature Vector (6000-D per waypoint)
-
-| Channel | Dimension | Description |
-| ------- | --------: | ----------- |
-| Max RSSI | 2000 | Peak signal strength per BSSID |
-| Mean RSSI | 2000 | Average signal level |
-| Visibility Count | 2000 | Temporal persistence of AP |
-
----
-
-## Module 3: Beam Search Optimization
-
-Discrete trajectory optimization using training waypoints as candidate grid.
-
-### Algorithm
-
-1. **Step 0**: Select top-2000 training waypoints nearest to WiFi prediction as initial candidates
-2. **Each step**: Expand each beam with top-100 nearest waypoints to IMU-predicted position
-3. **Half-plane filter**: Discard candidates in opposite direction of predicted movement
-4. **Pruning**: Keep top-2000 beams by total cost
-
-### Cost Function
-
-```
-Total Cost = w_wifi × ‖candidate − wifi_prediction‖         (absolute position)
-           + w_imu  × ‖actual_delta − predicted_delta‖      (relative displacement)
-           + w_angle × angular_error(actual, predicted)       (direction)
-           + w_dijk × max(0, dijkstra_dist − euclidean_dist)  (wall penalty)
-```
-
-### Dijkstra Graph
-
-- Training waypoints within 5m radius are connected
-- Adaptive radius expansion ensures ≥30% connectivity
-- Shortest-path distance matrix penalizes wall-crossing trajectories
-
-### Performance
-
-| Config | WiFi | IMU_L2 | Angle | Dijkstra | Public MPE |
-|--------|------|--------|-------|----------|-----------|
-| **Best** | **1.0** | **2.0** | **1.0** | **0.5** | **6.64m** |
-| WiFi-dominant | 3.0 | 0.5 | 0.3 | 1.5 | Worse |
-| Pure WiFi | 5.0 | 0.0 | 0.0 | 2.0 | Worse |
-
-The IMU-dominant weights performing best confirms that IMU provides useful relative displacement information despite 2.1m MAE.
-
----
-
-## Module 4: Pseudo-Label (Planned)
-
-Use high-confidence Beam Search predictions as pseudo-labels to retrain the ensemble model.
-
----
-
-## Project Structure
-
-```
+```text
 Indoor Location & Navigation/
-│
-├── configs/                              # YAML configuration (no hardcoded params)
-│   ├── baseline_config.yml               # n_bssid=800, base LightGBM
-│   ├── phase2_2k_config.yml              # n_bssid=2000, Per-Floor KNN
-│   ├── kaggle_train_config.yml           # Phase 2 Weighted Ensemble config
-│   ├── imu_delta_model.yml               # IMU Delta V2 config
-│   └── imu_delta_model_v3.yml            # IMU Delta V3 (DeltaDistanceLoss)
-│
-├── data_processing/                      # Feature engineering pipeline
-│   ├── parse_wifi_logs.py                # Sensor log parser
-│   ├── build_wifi_features.py            # BSSID vocabulary + RSSI extraction
-│   └── processed_v3/                     # V3 cached features
-│
-├── src/                                  # Core library
-│   ├── features.py / features_v2.py      # WiFi + multi-sensor feature extraction
-│   ├── models.py / models_v2.py / models_v3.py  # Model architectures (V1-V3)
-│   ├── ensemble_models.py               # Stacking ensemble (LGB + XGB + CB)
-│   ├── imu_delta_model.py               # IMU Delta network + DeltaDistanceLoss
-│   ├── imu_delta_dataset.py             # IMU data parsing + leg construction
-│   ├── train_imu_delta.py               # IMU training loop (cycle A/B)
-│   ├── post_process.py                  # L-BFGS-B trajectory smoothing
-│   └── viterbi_post_process.py          # Viterbi grid snapping
-│
-├── scripts/                              # Executable pipeline scripts
-│   ├── run_phase2.py                     # End-to-end: extract → train → infer
-│   ├── step3_infer_and_optimize.py       # Module 3: Beam Search optimization
-│   └── merge_submissions.py             # Submission merging utility
-│
-├── models/                               # Trained models (gitignored)
-│   ├── phase2_ensemble/                  # Weighted ensemble .pkl per site
-│   ├── imu_delta/                        # IMU V2 checkpoints
-│   └── imu_delta_v3/                     # IMU V3 checkpoints
-│
-├── indoor-location-navigation/           # Competition data (gitignored)
-│   ├── train/                            # 204 site directories
-│   ├── test/                             # Test trajectory files
-│   └── sample_submission.csv
-│
-└── README.md
+|-- configs/
+|-- data_processing/
+|   |-- processed/
+|   `-- *.py
+|-- models/
+|-- scripts/
+|-- src/
+|-- tests/
+|-- README.md
+|-- PROJECT_STATUS.md
+`-- CONTINUATION_GUIDE.md
 ```
 
----
+Key paths for current decision-making:
 
-## Quick Start
-
-### 1. Environment Setup
-
-```bash
-python -m venv venv
-venv\Scripts\activate          # Windows
-
-pip install numpy pandas scipy scikit-learn lightgbm xgboost catboost
-pip install torch pyyaml
-```
-
-### 2. Data Preparation
-
-Place the [competition data](https://www.kaggle.com/competitions/indoor-location-navigation/data) under `indoor-location-navigation/`.
-
-### 3. Full Pipeline
-
-```bash
-# Module 2: Train Weighted Ensemble (196 sites)
-python scripts/run_phase2.py --config configs/kaggle_train_config.yml
-
-# Module 1: Train IMU Delta V3
-python -m src.train_imu_delta --config configs/imu_delta_model_v3.yml
-
-# Module 3: Beam Search inference (serial, 16GB RAM safe)
-python scripts/step3_infer_and_optimize.py \
-    --config configs/kaggle_train_config.yml \
-    --out submission_step3_beamsearch.csv \
-    --w-wifi 1.0 --w-imu-l2 2.0 --w-imu-angle 1.0 --w-dijkstra 0.5
-```
+- `scripts/step3_infer_and_optimize.py`
+- `scripts/evaluate_pdr_v3_ensemble.py`
+- `scripts/evaluate_beam_search_validation.py`
+- `scripts/evaluate_beam_gating_validation.py`
+- `data_processing/processed/*.json`
 
 ---
 
-## Dependencies
+## Execution Guidance
 
-| Package | Version | Purpose |
-| ------- | ------- | ------- |
-| Python | ≥ 3.10 (tested: 3.12) | Runtime |
-| PyTorch | ≥ 2.0 | IMU Delta model training |
-| NumPy | ≥ 1.21 | Array operations |
-| Pandas | ≥ 1.3 | Data manipulation |
-| SciPy | ≥ 1.7 | Dijkstra graph, L-BFGS-B |
-| scikit-learn | ≥ 1.0 | KNN, StandardScaler |
-| LightGBM | ≥ 3.3 | Floor classification, XY regression |
-| XGBoost | ≥ 1.7 | Ensemble base model |
-| CatBoost | ≥ 1.2 | Ensemble base model |
-| PyYAML | ≥ 6.0 | Configuration |
+### Recommended workflow now
 
-### Hardware Requirements
+1. Keep the current submission entrypoint unchanged.
+2. Treat the absolute ensemble output as the reference baseline.
+3. Run all future comparisons on the same holdout split.
+4. Promote a beam-based variant only if it improves both:
+   - overall MAE
+   - number of regressing sites
 
-| Stage | GPU | RAM | Time |
-| ----- | --- | --: | ---: |
-| Feature Extraction | — | 16 GB | ~2h |
-| Ensemble Training | — | 16 GB | ~3h |
-| IMU Delta Training | RTX 3070ti (8GB) | 16 GB | ~1h |
-| Beam Search Inference | RTX 3070ti | 16 GB | ~30min |
+### Mandatory experiment metadata
 
----
+Every new experiment should record:
 
-## Reproducibility
-
-- **Random seed**: Fixed at `42` across all configs
-- **Configuration-driven**: Every parameter lives in `configs/*.yml`
-- **Experiment logging**: IMU training saves seed, git commit, environment, and metrics to JSON
-- **Serial processing**: Site-by-site execution with explicit `gc.collect()` ensures deterministic memory behavior
+- random seed
+- environment snapshot
+- git commit
+- config path
+- output file path
+- holdout definition
+- public / private leaderboard result when submitted
 
 ---
 
-## License
+## Reproducibility Notes
 
-This project is developed for the Kaggle Indoor Location & Navigation competition and PRCV 2026 submission.
+- Hyperparameters should remain in config files rather than hardcoded.
+- Experiments should be tied to a single commit and a single validation report.
+- Repository decisions should follow verified results in `data_processing/processed/`, not outdated roadmap text.

@@ -1,0 +1,29 @@
+{
+  "status": "ok",
+  "elapsed_s": 568.3391735553741,
+  "n_trials": 3,
+  "n_trajectories": 1,
+  "n_points": 4,
+  "site_ids": [
+    "5da138364db8ce0c98bc00f1"
+  ],
+  "best": {
+    "alpha": 4.686268360946942,
+    "beta_1": 1.5721286105539076,
+    "beta_2": 0.5124545307021835,
+    "floor_accuracy": 1.0,
+    "wifi_mae_m": 2.8881465528139074,
+    "beam_mae_m": 4.213767987149922,
+    "beam_minus_wifi_m": 1.3256214343360142,
+    "n_points": 4.0,
+    "trial": 3.0
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

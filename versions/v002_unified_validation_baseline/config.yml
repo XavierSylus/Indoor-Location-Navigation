@@ -1,0 +1,33 @@
+paths:
+  safe_beam_summary: "data_processing/processed/safe_beam_param_search_summary.json"
+  beam_gating_summary: "data_processing/processed/beam_gating_summary.json"
+  pdr_v3_metrics: "data_processing/processed/pdr_v3_ensemble_metrics.json"
+  output_report: "data_processing/processed/unified_validation_report.json"
+
+comparison:
+  target_metric: "private_lb"
+  primary_unit: "waypoint_mae_m"
+  require_same_holdout: true
+  baseline_tolerance: 1.0e-9
+
+acceptance:
+  require_overall_improvement: true
+  require_route_comparability: true
+  require_site_regression_check: true
+
+routes:
+  absolute_baseline:
+    source: "safe_beam_summary.best.wifi_mae_m"
+    comparison_unit: "waypoint_mae_m"
+  absolute_plus_global_beam:
+    source: "safe_beam_summary.best.beam_mae_m"
+    comparison_unit: "waypoint_mae_m"
+  absolute_plus_pdr:
+    source: "pdr_v3_metrics.ensemble_mae_m"
+    comparison_unit: "delta_leg_mae_m"
+  absolute_plus_site_selective_beam:
+    source: "missing"
+    comparison_unit: "waypoint_mae_m"
+  beam_gating_exploratory:
+    source: "beam_gating_summary.best.gated_mae_m"
+    comparison_unit: "waypoint_mae_m"

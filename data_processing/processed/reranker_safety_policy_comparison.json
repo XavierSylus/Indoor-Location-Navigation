@@ -1,0 +1,75 @@
+{
+  "status": "ok",
+  "version": "v005_reranker_safety_policy",
+  "diagnostic_only": true,
+  "target_mae_m": 4.0,
+  "n_groups": 59,
+  "split_type": "leave_one_path_id_out",
+  "random_seed": 42,
+  "rank1_mae_m": 9.268067323716174,
+  "oracle50_mae_m": 0.5833264467428692,
+  "rerankers": [
+    {
+      "name": "geometry_source_wifi_strong",
+      "summary_path": "data_processing/processed/topk_rerank_gsw_strong_summary.json",
+      "cv_predictions_path": "data_processing/processed/topk_rerank_gsw_strong_cv_predictions.csv",
+      "always_rerank_mae_m": 7.524908431950882,
+      "always_rerank_improvement_vs_rank1_m": 1.743158891765292,
+      "always_rerank_hit3": 0.288136,
+      "always_rerank_hit5": 0.457627,
+      "best_inference_safe_policy": "rerank_only_if_score_margin_positive",
+      "best_inference_safe_policy_mae_m": 7.524908431950882,
+      "best_inference_safe_policy_usage_rate": 0.745763,
+      "diagnostic_blacklist_policy_mae_m": 7.361871,
+      "diagnostic_blacklist_policy_usage_rate": 0.949153,
+      "worst_fold": {
+        "fold": "path_02",
+        "heldout_key": "5dce63105516ad00065f0280",
+        "site_floor_key": "5da138364db8ce0c98bc00f1|F3",
+        "rank1_mae_m": 4.314038,
+        "rerank_mae_m": 7.520435,
+        "improvement_vs_rank1_m": -3.206398
+      }
+    },
+    {
+      "name": "geometry_wifi_source_temporal_core_strong",
+      "summary_path": "data_processing/processed/topk_rerank_temporal_strong_summary.json",
+      "cv_predictions_path": "data_processing/processed/topk_rerank_temporal_strong_cv_predictions.csv",
+      "always_rerank_mae_m": 8.03024921270024,
+      "always_rerank_improvement_vs_rank1_m": 1.237818111015935,
+      "always_rerank_hit3": 0.220339,
+      "always_rerank_hit5": 0.423729,
+      "best_inference_safe_policy": "rerank_only_if_score_margin_positive",
+      "best_inference_safe_policy_mae_m": 8.03024921270024,
+      "best_inference_safe_policy_usage_rate": 0.661017,
+      "diagnostic_blacklist_policy_mae_m": 8.023926,
+      "diagnostic_blacklist_policy_usage_rate": 0.949153,
+      "worst_fold": {
+        "fold": "path_02",
+        "heldout_key": "5dce63105516ad00065f0280",
+        "site_floor_key": "5da138364db8ce0c98bc00f1|F3",
+        "rank1_mae_m": 4.314038,
+        "rerank_mae_m": 4.438395,
+        "improvement_vs_rank1_m": -0.124357
+      }
+    }
+  ],
+  "policy_conclusion": {
+    "best_observed_policy": "geometry_source_wifi_strong + diagnostic site/floor blacklist",
+    "best_observed_mae_m": 7.361871,
+    "submission_safe": false,
+    "best_submission_safe_policy": "geometry_source_wifi_strong rerank_only_if_score_margin_positive",
+    "best_submission_safe_mae_m": 7.524908431950882,
+    "interpretation": "Current simple inference-safe gating features do not identify the known regression fold reliably. The post-hoc blacklist proves there is recoverable error, but it is not a generalizable rule."
+  },
+  "next_recommendation": {
+    "version": "v006_rank1_risk_signal_probe",
+    "direction": "create a new rank1-risk information source before any submission attempt",
+    "reason": "The dominant failure is not reranker strength; it is missing confidence information for when rank1 is already good or when deep rerank choices are justified."
+  },
+  "leakage_notes": [
+    "No inference-safe policy uses GT, label, or oracle fields as a decision feature.",
+    "The diagnostic blacklist is derived from validation failure analysis and must not be used for submission.",
+    "The 59-group holdout is too small to treat policy results as LB expectations."
+  ]
+}

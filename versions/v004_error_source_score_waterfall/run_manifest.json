@@ -1,0 +1,36 @@
+{
+  "created_at_utc": "2026-05-09T04:35:03+00:00",
+  "version": "v004_error_source_score_waterfall",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "exact_command": "python scripts/build_error_source_score_waterfall.py",
+  "seed": "42",
+  "holdout_definition": "hard-site top50 diagnostic holdout; 59 groups / 5 paths / 5 sites",
+  "local_metric": "rank1_mae=9.268067; reranker_current_mae=8.030249; oracle50_mae=0.583326; selection_failure_excess=250.589584",
+  "decision": "exploratory",
+  "notes": "Score waterfall shows selection failure is the dominant excess-over-4m source; recommended v005 is reranker_safety_policy. CV-only diagnostic, no submission.",
+  "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa",
+  "git_status_short": "## main...origin/main\n M README.md\n M scripts/step3_infer_and_optimize.py\n?? AGENTS.md\n?? EXPERIMENT_LEDGER.md\n?? configs/beam_site_policy.yml\n?? configs/pdr_config.yml\n?? configs/pdr_v3_ensemble.yml\n?? configs/unified_validation.yml\n?? data_processing/pdr_module.py\n?? data_processing/processed/\n?? scripts/agent_workflow.py\n?? scripts/analyze_absolute_holdout_validation.py\n?? scripts/analyze_hard_site_candidate_recall.py\n?? scripts/analyze_single_site_recall_failure.py\n?? scripts/build_error_source_score_waterfall.py\n?? scripts/build_unified_validation_report.py\n?? scripts/diagnose_beam_search_validation.py\n?? scripts/diagnose_grid_discretization.py\n?? scripts/evaluate_beam_gating_validation.py\n?? scripts/evaluate_beam_search_validation.py\n?? scripts/evaluate_pdr_v3_ensemble.py\n?? scripts/generate_beam_site_whitelist.py\n?? scripts/infer_v3_validation.py\n?? scripts/search_safe_beam_params.py\n?? scripts/train_topk_rerank_baseline.py\n?? submissions/\n?? versions/",
+  "python": {
+    "executable": "D:\\soft\\anaconda\\python.exe",
+    "version": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "version": "10.0.26200",
+    "machine": "AMD64"
+  },
+  "files": {
+    "config": "versions/v004_error_source_score_waterfall/config.yml",
+    "metrics": "data_processing/processed/error_source_score_waterfall.json",
+    "submission": null,
+    "validation_summary": "versions/v004_error_source_score_waterfall/validation_summary.json"
+  },
+  "sha256": {
+    "versions/v004_error_source_score_waterfall/config.yml": "da0d7f39253955b49fcf3c179eedc38cb3377c7e4df9023ae584845d5262dab0",
+    "data_processing/processed/error_source_score_waterfall.json": "697e6c89f498a0366bb21c51e34df98becec2d473258af959e38dffa0573e66b",
+    "versions/v004_error_source_score_waterfall/validation_summary.json": "443afced1c12858fe9d519d474b72fddd54a49dbd8cdae276d240e3a204464ef"
+  },
+  "validation_summary_status": "ok"
+}

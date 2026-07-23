@@ -1,0 +1,120 @@
+{
+  "status": "ok",
+  "comparison_contract": {
+    "target_metric": "private_lb",
+    "primary_unit": "waypoint_mae_m",
+    "require_same_holdout": true
+  },
+  "holdout_checks": {
+    "safe_beam_signature": {
+      "site_ids": [
+        "5d27099f03f801723c32511d",
+        "5da138274db8ce0c98bbd3d2",
+        "5da138364db8ce0c98bc00f1",
+        "5da1383b4db8ce0c98bc11ab",
+        "5da138754db8ce0c98bca82f"
+      ],
+      "n_points": 40,
+      "n_paths": 5
+    },
+    "beam_gating_signature": {
+      "site_ids": [
+        "5d27099f03f801723c32511d",
+        "5da138274db8ce0c98bbd3d2",
+        "5da138364db8ce0c98bc00f1",
+        "5da1383b4db8ce0c98bc11ab",
+        "5da138754db8ce0c98bca82f"
+      ],
+      "n_points": 40,
+      "n_paths": 5
+    },
+    "same_holdout": true,
+    "baseline_consistent": true,
+    "baseline_gap": 0.0
+  },
+  "routes": {
+    "absolute_baseline": {
+      "status": "available",
+      "comparison_unit": "waypoint_mae_m",
+      "mae_m": 11.619039083658853,
+      "source": "data_processing\\processed\\safe_beam_param_search_summary.json"
+    },
+    "absolute_plus_global_beam": {
+      "status": "available",
+      "comparison_unit": "waypoint_mae_m",
+      "mae_m": 12.75453204665241,
+      "delta_vs_baseline_m": 1.1354929629935555,
+      "source": "data_processing\\processed\\safe_beam_param_search_summary.json"
+    },
+    "absolute_plus_pdr": {
+      "status": "not_comparable",
+      "comparison_unit": "delta_leg_mae_m",
+      "mae_m": 2.21576658488251,
+      "baseline_reference_m": 2.065458138233192,
+      "reason": "Current artifact is a delta-leg metric, not the waypoint holdout metric required for submission decisions.",
+      "source": "data_processing\\processed\\pdr_v3_ensemble_metrics.json"
+    },
+    "absolute_plus_site_selective_beam": {
+      "status": "available_but_not_promotable",
+      "comparison_unit": "waypoint_mae_m",
+      "mae_m": 10.95304512617025,
+      "delta_vs_baseline_m": -0.6659939574886025,
+      "full_holdout_points": 40,
+      "full_holdout_paths": 5,
+      "whitelist_points": 13,
+      "whitelist_paths": 2,
+      "whitelist_point_coverage": 0.325,
+      "whitelist_sites": [
+        "5da1383b4db8ce0c98bc11ab",
+        "5da138754db8ce0c98bca82f"
+      ],
+      "whitelist_wifi_mae_m": 11.906021680387285,
+      "whitelist_beam_mae_m": 9.856809503499278,
+      "whitelist_gain_m": 2.049212176888007,
+      "source": {
+        "whitelist_summary": "data_processing\\processed\\beam_gating_summary_whitelist.json",
+        "whitelist_path_metrics": "data_processing\\processed\\beam_gating_path_metrics_whitelist.csv"
+      },
+      "reason": "Whitelist beam improves the covered subset, but coverage is too small to promote without broader site regression evidence.",
+      "promotion_blocker": "Only the whitelist subset is positive; coverage is 2 paths / 13 points."
+    },
+    "beam_gating_exploratory": {
+      "status": "available_but_not_promotable",
+      "comparison_unit": "waypoint_mae_m",
+      "mae_m": 11.545122058552458,
+      "delta_vs_baseline_m": -0.07391702510639533,
+      "beam_enabled_paths": 1,
+      "beam_enabled_points": 2,
+      "source": "data_processing\\processed\\beam_gating_summary.json",
+      "reason": "Evidence size is too small to promote gating to the default private-LB path."
+    }
+  },
+  "mainline_decision": {
+    "target_metric": "private_lb",
+    "recommended_default_route": "absolute_baseline",
+    "why": [
+      "It is the only route with directly usable submission-facing baseline evidence.",
+      "Global beam currently regresses on the comparable holdout.",
+      "PDR evidence is still on a non-comparable delta-leg metric.",
+      "Site-selective beam is available only as a small-coverage diagnostic report."
+    ],
+    "promotion_blockers": [
+      "global beam regresses against the absolute baseline",
+      "PDR route is not yet available in the required waypoint-level comparison unit",
+      "site-selective beam route is not promotable on the current evidence"
+    ]
+  },
+  "source_files": {
+    "safe_beam_summary": "data_processing\\processed\\safe_beam_param_search_summary.json",
+    "beam_gating_summary": "data_processing\\processed\\beam_gating_summary.json",
+    "pdr_v3_metrics": "data_processing\\processed\\pdr_v3_ensemble_metrics.json"
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

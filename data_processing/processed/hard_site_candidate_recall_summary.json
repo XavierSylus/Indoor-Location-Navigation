@@ -1,0 +1,100 @@
+{
+  "status": "ok",
+  "target_route": "absolute_baseline",
+  "site_ids": [
+    "5d27099f03f801723c32511d",
+    "5da138274db8ce0c98bbd3d2",
+    "5da138364db8ce0c98bc00f1",
+    "5da1383b4db8ce0c98bc11ab",
+    "5da138754db8ce0c98bca82f"
+  ],
+  "seed": 42,
+  "holdout_fraction": 0.1,
+  "max_holdout_paths": 1,
+  "catastrophic_threshold_m": 20.0,
+  "n_paths": 5,
+  "n_sites": 5,
+  "n_points": 59,
+  "site_priority_order": [
+    {
+      "site_id": "5d27099f03f801723c32511d",
+      "wifi_mae_m": 14.590769468208975,
+      "failure_mode": "candidate_recall_failure",
+      "beam_candidate_signal": "fix_absolute_recall_first",
+      "top10_recall": 0.6666666666666666,
+      "catastrophic_outlier_ratio": 0.3333333333333333,
+      "mean_bias_mag_m": 4.270452623573662
+    },
+    {
+      "site_id": "5da138754db8ce0c98bca82f",
+      "wifi_mae_m": 10.24871655211599,
+      "failure_mode": "catastrophic_outlier_failure",
+      "beam_candidate_signal": "candidate_for_outlier_aware_beam",
+      "top10_recall": 0.9,
+      "catastrophic_outlier_ratio": 0.1,
+      "mean_bias_mag_m": 7.012623991450237
+    },
+    {
+      "site_id": "5da1383b4db8ce0c98bc11ab",
+      "wifi_mae_m": 8.84907853476602,
+      "failure_mode": "systematic_bias_failure",
+      "beam_candidate_signal": "candidate_for_site_selective_beam",
+      "top10_recall": 0.8387096774193549,
+      "catastrophic_outlier_ratio": 0.0,
+      "mean_bias_mag_m": 5.697971349620264
+    },
+    {
+      "site_id": "5da138364db8ce0c98bc00f1",
+      "wifi_mae_m": 3.6404221163250696,
+      "failure_mode": "mild_or_mixed_failure",
+      "beam_candidate_signal": "not_a_priority_for_beam",
+      "top10_recall": 1.0,
+      "catastrophic_outlier_ratio": 0.0,
+      "mean_bias_mag_m": 2.2397451300249362
+    },
+    {
+      "site_id": "5da138274db8ce0c98bbd3d2",
+      "wifi_mae_m": 2.8780991640995612,
+      "failure_mode": "mild_or_mixed_failure",
+      "beam_candidate_signal": "not_a_priority_for_beam",
+      "top10_recall": 1.0,
+      "catastrophic_outlier_ratio": 0.0,
+      "mean_bias_mag_m": 2.7178214289248874
+    }
+  ],
+  "best_beam_candidates": [
+    {
+      "site_id": "5da138754db8ce0c98bca82f",
+      "wifi_mae_m": 10.24871655211599,
+      "beam_candidate_signal": "candidate_for_outlier_aware_beam",
+      "top10_recall": 0.9,
+      "catastrophic_outlier_ratio": 0.1,
+      "mean_bias_mag_m": 7.012623991450237
+    },
+    {
+      "site_id": "5da1383b4db8ce0c98bc11ab",
+      "wifi_mae_m": 8.84907853476602,
+      "beam_candidate_signal": "candidate_for_site_selective_beam",
+      "top10_recall": 0.8387096774193549,
+      "catastrophic_outlier_ratio": 0.0,
+      "mean_bias_mag_m": 5.697971349620264
+    }
+  ],
+  "fix_recall_first_sites": [
+    {
+      "site_id": "5d27099f03f801723c32511d",
+      "wifi_mae_m": 14.590769468208975,
+      "top10_recall": 0.6666666666666666,
+      "top50_recall": 1.0,
+      "oracle_rank_mean": 12.666666666666666
+    }
+  ],
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

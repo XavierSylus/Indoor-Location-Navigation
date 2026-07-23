@@ -1,0 +1,13 @@
+artifact,metric_name,scope,n_points,split_type,uses_gt,comparable_to_submission,mae,notes
+unified_validation_report.json,absolute_baseline,available,,configured holdout,True,True,11.619039083658853,
+unified_validation_report.json,absolute_plus_global_beam,available,,configured holdout,True,True,12.75453204665241,
+unified_validation_report.json,absolute_plus_pdr,not_comparable,,configured holdout,True,False,2.21576658488251,"Current artifact is a delta-leg metric, not the waypoint holdout metric required for submission decisions."
+unified_validation_report.json,absolute_plus_site_selective_beam,available_but_not_promotable,40,configured holdout,True,True,10.95304512617025,"Whitelist beam improves the covered subset, but coverage is too small to promote without broader site regression evidence."
+unified_validation_report.json,beam_gating_exploratory,available_but_not_promotable,,configured holdout,True,True,11.545122058552458,Evidence size is too small to promote gating to the default private-LB path.
+hard_site_candidate_topk_points.csv,rank1_candidate_mae,hard-site top50 groups,59,diagnostic hard-site holdout,True,False,9.268067323716176,"candidate selection diagnostic, not full submission holdout"
+hard_site_candidate_topk_points.csv,oracle50_candidate_mae,hard-site top50 groups,59,diagnostic hard-site holdout,True,False,0.5833264467428693,oracle diagnostic uses GT; not submission-safe
+topk_rerank_baseline_cv_predictions.csv,rerank_selected_mae,hard-site top50 groups,59,leave-one-path_id-out,True,False,8.03024921270024,"reranker CV diagnostic, not full submission holdout"
+absolute_holdout_point_predictions.csv,absolute_point_prediction_mae,absolute holdout points,59,configured holdout,True,True,9.148229469523184,waypoint-level holdout metric
+pdr_v3_ensemble_metrics.json,v3_mae_m,delta-leg validation,,delta-leg,True,False,2.065458138233192,"delta-leg metric, not waypoint-level submission metric"
+pdr_v3_ensemble_metrics.json,pdr_mae_m,delta-leg validation,,delta-leg,True,False,3.3526968838240525,"delta-leg metric, not waypoint-level submission metric"
+pdr_v3_ensemble_metrics.json,ensemble_mae_m,delta-leg validation,,delta-leg,True,False,2.21576658488251,"delta-leg metric, not waypoint-level submission metric"

@@ -1,0 +1,58 @@
+{
+  "site_ids": [
+    "5da138364db8ce0c98bc00f1",
+    "5d27099f03f801723c32511d",
+    "5da138754db8ce0c98bca82f",
+    "5da138274db8ce0c98bbd3d2",
+    "5da1383b4db8ce0c98bc11ab"
+  ],
+  "seed": 42,
+  "holdout_fraction": 0.1,
+  "max_holdout_paths": 1,
+  "strategies": {
+    "legacy_delta": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "floor_accuracy": 0.975,
+      "wifi_mae_m": 11.619039083658853,
+      "beam_mae_m": 13.506315075353445,
+      "beam_minus_wifi_m": 1.8872759916945931
+    },
+    "legacy_wifi": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "floor_accuracy": 0.975,
+      "wifi_mae_m": 11.619039083658853,
+      "beam_mae_m": 13.506315075353445,
+      "beam_minus_wifi_m": 1.8872759916945931
+    },
+    "legacy_hybrid": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "floor_accuracy": 0.975,
+      "wifi_mae_m": 11.619039083658853,
+      "beam_mae_m": 13.506315075353445,
+      "beam_minus_wifi_m": 1.8872759916945931
+    },
+    "pure_wifi_snap": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "floor_accuracy": 0.975,
+      "wifi_mae_m": 11.619039083658853,
+      "beam_mae_m": 13.018974667503503,
+      "beam_minus_wifi_m": 1.3999355838446503
+    }
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

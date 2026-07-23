@@ -1,0 +1,124 @@
+{
+  "status": "ok",
+  "n_groups": 59,
+  "n_rows": 2926,
+  "raw_pred_mae": 9.148229469523184,
+  "rank1_candidate_mae": 9.268067323716174,
+  "oracle_mae_at_20": 1.545086274681444,
+  "oracle_mae_at_50": 0.5833264467428694,
+  "rank1_hit3": 0.13559322033898305,
+  "rank1_hit5": 0.288135593220339,
+  "oracle_hit3_at_50": 0.9152542372881356,
+  "oracle_hit5_at_50": 0.9661016949152542,
+  "notes": [
+    "gt_x, gt_y, and label_* columns are training/diagnostic fields only.",
+    "Inference features must not use gt_x, gt_y, or label_* columns."
+  ],
+  "wifi_features": {
+    "enabled": true,
+    "missing_rssi": -999.0,
+    "distance_missing_policy": "wifi_rssi_l1_distance_on_common and wifi_rssi_l2_distance_on_common are NaN when a candidate shares no BSSID with the validation point.",
+    "candidate_wifi_source_count_gt0_ratio": 1.0,
+    "wifi_has_common_bssid_ratio": 0.9511278195488722,
+    "candidate_wifi_knn_score_min": 0.0,
+    "candidate_wifi_knn_score_mean": 0.20374946922353057,
+    "candidate_wifi_knn_score_median": 0.1939998810336904,
+    "candidate_wifi_knn_score_p90": 0.3720608506538731,
+    "candidate_wifi_knn_score_max": 0.5852710770917063
+  },
+  "source_wifi_features": {
+    "enabled": true,
+    "candidate_wifi_source_count_gt0_ratio": 1.0,
+    "source_wifi_no_common_bssid_ratio": 0.04887218045112782,
+    "source_wifi_validation_no_wifi_ratio": 0.04887218045112782,
+    "candidate_wifi_best_source_score": {
+      "min": 0.0,
+      "mean": 0.2403357706547379,
+      "median": 0.2288785059667034,
+      "p90": 0.44621684515619586,
+      "max": 0.6230119277329322
+    },
+    "candidate_wifi_top3_source_score_mean": {
+      "min": 0.0,
+      "mean": 0.21320422887849919,
+      "median": 0.20394029160507765,
+      "p90": 0.40045077843309695,
+      "max": 0.5852710770917063
+    },
+    "candidate_wifi_top5_source_score_mean": {
+      "min": 0.0,
+      "mean": 0.20464962913602333,
+      "median": 0.1965910872836062,
+      "p90": 0.3765849986321978,
+      "max": 0.5852710770917063
+    },
+    "candidate_wifi_best_source_l1": {
+      "min": 2.5396825396825395,
+      "mean": 8.153228505166858,
+      "median": 7.448275862068965,
+      "p90": 12.831481481481484,
+      "max": 29.77777777777778
+    },
+    "candidate_wifi_best_source_cosine": {
+      "min": 0.0,
+      "mean": 0.6515348193144098,
+      "median": 0.7040039364243864,
+      "p90": 0.8694843130963996,
+      "max": 0.941789248431818
+    }
+  },
+  "temporal_density_features": {
+    "enabled": true,
+    "temporal_unavailable_policy": "Previous-step features are NaN at path starts; next-step features are NaN at path ends.",
+    "raw_pred_step_from_prev_nan_ratio": 0.08270676691729323,
+    "raw_pred_step_to_next_nan_ratio": 0.08270676691729323,
+    "candidate_step_from_prev_rank1_nan_ratio": 0.08270676691729323,
+    "candidate_step_to_next_rank1_nan_ratio": 0.08270676691729323,
+    "candidate_distance_to_prev_raw_pred_nan_ratio": 0.08270676691729323,
+    "candidate_distance_to_next_raw_pred_nan_ratio": 0.08270676691729323,
+    "candidate_temporal_smoothness_rank1_nan_ratio": 0.0,
+    "local_waypoint_count_3m": {
+      "min": 0.0,
+      "mean": 0.24196855775803144,
+      "median": 0.0,
+      "p90": 1.0,
+      "max": 4.0
+    },
+    "local_waypoint_count_5m": {
+      "min": 0.0,
+      "mean": 1.326725905673274,
+      "median": 1.0,
+      "p90": 3.0,
+      "max": 7.0
+    },
+    "local_waypoint_count_10m": {
+      "min": 0.0,
+      "mean": 5.66097060833903,
+      "median": 6.0,
+      "p90": 9.0,
+      "max": 15.0
+    },
+    "local_waypoint_nearest_dist_m": {
+      "min": 0.10000000000000142,
+      "mean": 4.203863877662177,
+      "median": 3.9458839313897807,
+      "p90": 6.020797289396148,
+      "max": 11.667476162392639
+    },
+    "local_waypoint_mean_dist_5nn_m": {
+      "min": 2.3024327593180924,
+      "mean": 7.059161916266652,
+      "median": 6.648699995082008,
+      "p90": 9.590991959550266,
+      "max": 16.674979138031354
+    },
+    "local_waypoint_mean_dist_10nn_m": {
+      "min": 4.2951829413966625,
+      "mean": 9.911092862330129,
+      "median": 9.374123529996858,
+      "p90": 13.594016939787874,
+      "max": 21.327948250906957
+    },
+    "candidate_is_sparse_area_ratio": 0.2518796992481203
+  }
+}

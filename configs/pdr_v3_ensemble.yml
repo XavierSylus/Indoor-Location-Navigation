@@ -1,0 +1,37 @@
+paths:
+  v3_predictions: "data_processing/processed/v3_validation_delta.csv"
+  pdr_predictions: "data_processing/processed/pdr_validation_delta.csv"
+  output_predictions: "data_processing/processed/pdr_v3_ensemble_validation.csv"
+  output_metrics: "data_processing/processed/pdr_v3_ensemble_metrics.json"
+
+keys:
+  - "path_id"
+  - "leg_index"
+  - "start_timestamp"
+  - "end_timestamp"
+
+columns:
+  v3:
+    path_id: "path_id"
+    leg_index: "leg_index"
+    start_timestamp: "start_timestamp"
+    end_timestamp: "end_timestamp"
+    v3_delta_x: "v3_delta_x"
+    v3_delta_y: "v3_delta_y"
+  pdr:
+    path_id: "path_id"
+    leg_index: "leg_index"
+    start_timestamp: "start_timestamp"
+    end_timestamp: "end_timestamp"
+    gt_delta_x: "gt_delta_x"
+    gt_delta_y: "gt_delta_y"
+    pdr_delta_x: "pdr_delta_x"
+    pdr_delta_y: "pdr_delta_y"
+
+weights:
+  v3: 0.67
+  pdr: 0.33
+
+validation:
+  require_exact_key_match: true
+  sort_output_by_keys: true

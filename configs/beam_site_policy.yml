@@ -1,0 +1,41 @@
+policy:
+  target_metric: "private_lb"
+  default_route: "absolute_baseline"
+  enable_site_selective_beam: false
+  policy_status: "whitelist_holdout_positive_not_promoted"
+
+decision_basis:
+  unified_validation_report: "data_processing/processed/unified_validation_report.json"
+  absolute_holdout_summary: "data_processing/processed/absolute_holdout_summary.json"
+  hard_site_candidate_summary: "data_processing/processed/hard_site_candidate_recall_summary.json"
+  whitelist_candidate_summary: "data_processing/processed/beam_site_whitelist_summary.json"
+  experiment_ledger: "EXPERIMENT_LEDGER.md"
+
+site_selective_beam:
+  whitelist_sites:
+    - "5da138754db8ce0c98bca82f"
+    - "5da1383b4db8ce0c98bc11ab"
+  fixed_params:
+    w_wifi: 3.0
+    w_imu_l2: 0.5
+    w_imu_angle: 0.3
+    w_dijkstra: 1.5
+    delta_weight_imu: 0.67
+    delta_weight_pdr: 0.33
+    beam_width: 2000
+    n_candidates: 100
+  default_for_non_whitelisted_sites: "pure_absolute"
+  whitelist_source: "data_processing/processed/beam_site_whitelist_candidates.yml"
+
+promotion_requirements:
+  require_same_holdout: true
+  require_waypoint_level_metric: true
+  require_overall_improvement: true
+  require_fewer_regressing_sites: true
+  require_durable_report: true
+
+inactive_reason:
+  - "Global beam currently regresses against the comparable absolute baseline."
+  - "Only the whitelist subset is positive on holdout; the global route is still negative."
+  - "The whitelist evidence is promising but still too small to promote as the default submission route."
+  - "Promotion still requires a durable site-selective beam report with broader holdout coverage."

@@ -1,0 +1,36 @@
+{
+  "created_at_utc": "2026-05-12T14:43:05+00:00",
+  "version": "v006_rank1_risk_signal_probe",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "exact_command": "python -m unittest tests.test_rank1_risk_signal_probe -v; python scripts/build_rank1_risk_signal_probe.py",
+  "seed": "42",
+  "holdout_definition": "hard-site Top-50 leave-one-path-id-out; 59 groups / 5 paths / 5 sites",
+  "local_metric": "best_policy=score_margin_positive; best_mae=7.524908; rank1_risk_best_no_regression_mae=8.055353; oracle50_mae=0.583326",
+  "decision": "rejected",
+  "notes": "Rank1 risk signal did not beat v005 safely. Best remains score_margin_positive, with one bad fold regression. Next route should create stronger candidate/path context.",
+  "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa",
+  "git_status_short": "## main...origin/main\n M README.md\n M scripts/step3_infer_and_optimize.py\n?? AGENTS.md\n?? EXPERIMENT_LEDGER.md\n?? configs/beam_site_policy.yml\n?? configs/pdr_config.yml\n?? configs/pdr_v3_ensemble.yml\n?? configs/rank1_risk_signal_probe.yml\n?? configs/topk_rerank_safety_policy.yml\n?? configs/unified_validation.yml\n?? data_processing/pdr_module.py\n?? data_processing/processed/\n?? scripts/agent_workflow.py\n?? scripts/analyze_absolute_holdout_validation.py\n?? scripts/analyze_hard_site_candidate_recall.py\n?? scripts/analyze_single_site_recall_failure.py\n?? scripts/build_error_source_score_waterfall.py\n?? scripts/build_rank1_risk_signal_probe.py\n?? scripts/build_unified_validation_report.py\n?? scripts/diagnose_beam_search_validation.py\n?? scripts/diagnose_grid_discretization.py\n?? scripts/evaluate_beam_gating_validation.py\n?? scripts/evaluate_beam_search_validation.py\n?? scripts/evaluate_pdr_v3_ensemble.py\n?? scripts/generate_beam_site_whitelist.py\n?? scripts/infer_v3_validation.py\n?? scripts/search_safe_beam_params.py\n?? scripts/train_topk_rerank_baseline.py\n?? submissions/\n?? tests/test_rank1_risk_signal_probe.py\n?? versions/",
+  "python": {
+    "executable": "D:\\soft\\anaconda\\python.exe",
+    "version": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "version": "10.0.26200",
+    "machine": "AMD64"
+  },
+  "files": {
+    "config": "versions/v006_rank1_risk_signal_probe/config.yml",
+    "metrics": "data_processing/processed/rank1_risk_signal_policy_summary.json",
+    "submission": null,
+    "validation_summary": "versions/v006_rank1_risk_signal_probe/validation_summary.json"
+  },
+  "sha256": {
+    "versions/v006_rank1_risk_signal_probe/config.yml": "3957ad013501d3d1a2e7fd57df0b48b30a48264c49328ad8bba27a9a38f6930e",
+    "data_processing/processed/rank1_risk_signal_policy_summary.json": "d11bcb126a2eac6e25fd346489422f1ed40f358e4a9042f116a2325556021d2f",
+    "versions/v006_rank1_risk_signal_probe/validation_summary.json": "7fa913119b832ad0cc2eef2705bab40fefd8c956d7814a541a14f1dd276b7e18"
+  },
+  "validation_summary_status": "ok"
+}

@@ -1,0 +1,44 @@
+{
+  "submission_file": "submission_step3_beamsearch.csv",
+  "sample_submission": "indoor-location-navigation/sample_submission.csv",
+  "row_count": 10133,
+  "sample_row_count": 10133,
+  "columns": [
+    "site_path_timestamp",
+    "floor",
+    "x",
+    "y"
+  ],
+  "expected_columns": [
+    "site_path_timestamp",
+    "floor",
+    "x",
+    "y"
+  ],
+  "columns_match": true,
+  "row_count_matches_sample": true,
+  "site_path_timestamp_order_matches_sample": true,
+  "nan_count": 0,
+  "inf_count": 0,
+  "coordinate_summary": {
+    "floor": {
+      "min": -2.0,
+      "max": 7.0,
+      "mean": 1.4347182473107667,
+      "non_finite_count": 0
+    },
+    "x": {
+      "min": 1.9,
+      "max": 278.0,
+      "mean": 100.44007697621633,
+      "non_finite_count": 0
+    },
+    "y": {
+      "min": 3.4,
+      "max": 312.8,
+      "mean": 97.62840225007402,
+      "non_finite_count": 0
+    }
+  },
+  "status": "ok"
+}

@@ -1,0 +1,44 @@
+{
+  "status": "ok",
+  "target_route": "absolute_baseline",
+  "site_ids": [
+    "5cd56ba0e2acfd2d33b600ed"
+  ],
+  "seed": 42,
+  "holdout_fraction": 0.1,
+  "max_holdout_paths": 1,
+  "catastrophic_threshold_m": 20.0,
+  "n_paths": 1,
+  "n_sites": 1,
+  "n_points": 9,
+  "site_priority_order": [
+    {
+      "site_id": "5cd56ba0e2acfd2d33b600ed",
+      "wifi_mae_m": 20.977793874219344,
+      "failure_mode": "catastrophic_outlier_failure",
+      "beam_candidate_signal": "candidate_for_outlier_aware_beam",
+      "top10_recall": 1.0,
+      "catastrophic_outlier_ratio": 0.5555555555555556,
+      "mean_bias_mag_m": 15.593541568592403
+    }
+  ],
+  "best_beam_candidates": [
+    {
+      "site_id": "5cd56ba0e2acfd2d33b600ed",
+      "wifi_mae_m": 20.977793874219344,
+      "beam_candidate_signal": "candidate_for_outlier_aware_beam",
+      "top10_recall": 1.0,
+      "catastrophic_outlier_ratio": 0.5555555555555556,
+      "mean_bias_mag_m": 15.593541568592403
+    }
+  ],
+  "fix_recall_first_sites": [],
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "status": "ok",
+  "validation_type": "cv_probe",
+  "diagnostic_only": true,
+  "n_groups": 59,
+  "target_mae_m": 4.0,
+  "rank1_mae_m": 9.268067323716176,
+  "current_rerank_cv_mae_m": 8.030249212700241,
+  "oracle50_mae_m": 0.5833264467428693,
+  "rank1_sum_excess_over_4m": 340.4879571011847,
+  "current_rerank_sum_excess_over_4m": 290.1855687321723,
+  "oracle50_sum_excess_over_4m": 10.07855096318741,
+  "dominant_error_source": "selection_failure",
+  "v005_recommendation": "reranker_safety_policy",
+  "submission": null,
+  "notes": [
+    "No Kaggle submission was generated.",
+    "Oracle and path-shift diagnostics use GT and are not submission-safe rules.",
+    "Policy conclusions must be treated as diagnostic because the holdout has only 59 groups."
+  ]
+}

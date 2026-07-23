@@ -20,7 +20,7 @@ import time
 import argparse
 from pathlib import Path
 from collections import defaultdict
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
@@ -48,6 +48,7 @@ from src.imu_delta_dataset import (
     floor_str_to_num as _floor_str_to_num_ds,
     site_id_to_idx,
 )
+from data_processing.pdr_module import PDR
 
 FLOOR_MAP = {
     'B3': -3, 'B2': -2, 'B1': -1,
@@ -460,9 +461,156 @@ def predict_imu_deltas_for_path(
     return deltas
 
 
+def predict_ensemble_deltas_for_path(
+    imu_model: Optional[torch.nn.Module],
+    pdr_model: Optional[PDR],
+    path_file: Path,
+    timestamps: List[int],
+    floor_str: str,
+    site_id: str,
+    device: torch.device,
+    imu_weight: float = 0.67,
+    pdr_weight: float = 0.33,
+    n_time_steps: int = 100,
+) -> Optional[np.ndarray]:
+    """
+    ensemble_delta = IMU_V3 * imu_weight + PDR * pdr_weight
+    若某一分支缺失，则退化为另一分支；若都不可用，则返回 None。
+    """
+    imu_deltas = predict_imu_deltas_for_path(
+        imu_model=imu_model,
+        path_file=path_file,
+        timestamps=timestamps,
+        floor_str=floor_str,
+        site_id=site_id,
+        device=device,
+        n_time_steps=n_time_steps,
+    )
+
+    pdr_deltas = None
+    if pdr_model is not None and path_file.exists():
+        interval_df = pdr_model.predict_interval_deltas(path_file, sorted(timestamps))
+        if not interval_df.empty:
+            pdr_deltas = interval_df[["pdr_delta_x", "pdr_delta_y"]].to_numpy(dtype=np.float64)
+
+    if imu_deltas is None and pdr_deltas is None:
+        return None
+    if imu_deltas is None:
+        return pdr_deltas
+    if pdr_deltas is None:
+        return imu_deltas
+
+    n_steps = min(len(imu_deltas), len(pdr_deltas))
+    if n_steps == 0:
+        return None
+
+    return imu_weight * imu_deltas[:n_steps] + pdr_weight * pdr_deltas[:n_steps]
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Step 3：Beam Search 轨迹优化
 # ══════════════════════════════════════════════════════════════════════════════
+
+def _topk_indices_from_dist_matrix(
+    dist_matrix: np.ndarray,
+    k: int,
+) -> np.ndarray:
+    if dist_matrix.ndim != 2:
+        raise ValueError("dist_matrix must be 2D")
+    n_rows, n_cols = dist_matrix.shape
+    k = min(k, n_cols)
+    if k <= 0:
+        return np.zeros((n_rows, 0), dtype=np.int32)
+    if n_cols <= k:
+        return np.tile(np.arange(n_cols, dtype=np.int32), (n_rows, 1))
+
+    part = np.argpartition(dist_matrix, k - 1, axis=1)[:, :k]
+    part_dist = np.take_along_axis(dist_matrix, part, axis=1)
+    order = np.argsort(part_dist, axis=1)
+    return np.take_along_axis(part, order, axis=1).astype(np.int32)
+
+
+def _select_candidate_indices(
+    candidate_mode: str,
+    prev_pos: np.ndarray,
+    init_pos_k: np.ndarray,
+    delta: np.ndarray,
+    wps_k: np.ndarray,
+    n_candidates: int,
+) -> np.ndarray:
+    n_beams = len(prev_pos)
+    n_wps_k = len(wps_k)
+    n_cand = min(n_candidates, n_wps_k)
+    if n_cand <= 0:
+        return np.zeros((n_beams, 0), dtype=np.int32)
+
+    wifi_dist = np.linalg.norm(wps_k - init_pos_k, axis=1)
+    wifi_top = np.argsort(wifi_dist)[:n_cand].astype(np.int32)
+
+    if candidate_mode == "wifi":
+        return np.tile(wifi_top, (n_beams, 1))
+
+    expected_pos = prev_pos + delta
+    delta_dist = np.linalg.norm(
+        expected_pos[:, np.newaxis, :] - wps_k[np.newaxis, :, :], axis=2
+    )
+
+    if candidate_mode == "delta":
+        return _topk_indices_from_dist_matrix(delta_dist, n_cand)
+
+    if candidate_mode != "hybrid":
+        raise ValueError(f"Unsupported candidate_mode: {candidate_mode}")
+
+    delta_top = _topk_indices_from_dist_matrix(delta_dist, n_cand)
+    merged = np.empty((n_beams, n_cand), dtype=np.int32)
+    for row_idx in range(n_beams):
+        merged_row: List[int] = []
+        for idx in delta_top[row_idx]:
+            idx_int = int(idx)
+            if idx_int not in merged_row:
+                merged_row.append(idx_int)
+            if len(merged_row) == n_cand:
+                break
+        for idx in wifi_top:
+            idx_int = int(idx)
+            if idx_int not in merged_row:
+                merged_row.append(idx_int)
+            if len(merged_row) == n_cand:
+                break
+        if len(merged_row) < n_cand:
+            for idx_int in range(n_wps_k):
+                if idx_int not in merged_row:
+                    merged_row.append(idx_int)
+                if len(merged_row) == n_cand:
+                    break
+        merged[row_idx] = np.asarray(merged_row[:n_cand], dtype=np.int32)
+    return merged
+
+
+def compute_path_grid_distance_metric(
+    xy: np.ndarray,
+    floor_strs: Sequence[str],
+    dijkstra_data: Dict[str, Tuple[np.ndarray, np.ndarray]],
+    metric: str = "mean",
+) -> float:
+    if len(xy) == 0:
+        return float("inf")
+    if metric not in {"mean", "p90"}:
+        raise ValueError(f"Unsupported beam gate metric: {metric}")
+
+    per_point = []
+    for idx, floor_str in enumerate(floor_strs):
+        data = dijkstra_data.get(str(floor_str))
+        if data is None or len(data[0]) == 0:
+            per_point.append(np.inf)
+            continue
+        wps = data[0]
+        per_point.append(float(np.min(np.linalg.norm(wps - xy[idx], axis=1))))
+
+    dists = np.asarray(per_point, dtype=np.float64)
+    if metric == "mean":
+        return float(np.mean(dists))
+    return float(np.quantile(dists, 0.9))
 
 def beam_search_single_trajectory(
     init_xy: np.ndarray,
@@ -475,6 +623,12 @@ def beam_search_single_trajectory(
     w_imu_l2: float = 2.0,
     w_imu_angle: float = 1.0,
     w_dijkstra: float = 0.5,
+    cost_mode: str = "legacy",
+    alpha: Optional[float] = None,
+    beta_1: Optional[float] = None,
+    beta_2: Optional[float] = None,
+    use_dijkstra: bool = True,
+    candidate_mode: str = "delta",
 ) -> np.ndarray:
     """
     对单条轨迹执行 Beam Search 离散优化。
@@ -486,7 +640,11 @@ def beam_search_single_trajectory(
         dijkstra_data: {floor_str: (waypoints, sp_dists)}
         beam_width:    束宽
         n_candidates:  每步候选路点数
-        w_wifi/w_imu_l2/w_imu_angle/w_dijkstra: 惩罚权重
+        w_wifi/w_imu_l2/w_imu_angle/w_dijkstra: legacy 模式惩罚权重
+        cost_mode: "legacy" 或 "safe_rank2"
+        alpha/beta_1/beta_2: safe_rank2 核心惩罚权重
+        use_dijkstra: 是否启用 Dijkstra 穿墙惩罚
+        candidate_mode: 候选集生成方式，"delta" / "wifi" / "hybrid"
 
     Returns:
         (N, 2) 优化后的坐标
@@ -498,6 +656,16 @@ def beam_search_single_trajectory(
     # 回退 delta：若无 IMU 模型，用初始预测的差分
     if imu_deltas is None:
         imu_deltas = np.diff(init_xy, axis=0)
+
+    if cost_mode not in {"legacy", "safe_rank2"}:
+        raise ValueError(f"Unsupported cost_mode: {cost_mode}")
+    if candidate_mode not in {"delta", "wifi", "hybrid"}:
+        raise ValueError(f"Unsupported candidate_mode: {candidate_mode}")
+
+    if cost_mode == "safe_rank2":
+        alpha = float(alpha if alpha is not None else w_wifi)
+        beta_1 = float(beta_1 if beta_1 is not None else w_imu_angle)
+        beta_2 = float(beta_2 if beta_2 is not None else w_imu_l2)
 
     # ── Step 0：初始化 ──
     floor0 = init_floors[0]
@@ -513,9 +681,11 @@ def beam_search_single_trajectory(
     init_idx = np.argsort(wifi_d0)[:n_init]
 
     # Beam 状态：使用 parent pointer 回溯，避免复制轨迹列表
-    beam_costs = w_wifi * wifi_d0[init_idx]
+    if cost_mode == "safe_rank2":
+        beam_costs = alpha * wifi_d0[init_idx]
+    else:
+        beam_costs = w_wifi * wifi_d0[init_idx]
     beam_wp = init_idx.copy()
-    beam_floor = floor0
 
     # 历史记录：history[k] = (wp_indices, parent_indices)
     history = [(init_idx.copy(), np.arange(n_init))]
@@ -544,9 +714,9 @@ def beam_search_single_trajectory(
             reset_idx = np.argsort(wifi_dk)[:n_reset]
 
             best_prev_cost = np.min(beam_costs) if n_beams > 0 else 0.0
-            beam_costs = best_prev_cost + w_wifi * wifi_dk[reset_idx]
+            reset_weight = alpha if cost_mode == "safe_rank2" else w_wifi
+            beam_costs = best_prev_cost + reset_weight * wifi_dk[reset_idx]
             beam_wp = reset_idx
-            beam_floor = floor_k
 
             best_prev = int(np.argmin(beam_costs[:n_beams])) if n_beams > 0 else 0
             parent_idx = np.full(n_reset, best_prev, dtype=np.int32)
@@ -560,67 +730,75 @@ def beam_search_single_trajectory(
             continue
 
         prev_pos = wps_prev[beam_wp]
-        expected_pos = prev_pos + delta
-
-        # 距离矩阵: (n_beams, n_wps_k)
-        dist_to_exp = np.linalg.norm(
-            expected_pos[:, np.newaxis, :] - wps_k[np.newaxis, :, :], axis=2
+        cand_idx = _select_candidate_indices(
+            candidate_mode=candidate_mode,
+            prev_pos=prev_pos,
+            init_pos_k=init_xy[k],
+            delta=delta,
+            wps_k=wps_k,
+            n_candidates=n_candidates,
         )
-
-        # 每个 beam 取 top n_candidates
-        n_cand = min(n_candidates, n_wps_k)
-        if n_wps_k > n_cand:
-            cand_idx = np.argpartition(dist_to_exp, n_cand, axis=1)[:, :n_cand]
-        else:
-            cand_idx = np.tile(np.arange(n_wps_k), (n_beams, 1))
-            n_cand = n_wps_k
+        n_cand = cand_idx.shape[1]
+        if n_cand == 0:
+            history.append((beam_wp.copy(), np.arange(n_beams)))
+            continue
 
         cand_pos = wps_k[cand_idx]
 
-        # ── WiFi 惩罚 ──
-        wifi_cost = w_wifi * np.linalg.norm(
-            cand_pos - init_xy[k], axis=2
-        )
-
-        # ── IMU L2 惩罚 ──
         actual_delta = cand_pos - prev_pos[:, np.newaxis, :]
-        imu_diff = actual_delta - delta
-        imu_l2_cost = w_imu_l2 * np.linalg.norm(imu_diff, axis=2)
-
-        # ── IMU 角度惩罚 + 半平面过滤 ──
         delta_norm = np.linalg.norm(delta)
-        if delta_norm > 0.1:
-            pred_angle = np.arctan2(delta[1], delta[0])
-            actual_angle = np.arctan2(actual_delta[:, :, 1], actual_delta[:, :, 0])
-            angle_diff = np.abs(actual_angle - pred_angle)
-            angle_diff = np.minimum(angle_diff, 2 * np.pi - angle_diff)
-            imu_angle_cost = w_imu_angle * angle_diff
-            half_plane_mask = angle_diff < (np.pi * 0.75)
-        else:
-            imu_angle_cost = np.zeros((n_beams, n_cand))
-            half_plane_mask = np.ones((n_beams, n_cand), dtype=bool)
+        actual_dist = np.linalg.norm(actual_delta, axis=2)
+        if cost_mode == "safe_rank2":
+            wifi_cost = alpha * np.linalg.norm(cand_pos - init_xy[k], axis=2)
+            pred_dist = float(delta_norm)
+            dist_cost = beta_2 * np.abs(actual_dist - pred_dist)
 
-        # ── Dijkstra 穿墙惩罚（向量化） ──
-        if sp_k is not None and sp_k.size > 0:
-            prev_expand = np.repeat(beam_wp, n_cand)
-            cand_flat = cand_idx.flatten()
-            dij_raw = sp_k[prev_expand, cand_flat].reshape(n_beams, n_cand)
+            if delta_norm > 0.1:
+                pred_angle = np.arctan2(delta[1], delta[0])
+                actual_angle = np.arctan2(actual_delta[:, :, 1], actual_delta[:, :, 0])
+                angle_diff = np.abs(actual_angle - pred_angle)
+                angle_diff = np.minimum(angle_diff, 2 * np.pi - angle_diff)
+                angle_cost = beta_1 * angle_diff
+            else:
+                angle_cost = np.zeros((n_beams, n_cand))
 
-            euclid_direct = np.linalg.norm(
-                cand_pos - prev_pos[:, np.newaxis, :], axis=2
-            )
-            wall_penalty = np.where(
-                np.isfinite(dij_raw),
-                np.maximum(0, dij_raw - euclid_direct),
-                10.0
-            )
-            dijkstra_cost = w_dijkstra * wall_penalty
-        else:
             dijkstra_cost = np.zeros((n_beams, n_cand))
+            step_cost = wifi_cost + angle_cost + dist_cost
+        else:
+            wifi_cost = w_wifi * np.linalg.norm(cand_pos - init_xy[k], axis=2)
+            imu_diff = actual_delta - delta
+            imu_l2_cost = w_imu_l2 * np.linalg.norm(imu_diff, axis=2)
 
-        # ── 总惩罚 ──
-        step_cost = wifi_cost + imu_l2_cost + imu_angle_cost + dijkstra_cost
-        step_cost[~half_plane_mask] = 1e9
+            if delta_norm > 0.1:
+                pred_angle = np.arctan2(delta[1], delta[0])
+                actual_angle = np.arctan2(actual_delta[:, :, 1], actual_delta[:, :, 0])
+                angle_diff = np.abs(actual_angle - pred_angle)
+                angle_diff = np.minimum(angle_diff, 2 * np.pi - angle_diff)
+                imu_angle_cost = w_imu_angle * angle_diff
+                half_plane_mask = angle_diff < (np.pi * 0.75)
+            else:
+                imu_angle_cost = np.zeros((n_beams, n_cand))
+                half_plane_mask = np.ones((n_beams, n_cand), dtype=bool)
+
+            if use_dijkstra and sp_k is not None and sp_k.size > 0:
+                prev_expand = np.repeat(beam_wp, n_cand)
+                cand_flat = cand_idx.flatten()
+                dij_raw = sp_k[prev_expand, cand_flat].reshape(n_beams, n_cand)
+
+                euclid_direct = np.linalg.norm(
+                    cand_pos - prev_pos[:, np.newaxis, :], axis=2
+                )
+                wall_penalty = np.where(
+                    np.isfinite(dij_raw),
+                    np.maximum(0, dij_raw - euclid_direct),
+                    10.0
+                )
+                dijkstra_cost = w_dijkstra * wall_penalty
+            else:
+                dijkstra_cost = np.zeros((n_beams, n_cand))
+
+            step_cost = wifi_cost + imu_l2_cost + imu_angle_cost + dijkstra_cost
+            step_cost[~half_plane_mask] = 1e9
 
         total_cost = beam_costs[:, np.newaxis] + step_cost
 
@@ -667,12 +845,23 @@ def beam_search_optimize_site(
     initial_preds: List[dict],
     dijkstra_data: Dict[str, Tuple[np.ndarray, np.ndarray]],
     imu_model=None,
+    pdr_model: Optional[PDR] = None,
     device: torch.device = None,
     test_dir: Path = None,
     train_dir: Path = None,
     beam_width: int = 2000,
     n_candidates: int = 100,
     weights: Tuple[float, float, float, float] = (3.0, 0.5, 0.3, 1.5),
+    delta_weights: Tuple[float, float] = (0.67, 0.33),
+    imu_n_time_steps: int = 100,
+    cost_mode: str = "legacy",
+    alpha: Optional[float] = None,
+    beta_1: Optional[float] = None,
+    beta_2: Optional[float] = None,
+    use_dijkstra: bool = True,
+    candidate_mode: str = "delta",
+    beam_gate_threshold: Optional[float] = None,
+    beam_gate_metric: str = "mean",
 ) -> List[dict]:
     """
     Step 3: 对单个 Site 的所有轨迹执行 Beam Search 优化。
@@ -690,6 +879,12 @@ def beam_search_optimize_site(
         paths_preds[p['path_id']].append(p)
 
     optimized = []
+    gate_stats = {
+        "enabled_paths": 0,
+        "skipped_paths": 0,
+        "enabled_points": 0,
+        "skipped_points": 0,
+    }
     for path_id, path_preds in paths_preds.items():
         # 按时间排序
         path_preds.sort(key=lambda x: x['ts'])
@@ -698,30 +893,67 @@ def beam_search_optimize_site(
         init_floors = [p['floor_str'] for p in path_preds]
         timestamps = [p['ts'] for p in path_preds]
 
-        # IMU delta 预测
-        imu_deltas = None
-        if imu_model is not None and test_dir is not None:
-            path_file = test_dir / f"{path_id}.txt"
-            majority_floor = max(set(init_floors), key=init_floors.count)
-            imu_deltas = predict_imu_deltas_for_path(
-                imu_model, path_file, timestamps,
-                majority_floor, site_id,
-                device or torch.device('cpu'),
+        gate_metric_value = None
+        if beam_gate_threshold is not None and beam_gate_threshold >= 0:
+            gate_metric_value = compute_path_grid_distance_metric(
+                xy=init_xy,
+                floor_strs=init_floors,
+                dijkstra_data=dijkstra_data,
+                metric=beam_gate_metric,
             )
 
-        # Beam Search
-        opt_xy = beam_search_single_trajectory(
-            init_xy, init_floors, imu_deltas, dijkstra_data,
-            beam_width=beam_width, n_candidates=n_candidates,
-            w_wifi=w_wifi, w_imu_l2=w_imu_l2,
-            w_imu_angle=w_imu_angle, w_dijkstra=w_dijkstra,
-        )
+        run_beam = True
+        if gate_metric_value is not None and gate_metric_value > beam_gate_threshold:
+            run_beam = False
+
+        if run_beam:
+            # IMU delta 预测
+            imu_deltas = None
+            if test_dir is not None and (imu_model is not None or pdr_model is not None):
+                path_file = test_dir / f"{path_id}.txt"
+                majority_floor = max(set(init_floors), key=init_floors.count)
+                imu_deltas = predict_ensemble_deltas_for_path(
+                    imu_model=imu_model,
+                    pdr_model=pdr_model,
+                    path_file=path_file,
+                    timestamps=timestamps,
+                    floor_str=majority_floor,
+                    site_id=site_id,
+                    device=device or torch.device('cpu'),
+                    imu_weight=delta_weights[0],
+                    pdr_weight=delta_weights[1],
+                    n_time_steps=imu_n_time_steps,
+                )
+
+            opt_xy = beam_search_single_trajectory(
+                init_xy, init_floors, imu_deltas, dijkstra_data,
+                beam_width=beam_width, n_candidates=n_candidates,
+                w_wifi=w_wifi, w_imu_l2=w_imu_l2,
+                w_imu_angle=w_imu_angle, w_dijkstra=w_dijkstra,
+                cost_mode=cost_mode, alpha=alpha,
+                beta_1=beta_1, beta_2=beta_2,
+                use_dijkstra=use_dijkstra,
+                candidate_mode=candidate_mode,
+            )
+            gate_stats["enabled_paths"] += 1
+            gate_stats["enabled_points"] += len(path_preds)
+        else:
+            opt_xy = init_xy.copy()
+            gate_stats["skipped_paths"] += 1
+            gate_stats["skipped_points"] += len(path_preds)
 
         for idx, p in enumerate(path_preds):
             p_out = dict(p)
             p_out['x'] = float(opt_xy[idx, 0])
             p_out['y'] = float(opt_xy[idx, 1])
             optimized.append(p_out)
+
+    if beam_gate_threshold is not None and beam_gate_threshold >= 0:
+        print(
+            f"      Beam gate: enabled {gate_stats['enabled_paths']} paths / {gate_stats['enabled_points']} pts, "
+            f"skipped {gate_stats['skipped_paths']} paths / {gate_stats['skipped_points']} pts "
+            f"(threshold={beam_gate_threshold}, metric={beam_gate_metric})"
+        )
 
     return optimized
 
@@ -751,9 +983,36 @@ def main():
                         help="IMU 方向角度误差权重")
     parser.add_argument("--w-dijkstra", type=float, default=1.5,
                         help="Dijkstra 穿墙惩罚权重")
+    parser.add_argument("--beam-cost-mode", choices=["legacy", "safe_rank2"], default="legacy",
+                        help="Beam Search 代价函数模式")
+    parser.add_argument("--alpha", type=float, default=3.0,
+                        help="safe_rank2: WiFi 绝对坐标惩罚权重")
+    parser.add_argument("--beta-1", type=float, default=0.3,
+                        help="safe_rank2: delta 方向角惩罚权重")
+    parser.add_argument("--beta-2", type=float, default=0.5,
+                        help="safe_rank2: delta 距离模长惩罚权重")
+    parser.add_argument("--disable-dijkstra", action="store_true",
+                        help="禁用 Dijkstra 穿墙惩罚")
+    parser.add_argument("--candidate-mode", choices=["delta", "wifi", "hybrid"], default="delta",
+                        help="Beam Search 候选集生成方式")
+    parser.add_argument("--beam-gate-threshold", type=float, default=-1.0,
+                        help="路径级 Beam 门控阈值；<0 表示禁用门控")
+    parser.add_argument("--beam-gate-metric", choices=["mean", "p90"], default="mean",
+                        help="路径级 Beam 门控统计量")
+    parser.add_argument("--imu-config", default="configs/imu_delta_model_v3.yml",
+                        help="IMU V3 delta 配置")
+    parser.add_argument("--imu-ckpt", default="models/imu_delta_v3/imu_delta_best.pt",
+                        help="IMU V3 delta 权重")
+    parser.add_argument("--pdr-config", default="configs/pdr_config.yml",
+                        help="PDR 配置")
+    parser.add_argument("--delta-weight-imu", type=float, default=0.67,
+                        help="Beam Search 使用的 IMU delta 权重")
+    parser.add_argument("--delta-weight-pdr", type=float, default=0.33,
+                        help="Beam Search 使用的 PDR delta 权重")
     args = parser.parse_args()
 
     bs_weights = (args.w_wifi, args.w_imu_l2, args.w_imu_angle, args.w_dijkstra)
+    delta_weights = (args.delta_weight_imu, args.delta_weight_pdr)
 
     # ── 加载配置 ──
     with open(args.config, 'r', encoding='utf-8') as f:
@@ -773,16 +1032,29 @@ def main():
     print(f"  连通半径    : {args.connect_radius}m")
     print(f"  Beam Search : {'跳过' if args.skip_beam_search else '启用'}")
     if not args.skip_beam_search:
-        print(f"  权重        : wifi={args.w_wifi}, imu_l2={args.w_imu_l2}, "
-              f"angle={args.w_imu_angle}, dijkstra={args.w_dijkstra}")
+        print(f"  代价模式    : {args.beam_cost_mode}")
+        if args.beam_cost_mode == "safe_rank2":
+            print(f"  核心参数    : alpha={args.alpha}, beta_1={args.beta_1}, beta_2={args.beta_2}")
+        else:
+            print(f"  权重        : wifi={args.w_wifi}, imu_l2={args.w_imu_l2}, "
+                  f"angle={args.w_imu_angle}, dijkstra={args.w_dijkstra}")
+        print(f"  Dijkstra    : {'禁用' if args.disable_dijkstra else '启用'}")
+        print(f"  候选策略    : {args.candidate_mode}")
+        print(f"  Beam 门控   : {'禁用' if args.beam_gate_threshold < 0 else f'{args.beam_gate_metric} <= {args.beam_gate_threshold}m'}")
 
     # ── 加载 IMU Delta 模型 ──
     imu_model = None
+    pdr_model = None
+    imu_n_time_steps = 100
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     if not args.skip_beam_search:
-        imu_cfg_path = _PROJECT_ROOT / 'configs' / 'imu_delta_model.yml'
-        imu_ckpt_path = _PROJECT_ROOT / 'models' / 'imu_delta' / 'imu_delta_best.pt'
+        imu_cfg_path = _PROJECT_ROOT / args.imu_config
+        imu_ckpt_path = _PROJECT_ROOT / args.imu_ckpt
+        with open(imu_cfg_path, 'r', encoding='utf-8') as f:
+            imu_cfg = yaml.safe_load(f)
+        imu_n_time_steps = int(imu_cfg['data']['n_time_steps'])
         imu_model = load_imu_model(imu_cfg_path, imu_ckpt_path, device)
+        pdr_model = PDR.from_yaml(_PROJECT_ROOT / args.pdr_config)
 
     # ── 解析提交文件 ──
     site_path_queries = parse_submission(sub_path)
@@ -834,10 +1106,21 @@ def main():
                     initial_preds=preds,
                     dijkstra_data=dijkstra_data,
                     imu_model=imu_model,
+                    pdr_model=pdr_model,
                     device=device,
                     test_dir=test_dir,
                     train_dir=train_dir,
                     weights=bs_weights,
+                    delta_weights=delta_weights,
+                    imu_n_time_steps=imu_n_time_steps,
+                    cost_mode=args.beam_cost_mode,
+                    alpha=args.alpha,
+                    beta_1=args.beta_1,
+                    beta_2=args.beta_2,
+                    use_dijkstra=not args.disable_dijkstra,
+                    candidate_mode=args.candidate_mode,
+                    beam_gate_threshold=(None if args.beam_gate_threshold < 0 else args.beam_gate_threshold),
+                    beam_gate_metric=args.beam_gate_metric,
                 )
 
             all_results.extend(preds)

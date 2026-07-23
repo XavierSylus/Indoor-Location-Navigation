@@ -1,0 +1,2 @@
+site_id,model_kind,feature_source,n_train_paths,n_holdout_paths,n_train_points,n_holdout_points,n_train_floors,floor_accuracy,wifi_mae_m,beam_mae_m,beam_minus_wifi_m
+5d27099f03f801723c32511d,trained,cache_reconstructed,130,1,894,3,5,1.0,14.590769468208975,16.36975476790118,1.7789852996922046

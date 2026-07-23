@@ -1,0 +1,55 @@
+version: v005_reranker_safety_policy
+experiment_type: cv_probe
+iteration_mode: tune_module
+goal: Compare inference-safe safety policies for the current Top-50 reranker.
+random_seed: 42
+submission: null
+
+dataset: data_processing/processed/hard_site_candidate_rerank_dataset.csv
+split:
+  type: leave_one_path_id_out
+  n_groups: 59
+  n_paths: 5
+
+model_params:
+  model_type: lgbm
+  num_leaves: 7
+  min_child_samples: 20
+  learning_rate: 0.05
+  n_estimators: 300
+  reg_alpha: 1.0
+  reg_lambda: 5.0
+  subsample: 0.8
+  colsample_bytree: 0.8
+  random_state: 42
+
+rerankers:
+  - name: geometry_source_wifi_strong
+    feature_set: geometry_source_wifi
+    cv_pred_out: data_processing/processed/topk_rerank_gsw_strong_cv_predictions.csv
+    summary_out: data_processing/processed/topk_rerank_gsw_strong_summary.json
+  - name: geometry_wifi_source_temporal_core_strong
+    feature_set: geometry_wifi_source_temporal_core
+    cv_pred_out: data_processing/processed/topk_rerank_temporal_strong_cv_predictions.csv
+    summary_out: data_processing/processed/topk_rerank_temporal_strong_summary.json
+
+policies:
+  - always_rank1
+  - always_rerank
+  - rerank_only_if_selected_rank_le_10
+  - rerank_only_if_selected_rank_le_20
+  - rerank_only_if_score_margin_positive
+  - rerank_only_if_wifi_margin_positive
+  - rerank_only_if_rank_le_20_and_wifi_margin_positive
+  - site_floor_blacklist
+
+diagnostic_blacklist:
+  diagnostic_only: true
+  site_floor_keys:
+    - 5da138364db8ce0c98bc00f1|F3
+  reason: Known fold-specific regression from v004/T4.11; not submission-safe.
+
+leakage_boundary:
+  - Policy decisions may use only inference-available fields.
+  - GT, labels, and oracle distances are used only after selection for diagnostic metrics.
+  - Site/floor blacklist is diagnostic-only and cannot be promoted without OOF or submission-safe validation.

@@ -1,0 +1,6 @@
+site_id,path_id,floor,n_points,floor_accuracy,estimated_floor_error_points,diagnostic_level,point_level_pred_floor_available,notes
+5d27099f03f801723c32511d,5dce818894e4900006125129,F3,3,1.0,0.0,path_aggregate,False,"Current artifacts expose aggregate floor_accuracy, not point-level pred_floor."
+5da138754db8ce0c98bca82f,5dd0e5dd878f3300066c7644,F1,20,1.0,0.0,path_aggregate,False,"Current artifacts expose aggregate floor_accuracy, not point-level pred_floor."
+5da1383b4db8ce0c98bc11ab,5dd374ae44333f00067aa196,F1,31,1.0,0.0,path_aggregate,False,"Current artifacts expose aggregate floor_accuracy, not point-level pred_floor."
+5da138364db8ce0c98bc00f1,5dce63105516ad00065f0280,F3,3,1.0,0.0,path_aggregate,False,"Current artifacts expose aggregate floor_accuracy, not point-level pred_floor."
+5da138274db8ce0c98bbd3d2,5dc65d451cda3700060305be,F1,2,1.0,0.0,path_aggregate,False,"Current artifacts expose aggregate floor_accuracy, not point-level pred_floor."

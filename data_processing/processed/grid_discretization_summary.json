@@ -1,0 +1,74 @@
+{
+  "status": "ok",
+  "elapsed_s": 4156.943172216415,
+  "seed": 42,
+  "holdout_fraction": 0.1,
+  "max_holdout_paths": 1,
+  "site_ids": [
+    "5da138364db8ce0c98bc00f1",
+    "5d27099f03f801723c32511d",
+    "5da138754db8ce0c98bca82f",
+    "5da138274db8ce0c98bbd3d2",
+    "5da1383b4db8ce0c98bc11ab"
+  ],
+  "variants": {
+    "raw_all": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "wifi_mae_m": 11.619039083658853,
+      "snapped_pred_mae_m": 12.121857595359591,
+      "snap_damage_m": 0.502818511700737,
+      "pred_to_grid_mae_m": 5.059625065238069,
+      "gt_to_grid_oracle_mae_m": 1.5658468494612068
+    },
+    "raw_unique": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "wifi_mae_m": 11.619039083658853,
+      "snapped_pred_mae_m": 12.121857595359591,
+      "snap_damage_m": 0.502818511700737,
+      "pred_to_grid_mae_m": 5.059625065238069,
+      "gt_to_grid_oracle_mae_m": 1.5658468494612068
+    },
+    "round_0.1_unique": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "wifi_mae_m": 11.619039083658853,
+      "snapped_pred_mae_m": 12.124217047155662,
+      "snap_damage_m": 0.505177963496809,
+      "pred_to_grid_mae_m": 5.057748841469207,
+      "gt_to_grid_oracle_mae_m": 1.5937777605995567
+    },
+    "round_0.5_unique": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "wifi_mae_m": 11.619039083658853,
+      "snapped_pred_mae_m": 12.041176157453586,
+      "snap_damage_m": 0.42213707379473264,
+      "pred_to_grid_mae_m": 5.075817179781121,
+      "gt_to_grid_oracle_mae_m": 1.7045491688990615
+    },
+    "round_1.0_unique": {
+      "n_sites": 5,
+      "n_holdout_paths": 5,
+      "n_holdout_points": 40,
+      "wifi_mae_m": 11.619039083658853,
+      "snapped_pred_mae_m": 12.341602645080632,
+      "snap_damage_m": 0.7225635614217794,
+      "pred_to_grid_mae_m": 5.104882645896895,
+      "gt_to_grid_oracle_mae_m": 1.8159735624152191
+    }
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

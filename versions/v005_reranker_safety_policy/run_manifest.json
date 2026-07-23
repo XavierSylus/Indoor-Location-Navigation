@@ -1,0 +1,36 @@
+{
+  "created_at_utc": "2026-05-12T14:19:05+00:00",
+  "version": "v005_reranker_safety_policy",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "tune_module",
+  "exact_command": "python scripts/train_topk_rerank_baseline.py --feature-set geometry_source_wifi --model-type lgbm --num-leaves 7 --min-child-samples 20 --learning-rate 0.05 --n-estimators 300 --reg-alpha 1.0 --reg-lambda 5.0 --subsample 0.8 --colsample-bytree 0.8 --cv-pred-out data_processing/processed/topk_rerank_gsw_strong_cv_predictions.csv --summary-out data_processing/processed/topk_rerank_gsw_strong_summary.json; python scripts/train_topk_rerank_baseline.py --feature-set geometry_wifi_source_temporal_core --model-type lgbm --num-leaves 7 --min-child-samples 20 --learning-rate 0.05 --n-estimators 300 --reg-alpha 1.0 --reg-lambda 5.0 --subsample 0.8 --colsample-bytree 0.8 --cv-pred-out data_processing/processed/topk_rerank_temporal_strong_cv_predictions.csv --summary-out data_processing/processed/topk_rerank_temporal_strong_summary.json; python scripts/train_topk_rerank_baseline.py --feature-set geometry_source_wifi --model-type lgbm --num-leaves 7 --min-child-samples 20 --learning-rate 0.05 --n-estimators 300 --reg-alpha 1.0 --reg-lambda 5.0 --subsample 0.8 --colsample-bytree 0.8 --policy-blacklist-site-floor '5da138364db8ce0c98bc00f1|F3' --cv-pred-out data_processing/processed/topk_rerank_gsw_strong_blacklist_diag_cv_predictions.csv --summary-out data_processing/processed/topk_rerank_gsw_strong_blacklist_diag_summary.json; python scripts/train_topk_rerank_baseline.py --feature-set geometry_wifi_source_temporal_core --model-type lgbm --num-leaves 7 --min-child-samples 20 --learning-rate 0.05 --n-estimators 300 --reg-alpha 1.0 --reg-lambda 5.0 --subsample 0.8 --colsample-bytree 0.8 --policy-blacklist-site-floor '5da138364db8ce0c98bc00f1|F3' --cv-pred-out data_processing/processed/topk_rerank_temporal_strong_blacklist_diag_cv_predictions.csv --summary-out data_processing/processed/topk_rerank_temporal_strong_blacklist_diag_summary.json",
+  "seed": "42",
+  "holdout_definition": "hard-site Top-50 leave-one-path-id-out; 59 groups / 5 paths / 5 sites",
+  "local_metric": "best_submission_safe_mae=7.524908; best_diag_blacklist_mae=7.361871; oracle50_mae=0.583326",
+  "decision": "exploratory",
+  "notes": "Inference-safe simple policies do not solve fold regression; post-hoc blacklist is diagnostic-only. Next v006 should create rank1-risk signal.",
+  "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa",
+  "git_status_short": "## main...origin/main\n M README.md\n M scripts/step3_infer_and_optimize.py\n?? AGENTS.md\n?? EXPERIMENT_LEDGER.md\n?? configs/beam_site_policy.yml\n?? configs/pdr_config.yml\n?? configs/pdr_v3_ensemble.yml\n?? configs/topk_rerank_safety_policy.yml\n?? configs/unified_validation.yml\n?? data_processing/pdr_module.py\n?? data_processing/processed/\n?? scripts/agent_workflow.py\n?? scripts/analyze_absolute_holdout_validation.py\n?? scripts/analyze_hard_site_candidate_recall.py\n?? scripts/analyze_single_site_recall_failure.py\n?? scripts/build_error_source_score_waterfall.py\n?? scripts/build_unified_validation_report.py\n?? scripts/diagnose_beam_search_validation.py\n?? scripts/diagnose_grid_discretization.py\n?? scripts/evaluate_beam_gating_validation.py\n?? scripts/evaluate_beam_search_validation.py\n?? scripts/evaluate_pdr_v3_ensemble.py\n?? scripts/generate_beam_site_whitelist.py\n?? scripts/infer_v3_validation.py\n?? scripts/search_safe_beam_params.py\n?? scripts/train_topk_rerank_baseline.py\n?? submissions/\n?? versions/",
+  "python": {
+    "executable": "D:\\soft\\anaconda\\python.exe",
+    "version": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "version": "10.0.26200",
+    "machine": "AMD64"
+  },
+  "files": {
+    "config": "versions/v005_reranker_safety_policy/config.yml",
+    "metrics": "data_processing/processed/reranker_safety_policy_comparison.json",
+    "submission": null,
+    "validation_summary": "versions/v005_reranker_safety_policy/validation_summary.json"
+  },
+  "sha256": {
+    "versions/v005_reranker_safety_policy/config.yml": "04c755603d44f53a4bbbeeec4d173197b4e5e9fd0cc834879b8a475093726368",
+    "data_processing/processed/reranker_safety_policy_comparison.json": "fabbc834546f2bd30dbd56d16dfe3ed0de8430dce2a1eedda3e3ca12aea64780",
+    "versions/v005_reranker_safety_policy/validation_summary.json": "5c052e098976bfe9dbe86d0cf1e909cfaf75daad07b329a87c187eb8cfd69316"
+  },
+  "validation_summary_status": "ok"
+}

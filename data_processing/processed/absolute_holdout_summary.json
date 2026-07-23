@@ -1,0 +1,164 @@
+{
+  "status": "ok",
+  "target_route": "absolute_baseline",
+  "site_ids": [
+    "5d27099f03f801723c32511d",
+    "5da138274db8ce0c98bbd3d2",
+    "5da138364db8ce0c98bc00f1",
+    "5da1383b4db8ce0c98bc11ab",
+    "5da138754db8ce0c98bca82f"
+  ],
+  "seed": 42,
+  "holdout_fraction": 0.1,
+  "max_holdout_paths": 1,
+  "n_paths": 5,
+  "n_points": 59,
+  "overall_wifi_mae_m": 9.148229469523182,
+  "worst_paths": [
+    {
+      "site_id": "5d27099f03f801723c32511d",
+      "path_id": "5dce818894e4900006125129",
+      "floor": "F3",
+      "wifi_mae_m": 14.590769468208975,
+      "path_length_m": 13.266254158651773,
+      "train_floor_count": 5,
+      "train_waypoint_density": 0.02924044185853169
+    },
+    {
+      "site_id": "5da138754db8ce0c98bca82f",
+      "path_id": "5dd0e5dd878f3300066c7644",
+      "floor": "F1",
+      "wifi_mae_m": 10.24871655211599,
+      "path_length_m": 156.6812861615417,
+      "train_floor_count": 4,
+      "train_waypoint_density": 0.009646125119458815
+    },
+    {
+      "site_id": "5da1383b4db8ce0c98bc11ab",
+      "path_id": "5dd374ae44333f00067aa196",
+      "floor": "F1",
+      "wifi_mae_m": 8.84907853476602,
+      "path_length_m": 263.42235383134073,
+      "train_floor_count": 3,
+      "train_waypoint_density": 0.009543689295913088
+    },
+    {
+      "site_id": "5da138364db8ce0c98bc00f1",
+      "path_id": "5dce63105516ad00065f0280",
+      "floor": "F3",
+      "wifi_mae_m": 3.640422116325069,
+      "path_length_m": 15.119274743578266,
+      "train_floor_count": 3,
+      "train_waypoint_density": 0.014184335889517771
+    },
+    {
+      "site_id": "5da138274db8ce0c98bbd3d2",
+      "path_id": "5dc65d451cda3700060305be",
+      "floor": "F1",
+      "wifi_mae_m": 2.8780991640995754,
+      "path_length_m": 6.489313246168648,
+      "train_floor_count": 3,
+      "train_waypoint_density": 0.014541770205716599
+    }
+  ],
+  "by_site": [
+    {
+      "site_id": "5d27099f03f801723c32511d",
+      "n_paths": 1,
+      "n_points": 3,
+      "wifi_mae_m": 14.590769468208975
+    },
+    {
+      "site_id": "5da138754db8ce0c98bca82f",
+      "n_paths": 1,
+      "n_points": 20,
+      "wifi_mae_m": 10.24871655211599
+    },
+    {
+      "site_id": "5da1383b4db8ce0c98bc11ab",
+      "n_paths": 1,
+      "n_points": 31,
+      "wifi_mae_m": 8.84907853476602
+    },
+    {
+      "site_id": "5da138364db8ce0c98bc00f1",
+      "n_paths": 1,
+      "n_points": 3,
+      "wifi_mae_m": 3.640422116325069
+    },
+    {
+      "site_id": "5da138274db8ce0c98bbd3d2",
+      "n_paths": 1,
+      "n_points": 2,
+      "wifi_mae_m": 2.8780991640995754
+    }
+  ],
+  "by_train_floor_count": [
+    {
+      "train_floor_count": 5,
+      "n_paths": 1,
+      "n_points": 3,
+      "wifi_mae_m": 14.590769468208975
+    },
+    {
+      "train_floor_count": 4,
+      "n_paths": 1,
+      "n_points": 20,
+      "wifi_mae_m": 10.24871655211599
+    },
+    {
+      "train_floor_count": 3,
+      "n_paths": 3,
+      "n_points": 36,
+      "wifi_mae_m": 8.083302757081139
+    }
+  ],
+  "by_path_length_bucket": [
+    {
+      "path_length_bucket": "low",
+      "n_paths": 2,
+      "n_points": 5,
+      "wifi_mae_m": 9.905701346565214
+    },
+    {
+      "path_length_bucket": "high",
+      "n_paths": 2,
+      "n_points": 51,
+      "wifi_mae_m": 9.397956188628752
+    },
+    {
+      "path_length_bucket": "medium",
+      "n_paths": 1,
+      "n_points": 3,
+      "wifi_mae_m": 3.640422116325069
+    }
+  ],
+  "by_waypoint_density_bucket": [
+    {
+      "waypoint_density_bucket": "high",
+      "n_paths": 2,
+      "n_points": 5,
+      "wifi_mae_m": 9.905701346565214
+    },
+    {
+      "waypoint_density_bucket": "low",
+      "n_paths": 2,
+      "n_points": 51,
+      "wifi_mae_m": 9.397956188628752
+    },
+    {
+      "waypoint_density_bucket": "medium",
+      "n_paths": 1,
+      "n_points": 3,
+      "wifi_mae_m": 3.640422116325069
+    }
+  ],
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

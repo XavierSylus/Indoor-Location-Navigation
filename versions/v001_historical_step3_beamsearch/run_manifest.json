@@ -1,0 +1,36 @@
+{
+  "created_at_utc": "2026-05-09T02:30:00+00:00",
+  "version": "v001_historical_step3_beamsearch",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "assemble_module",
+  "exact_command": "Write-Output 'Historical backfill: original exact generation command unknown; submission copied from submission_step3_beamsearch.csv.'",
+  "seed": "unknown",
+  "holdout_definition": "unknown",
+  "local_metric": "Public 6.64 m; Private 7.90 m; historical leaderboard record",
+  "decision": "historical",
+  "notes": "Backfilled current best recorded historical submission into versioned workflow.",
+  "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa",
+  "git_status_short": "## main...origin/main\n M README.md\n M scripts/step3_infer_and_optimize.py\n?? EXPERIMENT_LEDGER.md\n?? agent.md\n?? configs/beam_site_policy.yml\n?? configs/pdr_config.yml\n?? configs/pdr_v3_ensemble.yml\n?? configs/unified_validation.yml\n?? data_processing/pdr_module.py\n?? data_processing/processed/\n?? scripts/agent_workflow.py\n?? scripts/analyze_absolute_holdout_validation.py\n?? scripts/analyze_hard_site_candidate_recall.py\n?? scripts/analyze_single_site_recall_failure.py\n?? scripts/build_unified_validation_report.py\n?? scripts/diagnose_beam_search_validation.py\n?? scripts/diagnose_grid_discretization.py\n?? scripts/evaluate_beam_gating_validation.py\n?? scripts/evaluate_beam_search_validation.py\n?? scripts/evaluate_pdr_v3_ensemble.py\n?? scripts/generate_beam_site_whitelist.py\n?? scripts/infer_v3_validation.py\n?? scripts/search_safe_beam_params.py\n?? scripts/train_topk_rerank_baseline.py\n?? submissions/\n?? versions/",
+  "python": {
+    "executable": "D:\\soft\\anaconda\\python.exe",
+    "version": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "version": "10.0.26200",
+    "machine": "AMD64"
+  },
+  "files": {
+    "config": "versions/v001_historical_step3_beamsearch/config.yml",
+    "metrics": null,
+    "submission": "versions/v001_historical_step3_beamsearch/submission.csv",
+    "validation_summary": "versions/v001_historical_step3_beamsearch/validation_summary.json"
+  },
+  "sha256": {
+    "versions/v001_historical_step3_beamsearch/config.yml": "b4ec2304e01841e60b7245428535ea83c8247db264f155df4235129ace5659c0",
+    "versions/v001_historical_step3_beamsearch/submission.csv": "d651014cdc8b80a0d9e4b7e70abd14321c7847782f12b79f11f115c18a18fd4f",
+    "versions/v001_historical_step3_beamsearch/validation_summary.json": "69c5af0fb8c54197d706d5d654faa8702ac6b8944e014fa7363f15e9a26a7a80"
+  },
+  "validation_summary_status": "ok"
+}

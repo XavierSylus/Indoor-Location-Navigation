@@ -1,0 +1,8 @@
+candidate_set,mae_m,bad_point_ratio,sum_excess_over_4m,mean_excess_over_4m,n_points,available,notes
+raw_pred,9.148229469523184,0.8813559322033898,319.65114170359846,5.41781596107794,59,True,observed candidate
+rank1,9.268067323716176,0.8305084745762712,340.4879571011847,5.770982323748893,59,True,observed candidate
+oracle@5,4.589761742621102,0.3728813559322034,164.11176327221165,2.7815553096985024,59,True,diagnostic uses GT to choose oracle candidate
+oracle@10,2.3766176079715673,0.15254237288135594,92.12435979792446,1.5614298270834654,59,True,diagnostic uses GT to choose oracle candidate
+oracle@20,1.545086274681444,0.06779661016949153,62.83171901610167,1.0649443901034181,59,True,diagnostic uses GT to choose oracle candidate
+oracle@50,0.5833264467428693,0.05084745762711865,10.07855096318741,0.17082289768114256,59,True,diagnostic uses GT to choose oracle candidate
+oracle@100,,,,,59,False,unavailable because current top-k artifact has max rank 50

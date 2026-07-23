@@ -1,0 +1,21 @@
+{
+  "status": "ok",
+  "validation_type": "cv_probe",
+  "diagnostic_only": true,
+  "n_groups": 59,
+  "split_type": "leave_one_path_id_out",
+  "rank1_mae_m": 9.268067323716174,
+  "oracle50_mae_m": 0.5833264467428692,
+  "best_submission_safe_policy": "geometry_source_wifi_strong rerank_only_if_score_margin_positive",
+  "best_submission_safe_mae_m": 7.524908431950882,
+  "best_submission_safe_usage_rate": 0.745763,
+  "best_diagnostic_policy": "geometry_source_wifi_strong diagnostic site/floor blacklist",
+  "best_diagnostic_mae_m": 7.361871,
+  "submission": null,
+  "next_recommendation": "v006_rank1_risk_signal_probe",
+  "notes": [
+    "No Kaggle submission was generated.",
+    "The diagnostic site/floor blacklist is post-hoc and not submission-safe.",
+    "Current simple inference-safe policies do not solve the known fold-specific regression."
+  ]
+}

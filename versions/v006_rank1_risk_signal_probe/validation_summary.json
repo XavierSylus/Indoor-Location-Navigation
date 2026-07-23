@@ -1,0 +1,23 @@
+{
+  "status": "ok",
+  "validation_type": "cv_probe",
+  "diagnostic_only": true,
+  "n_groups": 59,
+  "split_type": "leave_one_path_id_out",
+  "rank1_mae_m": 9.268067323716174,
+  "oracle50_mae_m": 0.5833264467428692,
+  "v005_best_submission_safe_mae_m": 7.524908431950882,
+  "best_policy": "score_margin_positive",
+  "best_policy_mae_m": 7.524908431950882,
+  "best_policy_bad_fold_regression_count": 1,
+  "best_no_regression_risk_policy": "risk_ge_3_rank_le_10_score_margin_positive",
+  "best_no_regression_risk_policy_mae_m": 8.055353425995445,
+  "decision": "rejected",
+  "submission": null,
+  "next_recommendation": "v007_candidate_context_expansion",
+  "notes": [
+    "No Kaggle submission was generated.",
+    "The new rank1 risk signal did not beat v005 safely.",
+    "Current candidate-level confidence fields are insufficient; next route should create stronger candidate/path context."
+  ]
+}

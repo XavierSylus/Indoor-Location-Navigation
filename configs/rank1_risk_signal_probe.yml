@@ -1,0 +1,44 @@
+version: v006_rank1_risk_signal_probe
+experiment_type: cv_probe
+iteration_mode: add_module
+goal: Create an inference-safe rank1/rerank risk signal after simple v005 gating failed.
+random_seed: 42
+submission: null
+
+inputs:
+  dataset: data_processing/processed/hard_site_candidate_rerank_dataset.csv
+  rerank_cv: data_processing/processed/topk_rerank_gsw_strong_cv_predictions.csv
+
+outputs:
+  features: data_processing/processed/rank1_risk_signal_features.csv
+  summary: data_processing/processed/rank1_risk_signal_policy_summary.json
+  by_fold: data_processing/processed/rank1_risk_signal_policy_by_fold.csv
+
+split:
+  type: leave_one_path_id_out
+  n_groups: 59
+  n_paths: 5
+
+baseline:
+  rank1_mae_m: 9.268067323716174
+  gsw_score_margin_positive_mae_m: 7.524908431950882
+  oracle50_mae_m: 0.5833264467428692
+
+policy_features:
+  - rank1_source_wifi_best_rank
+  - rank1_source_wifi_top3_rank
+  - rank1_wifi_knn_rank
+  - rank1_wifi_weighted_rank
+  - rank1_geometry_distance_rank
+  - rank1_temporal_smoothness_rank
+  - rank1_signal_support_count
+  - rank1_risk_score
+  - predicted_score_margin
+  - source_wifi_best_score_margin
+  - temporal_smoothness_margin_m
+  - selected_rank
+
+leakage_boundary:
+  - Policy features may use only candidate/reranker inference-time columns.
+  - GT, labels, and oracle distances are used only after policy selection for diagnostic metrics.
+  - Thresholds selected on the 59-group diagnostic holdout are not submission-safe until separately validated.

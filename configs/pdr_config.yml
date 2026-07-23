@@ -1,0 +1,36 @@
+paths:
+  default_train_dir: "indoor-location-navigation/train"
+  default_test_dir: "indoor-location-navigation/test"
+  default_output_dir: "data_processing/processed"
+
+data:
+  fallback_sample_period_ms: 20.0
+
+step_detection:
+  signal_source: "linear_accel_norm"
+  gravity_low_pass_alpha: 0.92
+  smooth_window_ms: 240.0
+  peak_min_distance_ms: 400.0
+  peak_prominence: 0.06
+  peak_height_quantile: 0.65
+  peak_height_min: 0.05
+  min_samples: 8
+
+step_length:
+  mode: "weinberg"
+  fixed_length_m: 0.68
+  weinberg_k: 0.56
+  weinberg_window_ms: 500.0
+  min_length_m: 0.25
+  max_length_m: 1.05
+
+heading:
+  primary_source: "rotation_vector"
+  fallback_source: "gyroscope"
+  yaw_offset_rad: 0.0
+  max_gyro_dt_ms: 80.0
+  x_axis_sign: -1.0
+  y_axis_sign: 1.0
+
+output:
+  include_leg_error_columns: true

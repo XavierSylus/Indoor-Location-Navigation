@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "elapsed_s": 570.5110604763031,
+  "seed": 42,
+  "holdout_fraction": 0.1,
+  "max_holdout_paths": 1,
+  "test_sites_only": false,
+  "beam_weights": {
+    "w_wifi": 3.0,
+    "w_imu_l2": 0.5,
+    "w_imu_angle": 0.3,
+    "w_dijkstra": 1.5
+  },
+  "delta_weights": {
+    "imu_weight": 0.67,
+    "pdr_weight": 0.33
+  },
+  "n_sites_evaluated": 1,
+  "n_sites_skipped": 0,
+  "n_holdout_paths": 1,
+  "n_holdout_points": 3,
+  "floor_accuracy": 1.0,
+  "wifi_baseline_mae_m": 14.590769468208975,
+  "beam_search_mae_m": 16.36975476790118,
+  "beam_minus_wifi_m": 1.7789852996922046,
+  "model_kind_counts": {
+    "trained": 1
+  },
+  "skipped_sites": [],
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

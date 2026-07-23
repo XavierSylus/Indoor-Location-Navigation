@@ -1,0 +1,33 @@
+status: ok
+source_site_metrics: data_processing\processed\hard_site_candidate_recall_sites.csv
+selection_rules:
+  allowed_signals:
+  - candidate_for_site_selective_beam
+  - candidate_for_outlier_aware_beam
+  min_top10_recall: 0.8
+  min_top50_recall: 0.9
+  max_oracle_rank_mean: 10.0
+  max_catastrophic_outlier_ratio: 0.15
+whitelist_sites:
+- 5da138754db8ce0c98bca82f
+- 5da1383b4db8ce0c98bc11ab
+site_details:
+- site_id: 5da138754db8ce0c98bca82f
+  wifi_mae_m: 10.24871655211599
+  failure_mode: catastrophic_outlier_failure
+  beam_candidate_signal: candidate_for_outlier_aware_beam
+  top10_recall: 0.9
+  top50_recall: 0.9
+  oracle_rank_mean: 8.1
+  catastrophic_outlier_ratio: 0.1
+  mean_bias_mag_m: 7.012623991450237
+- site_id: 5da1383b4db8ce0c98bc11ab
+  wifi_mae_m: 8.84907853476602
+  failure_mode: systematic_bias_failure
+  beam_candidate_signal: candidate_for_site_selective_beam
+  top10_recall: 0.8387096774193549
+  top50_recall: 1.0
+  oracle_rank_mean: 6.741935483870968
+  catastrophic_outlier_ratio: 0.0
+  mean_bias_mag_m: 5.697971349620264
+default_for_non_whitelisted_sites: pure_absolute

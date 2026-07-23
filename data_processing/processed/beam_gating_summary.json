@@ -1,0 +1,46 @@
+{
+  "status": "ok",
+  "elapsed_s": 4046.011632680893,
+  "metric": "mean",
+  "thresholds": [
+    0.5,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    8.0
+  ],
+  "site_ids": [
+    "5d27099f03f801723c32511d",
+    "5da138274db8ce0c98bbd3d2",
+    "5da138364db8ce0c98bc00f1",
+    "5da1383b4db8ce0c98bc11ab",
+    "5da138754db8ce0c98bca82f"
+  ],
+  "n_paths": 5,
+  "n_points": 40,
+  "best": {
+    "metric": "mean",
+    "threshold_m": 1.5,
+    "n_paths": 5,
+    "n_points": 40,
+    "beam_enabled_paths": 1,
+    "beam_enabled_points": 2,
+    "wifi_mae_m": 11.619039083658853,
+    "always_beam_mae_m": 13.506315075353447,
+    "gated_mae_m": 11.545122058552458,
+    "gated_minus_wifi_m": -0.07391702510639533,
+    "gated_minus_beam_m": -1.9611930168009892
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

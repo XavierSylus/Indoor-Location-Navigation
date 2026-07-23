@@ -1,0 +1,33 @@
+{
+  "status": "ok",
+  "elapsed_s": 5708.578594923019,
+  "n_trials": 10,
+  "n_trajectories": 5,
+  "n_points": 40,
+  "site_ids": [
+    "5d27099f03f801723c32511d",
+    "5da138274db8ce0c98bbd3d2",
+    "5da138364db8ce0c98bc00f1",
+    "5da1383b4db8ce0c98bc11ab",
+    "5da138754db8ce0c98bca82f"
+  ],
+  "best": {
+    "alpha": 4.78110923390569,
+    "beta_1": 0.38927741570393515,
+    "beta_2": 1.8668840149081367,
+    "floor_accuracy": 0.975,
+    "wifi_mae_m": 11.619039083658853,
+    "beam_mae_m": 12.75453204665241,
+    "beam_minus_wifi_m": 1.1354929629935555,
+    "n_points": 40.0,
+    "trial": 9.0
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}

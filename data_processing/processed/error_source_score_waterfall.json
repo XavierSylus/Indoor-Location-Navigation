@@ -1,0 +1,78 @@
+{
+  "status": "ok",
+  "target_mae_m": 4.0,
+  "diagnostic_only": true,
+  "score_waterfall": {
+    "raw_pred": {
+      "n_points": 59,
+      "mae_m": 9.148229469523184,
+      "bad_point_ratio": 0.8813559322033898,
+      "sum_excess_over_4m": 319.65114170359846,
+      "mean_excess_over_4m": 5.41781596107794
+    },
+    "rank1": {
+      "n_points": 59,
+      "mae_m": 9.268067323716176,
+      "bad_point_ratio": 0.8305084745762712,
+      "sum_excess_over_4m": 340.4879571011847,
+      "mean_excess_over_4m": 5.770982323748893
+    },
+    "current_rerank_cv": {
+      "n_points": 59,
+      "mae_m": 8.030249212700241,
+      "bad_point_ratio": 0.6610169491525424,
+      "sum_excess_over_4m": 290.1855687321723,
+      "mean_excess_over_4m": 4.918399470036819
+    },
+    "oracle50": {
+      "n_points": 59,
+      "mae_m": 0.5833264467428693,
+      "bad_point_ratio": 0.05084745762711865,
+      "sum_excess_over_4m": 10.07855096318741,
+      "mean_excess_over_4m": 0.17082289768114256
+    },
+    "path_shift_oracle": {
+      "n_points": 59,
+      "mae_m": 7.907910700912721,
+      "gain_vs_absolute_points_m": 1.240318768610459
+    }
+  },
+  "error_class_contribution": [
+    {
+      "error_class": "selection_failure",
+      "n_points": 46,
+      "point_ratio": 0.7796610169491526,
+      "rank1_sum_excess_over_4m": 250.58958432336487,
+      "oracle50_sum_excess_over_4m": 0.0
+    },
+    {
+      "error_class": "candidate_missing",
+      "n_points": 3,
+      "point_ratio": 0.05084745762711865,
+      "rank1_sum_excess_over_4m": 89.89837277781984,
+      "oracle50_sum_excess_over_4m": 10.07855096318741
+    },
+    {
+      "error_class": "low_value",
+      "n_points": 10,
+      "point_ratio": 0.1694915254237288,
+      "rank1_sum_excess_over_4m": 0.0,
+      "oracle50_sum_excess_over_4m": 0.0
+    }
+  ],
+  "metric_bridge_rows": 12,
+  "v005_recommendation": "reranker_safety_policy",
+  "recommendation_reason": "Top-50 candidates contain near-GT options, but rank1 selection contributes most excess over 4m.",
+  "leakage_notes": [
+    "Oracle candidate, residual, and path-shift rows use GT and are diagnostic-only.",
+    "Do not convert any oracle correction into a submission rule without OOF or submission-safe validation.",
+    "PDR delta-leg metrics are intentionally marked non-comparable to waypoint submission metrics."
+  ],
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "git_commit": "a8e918d419a7ef92c48dc4672b3ea41aaa11e0fa"
+  }
+}
