@@ -1,0 +1,76 @@
+{
+  "status": "complete",
+  "validation_type": "cv_probe",
+  "diagnostic_only": true,
+  "submission_safe": false,
+  "kernel": {
+    "slug": "kiivii/indoor-v008-path-safe-delta-oof",
+    "version": 2,
+    "status": "COMPLETE",
+    "validation": "passed"
+  },
+  "split": {
+    "target_sites": 5,
+    "fit_paths": 735,
+    "internal_validation_paths": 130,
+    "heldout_paths": 5,
+    "path_overlap_count": 0,
+    "expected_intervals": 54,
+    "predicted_intervals": 54
+  },
+  "metrics": {
+    "best_internal_validation_delta_mae_m": 2.8068508307139077,
+    "heldout_delta_mae_m": 3.3188677368434205,
+    "unary_reranker_mae_m": 7.524908431950883,
+    "structured_lattice_mae_m": 4.346602166870011,
+    "improvement_vs_unary_m": 3.178306265080872,
+    "unary_sum_excess_over_4m": 274.83238197789245,
+    "structured_sum_excess_over_4m": 125.19464053183394,
+    "excess_over_4m_reduction_ratio": 0.5444691064755803,
+    "hit3": 0.4576271186440678,
+    "hit5": 0.559322033898305
+  },
+  "path_ledger": [
+    {
+      "path_id": "5dc65d451cda3700060305be",
+      "n_groups": 2,
+      "delta_mae_m": 1.221101,
+      "lattice_mae_m": 0.032498,
+      "sum_excess_over_4m": 0.0
+    },
+    {
+      "path_id": "5dce63105516ad00065f0280",
+      "n_groups": 3,
+      "delta_mae_m": 1.168285,
+      "lattice_mae_m": 6.251040,
+      "sum_excess_over_4m": 6.753119
+    },
+    {
+      "path_id": "5dce818894e4900006125129",
+      "n_groups": 3,
+      "delta_mae_m": 2.313919,
+      "lattice_mae_m": 0.562046,
+      "sum_excess_over_4m": 0.0
+    },
+    {
+      "path_id": "5dd0e5dd878f3300066c7644",
+      "n_groups": 20,
+      "delta_mae_m": 3.010393,
+      "lattice_mae_m": 3.576294,
+      "sum_excess_over_4m": 35.321270
+    },
+    {
+      "path_id": "5dd374ae44333f00067aa196",
+      "n_groups": 31,
+      "delta_mae_m": 3.794529,
+      "lattice_mae_m": 5.303852,
+      "sum_excess_over_4m": 83.120252
+    }
+  ],
+  "success_gate": {
+    "target_mae_m": 3.0,
+    "minimum_excess_over_4m_reduction_ratio": 0.25,
+    "passed": false
+  },
+  "conclusion": "The transition gene generalizes and remains valuable, but the v007 1.355896m result was materially inflated by the unsafe checkpoint. Do not create a submission from v008."
+}

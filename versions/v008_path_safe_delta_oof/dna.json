@@ -1,0 +1,106 @@
+{
+  "dna_id": "v008_path_safe_delta_oof",
+  "dna_parent": "v007_candidate_transition_lattice",
+  "version": "v008_path_safe_delta_oof",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "genes": {
+    "base": [
+      {
+        "id": "v007_candidate_transition_lattice",
+        "inherit": [
+          "candidate_dataset",
+          "geometry_source_wifi_unary_reranker",
+          "transition_lattice",
+          "alpha_grid",
+          "pairwise_cap_m"
+        ]
+      }
+    ],
+    "strategy": [
+      {
+        "id": "path_safe_relative_motion_validation",
+        "hypothesis": "The v007 transition gain remains material when every diagnostic path is excluded from delta-model fitting and checkpoint selection."
+      }
+    ],
+    "feature_component": [
+      {
+        "id": "path_safe_v3_delta_oof",
+        "status": "positive_but_insufficient",
+        "evidence": {
+          "path_overlap_count": 0,
+          "interval_coverage": "54/54",
+          "heldout_delta_mae_m": 3.3188677368434205
+        }
+      }
+    ],
+    "model_component": [
+      {
+        "id": "imu_delta_v3",
+        "architecture": "Conv1d + bidirectional GRU + auxiliary MLP",
+        "scope": "five diagnostic sites",
+        "checkpoint_selection": "non-target path-grouped internal validation"
+      }
+    ],
+    "change_operator": [
+      {
+        "operator": "replace",
+        "from": "leg-random-split V3 delta checkpoint",
+        "to": "complete-path-isolated V3 delta predictions"
+      }
+    ],
+    "validation": [
+      {
+        "id": "five_path_path_safe_probe",
+        "n_paths": 5,
+        "n_groups": 59,
+        "structured_lattice_mae_m": 4.346602166870011,
+        "excess_over_4m_reduction_ratio": 0.5444691064755803,
+        "target_mae_m": 3.0,
+        "success_gate_passed": false
+      }
+    ],
+    "execution": [
+      {
+        "platform": "Kaggle private GPU kernel",
+        "kernel": "kiivii/indoor-v008-path-safe-delta-oof",
+        "kernel_version": 2,
+        "seed": 42,
+        "git_commit": "459ef04a79e2437ff3a9f11770c9f6177ff7de24",
+        "config": "configs/path_safe_delta_oof.json"
+      }
+    ],
+    "submission": [
+      {
+        "artifact": null,
+        "leaderboard_attempted": false,
+        "quota_consumed": 0
+      }
+    ],
+    "external_source": [
+      {
+        "source": "https://cocoinit23.com/kaggle-indoor-location-navigation-15th-place-solution/",
+        "retained_gene": "complete-path GroupKFold boundary",
+        "discarded_for_this_version": [
+          "pseudo labeling",
+          "rotation correction",
+          "repeated cost minimization",
+          "stacking"
+        ]
+      },
+      {
+        "source": "https://www.kaggle.com/competitions/indoor-location-navigation/discussion/240342",
+        "retained_gene": "relative-position signal calibrated by absolute WiFi position",
+        "discarded_for_this_version": [
+          "snap-to-grid",
+          "site-survey parameter tuning"
+        ]
+      }
+    ]
+  },
+  "decision": {
+    "promote_gene": true,
+    "promote_score": false,
+    "reason": "Path-safe transition consistency cuts excess-over-4m by 54.45%, but MAE 4.346602 does not meet the 3m gate."
+  }
+}

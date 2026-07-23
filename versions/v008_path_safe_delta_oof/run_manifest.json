@@ -1,0 +1,49 @@
+{
+  "version": "v008_path_safe_delta_oof",
+  "dna_id": "v008_path_safe_delta_oof",
+  "dna_parent": "v007_candidate_transition_lattice",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "competition_slug": "indoor-location-navigation",
+  "execution": {
+    "platform": "Kaggle private GPU kernel",
+    "kernel_slug": "kiivii/indoor-v008-path-safe-delta-oof",
+    "kernel_version": 2,
+    "exact_command": "kaggle kernels push -p kaggle_training/v008_path_safe_delta_oof",
+    "git_commit": "459ef04a79e2437ff3a9f11770c9f6177ff7de24",
+    "wrapper_commit": "d327140",
+    "seed": 42,
+    "config_path": "configs/path_safe_delta_oof.json",
+    "runtime": {
+      "python": "3.12.13",
+      "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+      "gpu": "Tesla P100-PCIE-16GB",
+      "torch": "2.5.1+cu121",
+      "numpy": "2.0.2",
+      "pandas": "2.3.3"
+    }
+  },
+  "inputs": {
+    "competition_data": "/kaggle/input/indoor-location-navigation/train",
+    "candidate_dataset": "data_processing/processed/hard_site_candidate_rerank_dataset.csv",
+    "target_sites": 5,
+    "heldout_paths": 5
+  },
+  "outputs": {
+    "remote_report": "versions/v008_path_safe_delta_oof/remote_output/path_safe_delta_oof_report.json",
+    "delta_predictions": "versions/v008_path_safe_delta_oof/remote_output/path_safe_v3_delta_oof.csv",
+    "lattice_selections": "versions/v008_path_safe_delta_oof/remote_output/path_safe_lattice_selections.csv",
+    "split_manifest": "versions/v008_path_safe_delta_oof/remote_output/path_safe_split_manifest.csv",
+    "validation_report": "versions/v008_path_safe_delta_oof/validation_summary.json",
+    "submission": null
+  },
+  "tests": {
+    "command": ".\\venv\\Scripts\\python.exe -m unittest tests.test_kaggle_kernel_package tests.test_path_safe_delta_oof -v",
+    "result": "8 tests passed",
+    "local_training_performed": false
+  },
+  "leaderboard": {
+    "submission_attempted": false,
+    "quota_consumed": 0
+  }
+}
