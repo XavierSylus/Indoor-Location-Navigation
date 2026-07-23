@@ -86,6 +86,11 @@ SOURCE_WIFI_STATS_FEATURES = [
     "candidate_wifi_top3_common_bssid_mean",
 ]
 
+DENSE_SCAN_UNARY_FEATURES = [
+    "dense_scan_unary_distance_m",
+    "dense_scan_unary_rank",
+]
+
 TEMPORAL_FEATURES = [
     "raw_pred_step_from_prev_m",
     "raw_pred_step_to_next_m",
@@ -110,7 +115,7 @@ DENSITY_FEATURES = [
 ]
 
 CATEGORICAL_FEATURES = ["site_id", "floor"]
-NUMERIC_FEATURES = GEOMETRY_FEATURES + WIFI_FEATURES + SOURCE_WIFI_FEATURES + TEMPORAL_FEATURES + DENSITY_FEATURES
+NUMERIC_FEATURES = GEOMETRY_FEATURES + WIFI_FEATURES + SOURCE_WIFI_FEATURES + DENSE_SCAN_UNARY_FEATURES + TEMPORAL_FEATURES + DENSITY_FEATURES
 FEATURE_COLUMNS = NUMERIC_FEATURES + CATEGORICAL_FEATURES
 FEATURE_SET_TO_GROUPS = {
     "geometry": ("geometry",),
@@ -126,6 +131,7 @@ FEATURE_SET_TO_GROUPS = {
     "geometry_source_wifi_core": ("geometry", "source_wifi_core"),
     "geometry_source_wifi_rank": ("geometry", "source_wifi_rank"),
     "geometry_source_wifi_stats": ("geometry", "source_wifi_stats"),
+    "geometry_source_wifi_dense_scan": ("geometry", "source_wifi", "dense_scan_unary"),
     "geometry_wifi_source_temporal_core": ("geometry", "wifi", "source_wifi_core", "temporal"),
 }
 FEATURE_GROUP_TO_COLUMNS = {
@@ -135,6 +141,7 @@ FEATURE_GROUP_TO_COLUMNS = {
     "source_wifi_core": SOURCE_WIFI_CORE_FEATURES,
     "source_wifi_rank": SOURCE_WIFI_RANK_FEATURES,
     "source_wifi_stats": SOURCE_WIFI_STATS_FEATURES,
+    "dense_scan_unary": DENSE_SCAN_UNARY_FEATURES,
     "temporal": TEMPORAL_FEATURES,
     "density": DENSITY_FEATURES,
 }
