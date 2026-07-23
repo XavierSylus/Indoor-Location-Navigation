@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import unittest
+import subprocess
+import sys
+from pathlib import Path
 
 import numpy as np
 
@@ -67,6 +70,37 @@ class InterpolatedWifiSourceReanchoringTest(unittest.TestCase):
 
         np.testing.assert_array_equal(indices, np.array([0, 1]))
         np.testing.assert_allclose(distances, np.array([0.2, 0.3]))
+
+    def test_direct_script_execution_can_import_project_modules(self) -> None:
+        project_root = Path(__file__).resolve().parent.parent
+        script = (
+            project_root
+            / "data_processing"
+            / "interpolated_wifi_source_reanchoring.py"
+        )
+        config = (
+            project_root
+            / "configs"
+            / "interpolated_wifi_source_reanchoring.json"
+        )
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--config",
+                str(config),
+                "--stage",
+                "kaggle",
+            ],
+            cwd=script.parent,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertNotIn("ModuleNotFoundError", result.stderr)
+        self.assertIn("may run only inside Kaggle", result.stderr)
 
 
 if __name__ == "__main__":

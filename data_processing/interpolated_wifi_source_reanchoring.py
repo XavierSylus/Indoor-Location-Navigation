@@ -15,6 +15,9 @@ from scipy.spatial import cKDTree
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 DEFAULT_CONFIG = PROJECT_ROOT / "configs" / "interpolated_wifi_source_reanchoring.json"
 SOURCE_FEATURE_COLUMNS = [
     "candidate_wifi_source_count",
