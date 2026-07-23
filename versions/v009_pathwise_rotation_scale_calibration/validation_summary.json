@@ -1,0 +1,73 @@
+{
+  "status": "complete",
+  "validation_type": "cv_probe",
+  "diagnostic_only": true,
+  "submission_safe": false,
+  "kernel": {
+    "slug": "kiivii/indoor-v009-pathwise-similarity-calibration",
+    "version": 1,
+    "status": "COMPLETE",
+    "validation": "passed"
+  },
+  "coverage": {
+    "paths": 5,
+    "delta_rows": 54,
+    "lattice_groups": 59,
+    "transform_rows": 5,
+    "duplicate_delta_keys": 0,
+    "nonfinite_predictions": 0
+  },
+  "metrics": {
+    "raw_v008_delta_mae_m": 3.318867735720213,
+    "calibrated_delta_mae_m": 3.7840953450135864,
+    "raw_v008_lattice_mae_m": 4.346602166870011,
+    "calibrated_lattice_mae_m": 8.06836242115737,
+    "improvement_vs_v008_m": -3.72176025428736,
+    "structured_sum_excess_over_4m": 274.9860134996138,
+    "excess_over_4m_reduction_ratio_vs_unary": -0.0005590008012000699
+  },
+  "transform_range": {
+    "scale_min": 0.24229412782077603,
+    "scale_max": 1.0470038233824852,
+    "rotation_deg_min": -49.44051375339359,
+    "rotation_deg_max": 96.89281823055248
+  },
+  "path_ledger": [
+    {
+      "path_id": "5dc65d451cda3700060305be",
+      "n_groups": 2,
+      "lattice_mae_m": 0.03249816379549445,
+      "sum_excess_over_4m": 0.0
+    },
+    {
+      "path_id": "5dce63105516ad00065f0280",
+      "n_groups": 3,
+      "lattice_mae_m": 5.596002052715925,
+      "sum_excess_over_4m": 4.97049540025907
+    },
+    {
+      "path_id": "5dce818894e4900006125129",
+      "n_groups": 3,
+      "lattice_mae_m": 4.415085502901817,
+      "sum_excess_over_4m": 7.236303128790359
+    },
+    {
+      "path_id": "5dd0e5dd878f3300066c7644",
+      "n_groups": 20,
+      "lattice_mae_m": 12.232596452744094,
+      "sum_excess_over_4m": 164.65192905488186
+    },
+    {
+      "path_id": "5dd374ae44333f00067aa196",
+      "n_groups": 31,
+      "lattice_mae_m": 6.493006283837382,
+      "sum_excess_over_4m": 98.12728591568249
+    }
+  ],
+  "success_gate": {
+    "gene_gain_passed": false,
+    "target_below_3m_passed": false
+  },
+  "root_cause": "The calibration target is the noisy unary WiFi path. Large inferred rotations and scale collapse on short paths show that the transform follows absolute-position errors rather than correcting V3 motion.",
+  "decision": "Reject the pathwise similarity-calibration gene and return to error-source diagnosis. No submission is allowed."
+}

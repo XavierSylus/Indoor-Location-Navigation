@@ -1,0 +1,47 @@
+{
+  "version": "v009_pathwise_rotation_scale_calibration",
+  "dna_id": "v009_pathwise_rotation_scale_calibration",
+  "dna_parent": "v008_path_safe_delta_oof",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "competition_slug": "indoor-location-navigation",
+  "execution": {
+    "platform": "Kaggle private CPU kernel",
+    "kernel_slug": "kiivii/indoor-v009-pathwise-similarity-calibration",
+    "kernel_version": 1,
+    "exact_command": "kaggle kernels push -p kaggle_training/v009_pathwise_similarity_calibration",
+    "git_commit": "e65a2e42ea1ab8a9ec4d0815e40c95d891860466",
+    "wrapper_commit": "580e374",
+    "seed": 42,
+    "config_path": "configs/pathwise_similarity_calibration.json",
+    "runtime": {
+      "python": "3.12.13",
+      "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+      "accelerator": "CPU",
+      "numpy": "2.0.2",
+      "pandas": "2.3.3"
+    }
+  },
+  "inputs": {
+    "candidate_dataset": "data_processing/processed/hard_site_candidate_rerank_dataset.csv",
+    "raw_delta_predictions": "versions/v008_path_safe_delta_oof/remote_output/path_safe_v3_delta_oof.csv",
+    "v008_report": "versions/v008_path_safe_delta_oof/remote_output/path_safe_delta_oof_report.json"
+  },
+  "outputs": {
+    "remote_report": "versions/v009_pathwise_rotation_scale_calibration/remote_output/pathwise_similarity_calibration_report.json",
+    "calibrated_delta": "versions/v009_pathwise_rotation_scale_calibration/remote_output/pathwise_calibrated_delta.csv",
+    "transforms": "versions/v009_pathwise_rotation_scale_calibration/remote_output/pathwise_similarity_transforms.csv",
+    "lattice_selections": "versions/v009_pathwise_rotation_scale_calibration/remote_output/pathwise_calibrated_lattice_selections.csv",
+    "validation_report": "versions/v009_pathwise_rotation_scale_calibration/validation_summary.json",
+    "submission": null
+  },
+  "tests": {
+    "command": ".\\venv\\Scripts\\python.exe -m unittest tests.test_kaggle_kernel_package tests.test_pathwise_similarity_calibration -v",
+    "result": "9 tests passed",
+    "local_experiment_execution": false
+  },
+  "leaderboard": {
+    "submission_attempted": false,
+    "quota_consumed": 0
+  }
+}

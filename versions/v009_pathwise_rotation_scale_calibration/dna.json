@@ -1,0 +1,95 @@
+{
+  "dna_id": "v009_pathwise_rotation_scale_calibration",
+  "dna_parent": "v008_path_safe_delta_oof",
+  "version": "v009_pathwise_rotation_scale_calibration",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "genes": {
+    "base": [
+      {
+        "id": "v008_path_safe_delta_oof",
+        "inherit": [
+          "path_safe_v3_delta_oof",
+          "candidate_dataset",
+          "geometry_source_wifi_unary_reranker",
+          "transition_lattice",
+          "alpha_grid",
+          "pairwise_cap_m",
+          "five_path_validation_boundary"
+        ]
+      }
+    ],
+    "strategy": [
+      {
+        "id": "pathwise_similarity_calibration",
+        "hypothesis": "Inference-safe unary WiFi path geometry can estimate a useful per-path rotation and scale correction for path-safe V3 deltas."
+      }
+    ],
+    "feature_component": [
+      {
+        "id": "unary_path_delta_geometry",
+        "uses_gt": false,
+        "source": "OOF unary candidate selections"
+      }
+    ],
+    "model_component": [
+      {
+        "id": "origin_constrained_similarity_transform",
+        "parameters": [
+          "rotation",
+          "uniform_scale"
+        ],
+        "translation": false,
+        "fitting": "closed-form least squares by path"
+      }
+    ],
+    "change_operator": [
+      {
+        "operator": "add",
+        "target": "v008 path-safe V3 delta vectors",
+        "component": "per-path rotation and scale calibration"
+      }
+    ],
+    "validation": [
+      {
+        "id": "frozen_v008_five_path_probe",
+        "n_paths": 5,
+        "n_groups": 59,
+        "raw_v008_lattice_mae_m": 4.346602166870011,
+        "calibrated_lattice_mae_m": 8.06836242115737,
+        "improvement_vs_v008_m": -3.72176025428736,
+        "success_gate_passed": false
+      }
+    ],
+    "execution": [
+      {
+        "platform": "Kaggle private CPU kernel",
+        "kernel": "kiivii/indoor-v009-pathwise-similarity-calibration",
+        "kernel_version": 1,
+        "seed": 42,
+        "git_commit": "e65a2e42ea1ab8a9ec4d0815e40c95d891860466",
+        "config": "configs/pathwise_similarity_calibration.json"
+      }
+    ],
+    "submission": [
+      {
+        "artifact": null,
+        "leaderboard_attempted": false,
+        "quota_consumed": 0
+      }
+    ],
+    "external_source": [
+      {
+        "source": "https://cocoinit23.com/kaggle-indoor-location-navigation-15th-place-solution/",
+        "adopted_gene": "path-level rotation correction by minimizing disagreement between absolute-path and relative-motion deltas",
+        "adaptation": "used OOF unary geometry and path-safe V3 deltas; removed GT, translation, iteration and manual tuning"
+      }
+    ]
+  },
+  "decision": {
+    "promote_gene": false,
+    "status": "rejected",
+    "reason": "Unary WiFi geometry is too noisy to calibrate relative motion. It increased delta MAE from 3.318868m to 3.784095m and lattice MAE from 4.346602m to 8.068362m.",
+    "stop_condition": "Do not tune, clip or gate this transform to conceal the negative result. Return to error-source diagnosis before selecting v010."
+  }
+}

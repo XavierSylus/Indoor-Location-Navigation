@@ -1,0 +1,210 @@
+{
+  "status": "ok",
+  "version": "v009_pathwise_rotation_scale_calibration",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "competition_slug": "indoor-location-navigation",
+  "seed": 42,
+  "git_commit": "e65a2e42ea1ab8a9ec4d0815e40c95d891860466",
+  "calibration": {
+    "method": "origin_constrained_least_squares_similarity",
+    "translation_allowed": false,
+    "features_used": [
+      "v3_delta_x",
+      "v3_delta_y",
+      "unary_delta_x",
+      "unary_delta_y"
+    ],
+    "forbidden_columns": [
+      "group_oracle_distance_at_topk",
+      "gt_delta_x",
+      "gt_delta_y",
+      "gt_x",
+      "gt_y",
+      "label_distance_m"
+    ],
+    "n_paths": 5,
+    "transforms": [
+      {
+        "path_id": "5dc65d451cda3700060305be",
+        "n_alignment_pairs": 1,
+        "coefficient_a": 0.9530044286112943,
+        "coefficient_b": -0.17701362256151096,
+        "scale": 0.9693045256910177,
+        "rotation_rad": -0.18364979996296646,
+        "rotation_deg": -10.522358446299801,
+        "raw_alignment_rmse_m": 1.2303248486805691,
+        "calibrated_alignment_rmse_m": 8.881784197001252e-16
+      },
+      {
+        "path_id": "5dce63105516ad00065f0280",
+        "n_alignment_pairs": 2,
+        "coefficient_a": -0.03262248846475492,
+        "coefficient_b": 0.2698613299599494,
+        "scale": 0.27182598139505676,
+        "rotation_rad": 1.691098699659527,
+        "rotation_deg": 96.89281823055248,
+        "raw_alignment_rmse_m": 9.694411729285935,
+        "calibrated_alignment_rmse_m": 6.8741573713548165
+      },
+      {
+        "path_id": "5dce818894e4900006125129",
+        "n_alignment_pairs": 2,
+        "coefficient_a": 0.15754864921813666,
+        "coefficient_b": -0.18407842759533524,
+        "scale": 0.24229412782077603,
+        "rotation_rad": -0.8628997488742579,
+        "rotation_deg": -49.44051375339359,
+        "raw_alignment_rmse_m": 4.74374402595237,
+        "calibrated_alignment_rmse_m": 0.4582623936504428
+      },
+      {
+        "path_id": "5dd0e5dd878f3300066c7644",
+        "n_alignment_pairs": 19,
+        "coefficient_a": 0.7753242006598429,
+        "coefficient_b": -0.3058677240942788,
+        "scale": 0.8334762628722177,
+        "rotation_rad": -0.3757586212327986,
+        "rotation_deg": -21.52938311229424,
+        "raw_alignment_rmse_m": 15.051989221891885,
+        "calibrated_alignment_rmse_m": 14.844491364097248
+      },
+      {
+        "path_id": "5dd374ae44333f00067aa196",
+        "n_alignment_pairs": 30,
+        "coefficient_a": 1.045419350964521,
+        "coefficient_b": 0.05757939567642045,
+        "scale": 1.0470038233824852,
+        "rotation_rad": 0.05502220499250604,
+        "rotation_deg": 3.1525401255742436,
+        "raw_alignment_rmse_m": 7.179684727507627,
+        "calibrated_alignment_rmse_m": 7.16068926937205
+      }
+    ]
+  },
+  "metrics": {
+    "raw_v008_delta_mae_m": 3.318867735720213,
+    "calibrated_delta_mae_m": 3.7840953450135864,
+    "raw_v008_lattice_mae_m": 4.346602166870011,
+    "calibrated_lattice_mae_m": 8.06836242115737,
+    "improvement_vs_v008_m": -3.72176025428736,
+    "structured_sum_excess_over_4m": 274.9860134996138,
+    "excess_over_4m_reduction_ratio_vs_unary": -0.0005590008012000699
+  },
+  "path_ledger": [
+    {
+      "path_id": "5dc65d451cda3700060305be",
+      "n_groups": 2,
+      "lattice_mae_m": 0.03249816379549445,
+      "sum_excess_over_4m": 0.0
+    },
+    {
+      "path_id": "5dce63105516ad00065f0280",
+      "n_groups": 3,
+      "lattice_mae_m": 5.596002052715925,
+      "sum_excess_over_4m": 4.97049540025907
+    },
+    {
+      "path_id": "5dce818894e4900006125129",
+      "n_groups": 3,
+      "lattice_mae_m": 4.415085502901817,
+      "sum_excess_over_4m": 7.236303128790359
+    },
+    {
+      "path_id": "5dd0e5dd878f3300066c7644",
+      "n_groups": 20,
+      "lattice_mae_m": 12.232596452744094,
+      "sum_excess_over_4m": 164.65192905488186
+    },
+    {
+      "path_id": "5dd374ae44333f00067aa196",
+      "n_groups": 31,
+      "lattice_mae_m": 6.493006283837382,
+      "sum_excess_over_4m": 98.12728591568249
+    }
+  ],
+  "lattice": {
+    "status": "ok",
+    "version": "v009_pathwise_rotation_scale_calibration",
+    "experiment_type": "cv_probe",
+    "iteration_mode": "add_module",
+    "diagnostic_only": true,
+    "submission_safe": false,
+    "n_groups": 59,
+    "n_paths": 5,
+    "unary_reranker_mae_m": 7.524908431950883,
+    "structured_lattice_mae_m": 8.06836242115737,
+    "improvement_vs_unary_m": -0.5434539892064878,
+    "unary_sum_excess_over_4m": 274.83238197789245,
+    "structured_sum_excess_over_4m": 274.9860134996138,
+    "excess_over_4m_reduction_ratio": -0.0005590008012000699,
+    "hit3": 0.15254237288135594,
+    "hit5": 0.288135593220339,
+    "success_gate_passed": false,
+    "calibration": [
+      {
+        "heldout_path": "5dc65d451cda3700060305be",
+        "selected_alpha": 0.25,
+        "calibration_mae_m": 6.791897720247026,
+        "heldout_mae_m": 0.03249816379549445,
+        "n_heldout_groups": 2
+      },
+      {
+        "heldout_path": "5dce63105516ad00065f0280",
+        "selected_alpha": 0.25,
+        "calibration_mae_m": 6.614556432562925,
+        "heldout_mae_m": 5.596002052715925,
+        "n_heldout_groups": 3
+      },
+      {
+        "heldout_path": "5dce818894e4900006125129",
+        "selected_alpha": 0.25,
+        "calibration_mae_m": 6.677819819160108,
+        "heldout_mae_m": 4.415085502901817,
+        "n_heldout_groups": 3
+      },
+      {
+        "heldout_path": "5dd0e5dd878f3300066c7644",
+        "selected_alpha": 4.0,
+        "calibration_mae_m": 4.323313858169107,
+        "heldout_mae_m": 12.232596452744094,
+        "n_heldout_groups": 20
+      },
+      {
+        "heldout_path": "5dd374ae44333f00067aa196",
+        "selected_alpha": 0.25,
+        "calibration_mae_m": 6.639998985096883,
+        "heldout_mae_m": 6.493006283837382,
+        "n_heldout_groups": 31
+      }
+    ],
+    "transition_features_used": [
+      "candidate_delta_x",
+      "candidate_delta_y",
+      "v3_delta_x",
+      "v3_delta_y",
+      "vector_transition_error_m"
+    ],
+    "forbidden_transition_columns": [
+      "group_oracle_distance_at_topk",
+      "gt_delta_x",
+      "gt_delta_y",
+      "gt_x",
+      "gt_y",
+      "label_distance_m"
+    ],
+    "leakage_warning": "Rotation and scale use only path-safe V3 deltas and OOF unary candidate geometry; target-path GT is diagnostic-only.",
+    "next_recommendation": "Reject this transition formulation and return to candidate/path context diagnosis."
+  },
+  "gene_gain_passed": false,
+  "success_gate_passed": false,
+  "submission_created": false,
+  "environment": {
+    "python": "3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]",
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "numpy": "2.0.2",
+    "pandas": "2.3.3"
+  },
+  "repository_commit": "e65a2e42ea1ab8a9ec4d0815e40c95d891860466",
+  "kernel_validation": "passed"
+}
