@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 REPOSITORY_URL = "https://github.com/XavierSylus/Indoor-Location-Navigation.git"
-REPOSITORY_COMMIT = "ba56b329dd818a66ea945034e064871028c84618"
+REPOSITORY_COMMIT = "57cfb51394db66a1ccce081f4a0fff67b49f343e"
 WORKING_ROOT = Path("/kaggle/working")
 REPOSITORY_ROOT = Path("/tmp/indoor-location-navigation-v011")
 EXPECTED_OUTPUTS = {
