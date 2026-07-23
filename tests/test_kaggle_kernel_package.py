@@ -20,6 +20,7 @@ REANCHORING_KERNEL_PATH = (
     / "v011_interpolated_wifi_source_reanchoring"
     / "kernel.py"
 )
+DENSE_SCAN_KERNEL_PATH = PROJECT_ROOT / "kaggle_training" / "v012_dense_scan_wifi_unary" / "kernel.py"
 
 
 def load_kernel_module(path: Path, name: str):
@@ -93,6 +94,17 @@ class KaggleKernelPackageTests(unittest.TestCase):
             "v011_interpolated_wifi_source_reanchoring_kernel",
         )
 
+        self.assertTrue(metadata["is_private"])
+        self.assertFalse(metadata["enable_gpu"])
+        self.assertEqual(40, len(module.REPOSITORY_COMMIT))
+        self.assertFalse(module.WORKING_ROOT in module.REPOSITORY_ROOT.parents)
+        self.assertNotIn("submission.csv", module.EXPECTED_OUTPUTS)
+
+    def test_dense_scan_kernel_is_private_cpu_pinned_and_has_no_submission(self) -> None:
+        metadata = __import__("json").loads(
+            (DENSE_SCAN_KERNEL_PATH.parent / "kernel-metadata.json").read_text(encoding="utf-8")
+        )
+        module = load_kernel_module(DENSE_SCAN_KERNEL_PATH, "v012_dense_scan_wifi_unary_kernel")
         self.assertTrue(metadata["is_private"])
         self.assertFalse(metadata["enable_gpu"])
         self.assertEqual(40, len(module.REPOSITORY_COMMIT))

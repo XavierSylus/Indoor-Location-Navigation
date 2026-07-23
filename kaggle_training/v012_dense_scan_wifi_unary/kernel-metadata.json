@@ -1,0 +1,13 @@
+{
+  "id": "kiivii/indoor-v012-dense-scan-wifi-unary",
+  "title": "Indoor v012 Dense Scan WiFi Unary",
+  "code_file": "kernel.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": true,
+  "competition_sources": ["indoor-location-navigation"],
+  "dataset_sources": [],
+  "kernel_sources": []
+}
