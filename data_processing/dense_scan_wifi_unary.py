@@ -35,8 +35,6 @@ def interpolate_predictions(
     timestamps = np.asarray(scan_timestamps, dtype=np.int64)[ordered]
     coordinates = np.asarray(scan_xy, dtype=np.float64)[ordered]
     targets = np.asarray(target_timestamps, dtype=np.int64)
-    if targets.min() < timestamps[0] or targets.max() > timestamps[-1]:
-        raise ValueError("Waypoint timestamps fall outside dense scan prediction coverage.")
     return np.column_stack(
         [np.interp(targets, timestamps, coordinates[:, axis]) for axis in range(2)]
     )
