@@ -1,0 +1,5 @@
+metric_name,value,unit,scope,n_points,split_type,uses_gt,comparable_to_submission,dna_id
+baseline_lattice_mae_m,4.346602166870011,m,hard-site candidate lattice,59,five-complete-path-heldout,true,false,v008_path_safe_delta_oof
+reanchored_lattice_mae_m,5.352491119361942,m,hard-site candidate lattice,59,five-complete-path-heldout,true,false,v011_interpolated_wifi_source_reanchoring
+baseline_sum_excess_over_4m,125.19464053183394,m,hard-site candidate lattice,59,five-complete-path-heldout,true,false,v008_path_safe_delta_oof
+reanchored_sum_excess_over_4m,157.2529014137339,m,hard-site candidate lattice,59,five-complete-path-heldout,true,false,v011_interpolated_wifi_source_reanchoring

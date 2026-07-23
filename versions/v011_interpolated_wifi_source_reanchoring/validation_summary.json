@@ -1,0 +1,11 @@
+{
+  "status": "complete_rejected",
+  "validation_type": "cv_probe",
+  "diagnostic_only": true,
+  "submission_safe": false,
+  "coverage": {"paths": 5, "groups": 59, "path_overlap_count": 0},
+  "metrics": {"baseline_lattice_mae_m": 4.346602166870011, "reanchored_lattice_mae_m": 5.352491119361942, "mae_change_m": 1.0058889524919312, "baseline_sum_excess_over_4m": 125.19464053183394, "reanchored_sum_excess_over_4m": 157.2529014137339, "tail_excess_change": 32.05826088189996},
+  "path_tail_excess": [{"path_id": "5dc65d451cda3700060305be", "value": 0.0}, {"path_id": "5dce63105516ad00065f0280", "value": 6.4381963402189255}, {"path_id": "5dce818894e4900006125129", "value": 24.10138939734609}, {"path_id": "5dd0e5dd878f3300066c7644", "value": 33.1512645319891}, {"path_id": "5dd374ae44333f00067aa196", "value": 93.56205114417976}],
+  "execution": {"kaggle_kernel": "kiivii/indoor-v011-interpolated-wifi-reanchoring", "kernel_version": 8, "git_commit": "af4f66206b375e2f05ed7b5fbee11d6f499699cf", "seed": 42, "terminal_wrapper_error": "Missing unused interpolated_wifi_lattice_summary.json after all required probe outputs and report were written."},
+  "decision": "Reject nearest-grid WiFi source reanchoring. The output computation completed, but both MAE and tail excess regress versus v008. No Kaggle submission was created."
+}

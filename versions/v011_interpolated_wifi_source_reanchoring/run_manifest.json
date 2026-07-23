@@ -1,0 +1,13 @@
+{
+  "version": "v011_interpolated_wifi_source_reanchoring",
+  "dna_id": "v011_interpolated_wifi_source_reanchoring",
+  "dna_parent": "v008_path_safe_delta_oof",
+  "experiment_type": "cv_probe",
+  "iteration_mode": "add_module",
+  "competition_slug": "indoor-location-navigation",
+  "execution": {"platform": "Kaggle CPU", "exact_command": "python data_processing/interpolated_wifi_source_reanchoring.py --config configs/interpolated_wifi_source_reanchoring.json --stage kaggle", "git_commit": "af4f66206b375e2f05ed7b5fbee11d6f499699cf", "seed": 42, "config_path": "configs/interpolated_wifi_source_reanchoring.json", "runtime": {"python": "3.12.13", "platform": "Linux-6.12.90+-x86_64-with-glibc2.35", "numpy": "2.0.2", "pandas": "2.3.3"}},
+  "inputs": {"competition_train": "/kaggle/input/competitions/indoor-location-navigation/train", "candidate_dataset": "data_processing/processed/hard_site_candidate_rerank_dataset.csv", "v008_selections": "versions/v008_path_safe_delta_oof/remote_output/path_safe_lattice_selections.csv"},
+  "outputs": {"candidate_dataset": "interpolated_wifi_candidate_dataset.csv", "selections": "interpolated_wifi_lattice_selections.csv", "validation_report": "versions/v011_interpolated_wifi_source_reanchoring/validation_summary.json", "submission": null},
+  "tests": {"command": "python -m unittest tests.test_kaggle_kernel_package tests.test_interpolated_wifi_source_reanchoring", "result": "passed before remote launch", "local_training_executed": false},
+  "kaggle": {"kernel": "kiivii/indoor-v011-interpolated-wifi-reanchoring", "kernel_version": 8, "kernel_terminal_status": "ERROR", "computation_status": "completed; wrapper failed only because it expected an unused interpolated_wifi_lattice_summary.json", "submission_attempted": false, "quota_consumed": 0}
+}
