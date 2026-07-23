@@ -8,6 +8,12 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SMOKE_KERNEL_PATH = PROJECT_ROOT / "kaggle_training" / "v008_pathsafe_smoke" / "kernel.py"
 OOF_KERNEL_PATH = PROJECT_ROOT / "kaggle_training" / "v008_path_safe_delta_oof" / "kernel.py"
+SIMILARITY_KERNEL_PATH = (
+    PROJECT_ROOT
+    / "kaggle_training"
+    / "v009_pathwise_similarity_calibration"
+    / "kernel.py"
+)
 
 
 def load_kernel_module(path: Path, name: str):
@@ -50,6 +56,23 @@ class KaggleKernelPackageTests(unittest.TestCase):
             "https://download.pytorch.org/whl/cu121",
             module.PYTORCH_INDEX_URL,
         )
+
+    def test_similarity_kernel_is_private_cpu_and_has_no_submission(self) -> None:
+        metadata = __import__("json").loads(
+            (SIMILARITY_KERNEL_PATH.parent / "kernel-metadata.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        module = load_kernel_module(
+            SIMILARITY_KERNEL_PATH,
+            "v009_pathwise_similarity_calibration_kernel",
+        )
+
+        self.assertTrue(metadata["is_private"])
+        self.assertFalse(metadata["enable_gpu"])
+        self.assertEqual(40, len(module.REPOSITORY_COMMIT))
+        self.assertFalse(module.WORKING_ROOT in module.REPOSITORY_ROOT.parents)
+        self.assertNotIn("submission.csv", module.EXPECTED_OUTPUTS)
 
 
 if __name__ == "__main__":
