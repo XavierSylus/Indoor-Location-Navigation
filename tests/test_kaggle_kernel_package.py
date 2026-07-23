@@ -42,6 +42,15 @@ class KaggleKernelPackageTests(unittest.TestCase):
         self.assertFalse(module.WORKING_ROOT in module.REPOSITORY_ROOT.parents)
         self.assertNotIn("submission.csv", module.EXPECTED_OUTPUTS)
 
+    def test_oof_kernel_pins_pascal_compatible_pytorch(self) -> None:
+        module = load_kernel_module(OOF_KERNEL_PATH, "v008_path_safe_delta_oof_kernel")
+
+        self.assertEqual("2.5.1+cu121", module.PYTORCH_VERSION)
+        self.assertEqual(
+            "https://download.pytorch.org/whl/cu121",
+            module.PYTORCH_INDEX_URL,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

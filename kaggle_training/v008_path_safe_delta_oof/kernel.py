@@ -8,6 +8,8 @@ from pathlib import Path
 
 REPOSITORY_URL = "https://github.com/XavierSylus/Indoor-Location-Navigation.git"
 REPOSITORY_COMMIT = "459ef04a79e2437ff3a9f11770c9f6177ff7de24"
+PYTORCH_VERSION = "2.5.1+cu121"
+PYTORCH_INDEX_URL = "https://download.pytorch.org/whl/cu121"
 WORKING_ROOT = Path("/kaggle/working")
 REPOSITORY_ROOT = Path("/tmp/indoor-location-navigation-v008")
 EXPECTED_OUTPUTS = {
@@ -22,9 +24,39 @@ def run(command: list[str], cwd: Path | None = None) -> None:
     subprocess.run(command, cwd=cwd, check=True)
 
 
+def install_runtime_dependencies() -> None:
+    run(
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "--no-cache-dir",
+            "--no-deps",
+            "--force-reinstall",
+            f"torch=={PYTORCH_VERSION}",
+            "--index-url",
+            PYTORCH_INDEX_URL,
+        ]
+    )
+    run(
+        [
+            sys.executable,
+            "-c",
+            (
+                "import torch; "
+                "assert torch.cuda.is_available(); "
+                "assert 'sm_60' in torch.cuda.get_arch_list(), torch.cuda.get_arch_list(); "
+                "print(torch.__version__, torch.cuda.get_device_name(0), torch.cuda.get_arch_list())"
+            ),
+        ]
+    )
+
+
 def main() -> None:
     if not Path("/kaggle/input").is_dir() or not WORKING_ROOT.is_dir():
         raise RuntimeError("This kernel entrypoint may run only inside Kaggle.")
+    install_runtime_dependencies()
     run(["git", "clone", "--filter=blob:none", "--no-checkout", REPOSITORY_URL, str(REPOSITORY_ROOT)])
     run(["git", "checkout", "--detach", REPOSITORY_COMMIT], cwd=REPOSITORY_ROOT)
     run(
