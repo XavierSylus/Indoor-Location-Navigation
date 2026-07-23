@@ -66,12 +66,21 @@ def resolve_path(value: str | Path) -> Path:
 
 
 def resolve_runtime_train_root(config: dict, kaggle_runtime: bool) -> Path:
-    key = "kaggle_train_root" if kaggle_runtime else "train_root"
-    if key not in config["inputs"]:
-        raise ValueError(f"Missing explicit runtime input path: inputs.{key}")
-    path = Path(config["inputs"][key])
     if kaggle_runtime:
-        return path
+        from data_processing.kaggle_pathsafe_smoke import (
+            find_competition_train_root,
+        )
+
+        if "kaggle_input_root" not in config["inputs"]:
+            raise ValueError(
+                "Missing explicit runtime input path: inputs.kaggle_input_root"
+            )
+        return find_competition_train_root(
+            Path(config["inputs"]["kaggle_input_root"])
+        )
+    if "train_root" not in config["inputs"]:
+        raise ValueError("Missing explicit runtime input path: inputs.train_root")
+    path = Path(config["inputs"]["train_root"])
     return path if path.is_absolute() else PROJECT_ROOT / path
 
 
