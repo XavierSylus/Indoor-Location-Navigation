@@ -110,6 +110,8 @@ class InterpolatedWifiSourceReanchoringTest(unittest.TestCase):
             local_train = root / "local" / "train"
             local_train.mkdir(parents=True)
             kaggle_input = root / "input"
+            empty_legacy_train = kaggle_input / "indoor-location-navigation" / "train"
+            empty_legacy_train.mkdir(parents=True)
             mounted_train = kaggle_input / "nested-competition-mount" / "train"
             sample = mounted_train / "site" / "floor" / "path.txt"
             sample.parent.mkdir(parents=True)

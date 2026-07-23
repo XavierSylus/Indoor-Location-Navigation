@@ -67,17 +67,22 @@ def resolve_path(value: str | Path) -> Path:
 
 def resolve_runtime_train_root(config: dict, kaggle_runtime: bool) -> Path:
     if kaggle_runtime:
-        from data_processing.kaggle_pathsafe_smoke import (
-            find_competition_train_root,
-        )
-
         if "kaggle_input_root" not in config["inputs"]:
             raise ValueError(
                 "Missing explicit runtime input path: inputs.kaggle_input_root"
             )
-        return find_competition_train_root(
-            Path(config["inputs"]["kaggle_input_root"])
-        )
+        input_root = Path(config["inputs"]["kaggle_input_root"])
+        candidates = [
+            path
+            for path in input_root.rglob("train")
+            if path.is_dir() and any(path.glob("*/*/*.txt"))
+        ]
+        if len(candidates) != 1:
+            raise FileNotFoundError(
+                "Expected one non-empty Indoor Location train root under "
+                f"{input_root}, found {len(candidates)}."
+            )
+        return candidates[0]
     if "train_root" not in config["inputs"]:
         raise ValueError("Missing explicit runtime input path: inputs.train_root")
     path = Path(config["inputs"]["train_root"])
